@@ -1,183 +1,372 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Local Type Kit – Figma plugin for locally installed fonts</title>
-<meta name="description" content="Check, replace and style locally installed fonts across a whole Figma file. No network, no upload.">
-<style>
-  @font-face { font-family: "Geist"; src: url("fonts/GeistVariable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
-  @font-face { font-family: "Geist Mono"; src: url("fonts/GeistMonoVariable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
-  @font-face { font-family: "Perfectly Nineties"; src: url("fonts/PerfectlyNineties-Regular.woff") format("woff"); font-weight: 400; font-display: swap; }
+<meta name="description" content="Check, replace and style locally installed fonts across a whole Figma file. No network, no upload. Free and open source.">
+<link rel="alternate" hreflang="en" href="https://local-type-kit.vercel.app/">
+<link rel="alternate" hreflang="de" href="https://local-type-kit.vercel.app/de/">
+<link rel="alternate" hreflang="x-default" href="https://local-type-kit.vercel.app/">
 
-  :root {
-    --bg: #fefdfb;
-    --surface: #f5f5f4;
-    --fg: #1c1917;
-    --body: #44403c;
-    --muted: #78716c;
-    --faint: #a8a29e;
-    --border: #e7e5e4;
-    --neg: #a8412c;
-    --neg-soft: #fce7e2;
-    --pos: #1d6b48;
-    --pos-soft: #e2f4ea;
-    --display: "Perfectly Nineties", Georgia, serif;
-    --sans: "Geist", system-ui, sans-serif;
-    --mono: "Geist Mono", ui-monospace, monospace;
+<script>
+/* Vor dem ersten Zeichnen, damit eine gewaehlte Darstellung nicht erst die
+   andere aufblitzen laesst. Ist der Speicher gesperrt, folgt die Seite dem
+   System. */
+try {
+  var saved = localStorage.getItem("local-type-kit-theme");
+  if (saved === "light" || saved === "dark") {
+    document.documentElement.setAttribute("data-theme", saved);
   }
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body { margin: 0; background: var(--bg); color: var(--body); font-family: var(--sans); font-size: 17px; line-height: 1.6; }
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
-  @media (min-width: 720px) { .wrap { padding: 0 40px; } }
+} catch (e) {}
+</script>
 
-  .label { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
-  h1, h2 { font-family: var(--display); font-weight: 400; color: var(--fg); margin: 0; }
-  h1 { font-size: clamp(44px, 8vw, 84px); line-height: 1.02; }
-  h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.1; margin-bottom: 24px; }
-  h3 { font-size: 17px; font-weight: 600; color: var(--fg); margin: 0 0 6px; }
-  p { margin: 0 0 12px; }
-  a { color: var(--fg); text-underline-offset: 3px; }
-  code { font-family: var(--mono); font-size: 14px; background: var(--surface); padding: 1px 6px; border-radius: 4px; }
+<style>
+/* Schrift, Raster und Farben von fieldpack.dev (tracks/products/fieldpack),
+   damit beide Werkzeugseiten aus einer Hand aussehen. Instrument Serif und
+   Inter sind offen lizenziert. */
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("assets/fonts/InstrumentSerif-Regular.ttf") format("truetype");
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("assets/fonts/inter-regular.ttf") format("truetype");
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("assets/fonts/inter-medium.ttf") format("truetype");
+  font-weight: 500; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("assets/fonts/inter-semibold.ttf") format("truetype");
+  font-weight: 600; font-display: swap;
+}
 
-  header.top { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-  header.top .name { font-weight: 600; color: var(--fg); }
-  header.top nav a { color: var(--muted); text-decoration: none; margin-left: 20px; }
-  header.top nav a:hover { color: var(--fg); }
+:root {
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
-  .hero { display: grid; gap: 48px; padding: 72px 0 80px; align-items: center; }
-  @media (min-width: 900px) { .hero { grid-template-columns: 1.05fr 1fr; } }
-  .lead { font-size: 20px; line-height: 1.5; color: var(--body); margin: 24px 0 28px; max-width: 34em; }
-  .meta { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip { font-family: var(--mono); font-size: 12px; color: var(--body); border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px; background: var(--bg); }
+  --gl-gap: clamp(12px, 1.4vw, 28px);
+  --gl-pad: clamp(16px, 3.2vw, 72px);
+  --gl-cap: 1100px;
 
-  /* schematic plugin window */
-  figure { margin: 0; }
-  .win { background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 1px 2px rgba(28,25,23,.04), 0 12px 32px rgba(28,25,23,.06); overflow: hidden; font-size: 13px; }
-  .win-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
-  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
-  .win-title { margin-left: 8px; font-weight: 600; color: var(--fg); }
-  .tabs { display: flex; gap: 2px; padding: 8px 10px 0; border-bottom: 1px solid var(--border); }
-  .tab { padding: 6px 10px 8px; color: var(--muted); border-bottom: 2px solid transparent; }
-  .tab.on { color: var(--fg); border-bottom-color: var(--fg); font-weight: 600; }
-  .win-body { padding: 14px; }
-  .win-body .hint { color: var(--muted); font-size: 12px; margin-bottom: 10px; }
-  .row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
-  .row:last-child { border-bottom: 0; }
-  .fam { color: var(--fg); }
-  .fam span { color: var(--muted); }
-  .num { font-family: var(--mono); font-size: 12px; color: var(--muted); }
-  .badge { font-family: var(--mono); font-size: 11px; border-radius: 4px; padding: 2px 6px; }
-  .badge.ok { color: var(--pos); background: var(--pos-soft); }
-  .badge.miss { color: var(--neg); background: var(--neg-soft); }
-  figcaption { font-family: var(--mono); font-size: 11px; color: var(--faint); margin-top: 10px; text-transform: uppercase; letter-spacing: .06em; }
+  --bg: #FAF9F7; --bg-2: #F2F0EC; --border: #E2DFDA;
+  --fg: #1C1A17; --fg-2: #4A463F; --fg-3: #78736A;
+  --win: #FFFFFF;
+  --neg: #A8412C; --neg-soft: #FCE7E2;
+  --pos: #1D6B48; --pos-soft: #E2F4EA;
+  --measure: 36rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171614; --bg-2: #1F1E1B; --border: #33312D;
+    --fg: #EDEAE4; --fg-2: #B6B1A8; --fg-3: #858077;
+    --win: #1F1E1B;
+    --neg: #F0A391; --neg-soft: #3A221C;
+    --pos: #8FD3AE; --pos-soft: #1A2E24;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171614; --bg-2: #1F1E1B; --border: #33312D;
+  --fg: #EDEAE4; --fg-2: #B6B1A8; --fg-3: #858077;
+  --win: #1F1E1B;
+  --neg: #F0A391; --neg-soft: #3A221C;
+  --pos: #8FD3AE; --pos-soft: #1A2E24;
+}
 
-  section { padding: 72px 0; border-top: 1px solid var(--border); }
-  .steps { display: grid; gap: 40px 48px; }
-  @media (min-width: 720px) { .steps { grid-template-columns: 1fr 1fr; } }
-  .step .n { font-family: var(--mono); font-size: 13px; color: var(--faint); display: block; margin-bottom: 10px; }
-  .step p { color: var(--body); }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 400 17px/1.6 var(--font-sans);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  padding: 0 var(--gl-pad);
+}
+main, .bar, .feet { max-width: var(--gl-cap); margin: 0 auto; }
+p { color: var(--fg-2); }
+h1, h2, h3 { color: var(--fg); line-height: 1.2; }
+h2, h3 { font-weight: 600; }
+a { color: inherit; text-underline-offset: 3px; }
+svg { display: block; }
+section { padding: 4rem 0; border-top: 1px solid var(--border); scroll-margin-top: 4rem; }
 
-  .two { display: grid; gap: 48px; }
-  @media (min-width: 860px) { .two { grid-template-columns: 1fr 1fr; } }
-  ul.plain { list-style: none; padding: 0; margin: 0; }
-  ul.plain li { padding: 12px 0; border-bottom: 1px solid var(--border); }
-  ul.plain li:first-child { border-top: 1px solid var(--border); }
-  .note { background: var(--surface); border-radius: 8px; padding: 20px 22px; }
-  .note h3 { margin-bottom: 8px; }
-  ol.install { padding-left: 1.3em; margin: 0; }
-  ol.install li { padding: 6px 0; }
+.bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--gl-gap); padding: 1.25rem 0; flex-wrap: wrap;
+}
+.brand { text-decoration: none; }
+.mark { font-family: var(--font-display); font-size: 1.35rem; }
+nav { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
+nav a { color: var(--fg-2); text-decoration: none; font-size: .95rem; }
+nav a:hover { color: var(--fg); text-decoration: underline; }
+.sep { width: 1px; height: 1.1rem; background: var(--border); }
+@media (max-width: 34rem) { .sep { display: none; } nav { gap: .9rem 1rem; } }
 
-  footer { border-top: 1px solid var(--border); padding: 32px 0 48px; font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+.chip {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font: inherit; font-size: .8rem; letter-spacing: .04em; color: var(--fg-2);
+  border: 1px solid var(--border); border-radius: 6px; padding: .3rem .65rem;
+  background: none; cursor: pointer; line-height: 1; text-decoration: none;
+  transition: border-color .15s, color .15s;
+}
+.chip:hover { color: var(--fg); text-decoration: none; border-color: var(--fg-3); }
+.chip svg { width: 14px; height: 14px; }
+.when-light { display: none; }
+:root[data-theme="dark"] .when-light { display: block; }
+:root[data-theme="dark"] .when-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .when-light { display: block; }
+  :root:not([data-theme="light"]) .when-dark { display: none; }
+}
+
+.hero { padding: 3rem 0 4rem; text-align: center; }
+.hero h1 {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(3rem, 8.6vw, 5.8rem); line-height: .98;
+  margin: 0 auto 1.4rem; letter-spacing: -.01em;
+}
+.lede { font-size: 1.2rem; margin: 0 auto 2.25rem; max-width: var(--measure); }
+
+/* Das Plugin-Fenster als Zeichnung, solange es kein Bildschirmfoto aus einer
+   neutralen Demo-Datei gibt. Die Unterzeile sagt das offen. */
+.keyvisual { margin: 0 auto 2rem; max-width: 30rem; text-align: left; }
+.win {
+  background: var(--win); border: 1px solid var(--border); border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(28,26,23,.04), 0 18px 40px rgba(28,26,23,.08);
+  overflow: hidden; font-size: 13px;
+}
+.win-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
+.win-title { margin-left: 8px; font-weight: 600; color: var(--fg); }
+.tabs { display: flex; gap: 2px; padding: 8px 10px 0; border-bottom: 1px solid var(--border); }
+.tab { padding: 6px 10px 8px; color: var(--fg-3); border-bottom: 2px solid transparent; }
+.tab.on { color: var(--fg); border-bottom-color: var(--fg); font-weight: 600; }
+.win-body { padding: 14px; }
+.win-body .hint { color: var(--fg-3); font-size: 12px; margin-bottom: 10px; }
+.wrow { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.wrow:last-child { border-bottom: 0; }
+.fam { color: var(--fg); }
+.fam span { color: var(--fg-3); }
+.num { font-family: var(--font-mono); font-size: 12px; color: var(--fg-3); }
+.badge { font-family: var(--font-mono); font-size: 11px; border-radius: 4px; padding: 2px 6px; }
+.badge.ok { color: var(--pos); background: var(--pos-soft); }
+.badge.miss { color: var(--neg); background: var(--neg-soft); }
+@media (max-width: 30rem) { .num { display: none; } }
+
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; margin: 0 0 .9rem; }
+.button {
+  display: inline-flex; align-items: center; gap: .55rem;
+  padding: .75rem 1.35rem; border-radius: 10px;
+  background: var(--fg); color: var(--bg); text-decoration: none; font-weight: 600;
+}
+.button.secondary { background: transparent; color: var(--fg); border: 1px solid var(--border); font-weight: 400; }
+.fineprint { color: var(--fg-3); font-size: .9rem; margin: 0 auto; max-width: var(--measure); }
+
+code, pre { font-family: var(--font-mono); font-size: .875rem; }
+code { background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; padding: 0 .3rem; }
+
+/* Vier Reiter, vier Spalten, in der Reihenfolge, in der man sie braucht. */
+.grid { display: grid; gap: calc(var(--gl-gap) * 1.6); }
+@media (min-width: 40rem) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 62rem) { .grid { grid-template-columns: repeat(4, 1fr); } }
+.grid .n { display: block; font-size: .8rem; letter-spacing: .04em; color: var(--fg-3); margin-bottom: .5rem; }
+.grid h3 { font-size: 1.05rem; margin: 0 0 .4rem; }
+.grid p { font-size: .96rem; margin: 0; }
+
+section > h2 { margin: 0 0 1.5rem; font-size: 1.6rem; }
+section > p { max-width: var(--measure); }
+
+ol.install { margin: 0; padding-left: 1.3rem; max-width: var(--measure); color: var(--fg-2); }
+ol.install li { padding: .35rem 0; }
+
+details { border-top: 1px solid var(--border); padding: 1.1rem 0; }
+details > summary {
+  cursor: pointer; font-weight: 600; list-style: none;
+  display: flex; justify-content: space-between; gap: 1rem;
+}
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; color: var(--fg-3); }
+details[open] summary::after { content: "–"; }
+details p { margin: .85rem 0 0; max-width: var(--measure); }
+
+/* Die grosse Wortmarke am Ende, wie auf fieldpack.dev: eine scharfe Lage blendet
+   nach unten aus, eine unscharfe Kopie blendet dort ein, unter der Maus vereist
+   sie. Sie ist Gestaltung und fuer Vorleseprogramme unsichtbar. Die Groesse
+   ist auf die Breite von „Local Type Kit" gemessen. */
+body { overflow-x: clip; }
+.footer-display {
+  position: relative; overflow: hidden; isolation: isolate;
+  width: 100vw; left: 50%; transform: translateX(-50%);
+  margin: 0; user-select: none; pointer-events: none;
+}
+.footer-display > span, .footer-glass, .footer-hot {
+  display: block; white-space: nowrap; text-align: center;
+  font-family: var(--font-display); font-weight: 400;
+  font-size: 21.9vw; letter-spacing: -.01em; line-height: .9;
+  color: color-mix(in srgb, var(--fg) 13%, var(--bg));
+}
+.footer-display > span {
+  -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 0%, #000 70%),
+                      linear-gradient(to bottom, #000 16%, #0008 48%, transparent 82%);
+          mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 0%, #000 70%),
+                      linear-gradient(to bottom, #000 16%, #0008 48%, transparent 82%);
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+}
+@property --frost-r { syntax: "<length>"; inherits: true; initial-value: 0px; }
+.footer-display { --frost-x: 50%; --frost-y: 50%; transition: --frost-r .45s ease; }
+.footer-display.frosting { --frost-r: 22vw; }
+.footer-hot {
+  position: absolute; inset: 0; filter: blur(22px);
+  -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), #000 0%, transparent 70%);
+          mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), #000 0%, transparent 70%);
+}
+.footer-glass {
+  position: absolute; inset: 0; filter: blur(13px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 20%, #000b 60%, #0008 100%);
+          mask-image: linear-gradient(to bottom, transparent 20%, #000b 60%, #0008 100%);
+}
+
+.feet { position: relative; border-top: 1px dotted var(--border); margin-top: 4rem; padding: 2rem 0 100px; }
+.feet-over { position: absolute; left: 0; right: 0; bottom: 1.25rem; z-index: 2; }
+.feet-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--gl-gap) 1.5rem; flex-wrap: wrap;
+}
+.feet-mark { font-family: var(--font-display); font-size: 1.7rem; color: var(--fg); }
+.feet-links { display: flex; gap: .55rem; flex-wrap: wrap; color: var(--fg-3); font-size: .95rem; }
+.feet-house { font-family: var(--font-display); font-size: 1.7rem; color: var(--fg); text-decoration: none; }
+.feet-note { color: var(--fg-3); font-size: .82rem; margin: 1.5rem 0 0; }
 </style>
 </head>
+
 <body>
-<div class="wrap">
-  <header class="top">
-    <span class="name">Local Type Kit</span>
-    <nav><a href="#what">What it does</a><a href="#install">Install</a></nav>
-  </header>
+
+<div class="bar">
+  <a class="brand" href="./"><span class="mark">Local Type Kit</span></a>
+  <nav>
+    <a href="#how">What it does</a>
+    <a href="#install">Install</a>
+    <a href="#questions">Questions</a>
+    <span class="sep"></span>
+    <a class="chip" href="de/" title="Auf Deutsch">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM9.71002 19.6674C8.74743 17.6259 8.15732 15.3742 8.02731 13H4.06189C4.458 16.1765 6.71639 18.7747 9.71002 19.6674ZM10.0307 13C10.1811 15.4388 10.8778 17.7297 12 19.752C13.1222 17.7297 13.8189 15.4388 13.9693 13H10.0307ZM19.9381 13H15.9727C15.8427 15.3742 15.2526 17.6259 14.29 19.6674C17.2836 18.7747 19.542 16.1765 19.9381 13ZM4.06189 11H8.02731C8.15732 8.62577 8.74743 6.37407 9.71002 4.33256C6.71639 5.22533 4.458 7.8235 4.06189 11ZM10.0307 11H13.9693C13.8189 8.56122 13.1222 6.27025 12 4.24799C10.8778 6.27025 10.1811 8.56122 10.0307 11ZM14.29 4.33256C15.2526 6.37407 15.8427 8.62577 15.9727 11H19.9381C19.542 7.8235 17.2836 5.22533 14.29 4.33256Z"/></svg><span>DE</span>
+    </a>
+    <button class="chip" type="button" id="theme" title="Switch appearance" aria-label="Switch appearance">
+      <span class="when-dark"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor"><path stroke-width="2" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="when-light"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="5" stroke-width="2"/><path stroke-width="2" d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
+    </button>
+  </nav>
+</div>
+
+<main>
 
   <div class="hero">
-    <div>
-      <p class="label">Figma plugin · open source</p>
-      <h1>Your typeface stays on your machine.</h1>
-      <p class="lead">Licensed brand fonts often may not be uploaded to a shared font service. The Figma desktop app can still use them. Local Type Kit does the repetitive work around them across a whole file.</p>
-      <div class="meta">
-        <span class="chip">No network access</span>
-        <span class="chip">Nothing uploaded</span>
-        <span class="chip">MIT license</span>
-      </div>
-    </div>
-    <figure>
-      <div class="win" aria-hidden="true">
+    <h1>Your typeface<br>stays on your machine</h1>
+    <p class="lede">Many brand fonts may not be uploaded to a shared font service. The Figma desktop app can still use them. Local Type Kit does the repetitive work around them, across the whole file.</p>
+
+    <div class="keyvisual">
+      <div class="win" role="img" aria-label="Drawing of the plugin window: the Fonts tab lists Brand Sans as missing and Inter as installed, with the number of layers and styles for each.">
         <div class="win-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="win-title">Local Type Kit</span></div>
         <div class="tabs"><span class="tab on">Fonts</span><span class="tab">Replace</span><span class="tab">Styles</span><span class="tab">Assign</span></div>
         <div class="win-body">
           <div class="hint">Fonts used in this file, in text and in local styles.</div>
-          <div class="row"><span class="fam">Brand Sans <span>Bold</span></span><span class="num">212 layers · 6 styles</span><span class="badge miss">missing</span></div>
-          <div class="row"><span class="fam">Brand Sans <span>Regular</span></span><span class="num">488 layers · 9 styles</span><span class="badge miss">missing</span></div>
-          <div class="row"><span class="fam">Inter <span>Medium</span></span><span class="num">74 layers · 2 styles</span><span class="badge ok">installed</span></div>
-          <div class="row"><span class="fam">Inter <span>Regular</span></span><span class="num">131 layers · 3 styles</span><span class="badge ok">installed</span></div>
+          <div class="wrow"><span class="fam">Brand Sans <span>Bold</span></span><span class="num">212 layers · 6 styles</span><span class="badge miss">missing</span></div>
+          <div class="wrow"><span class="fam">Brand Sans <span>Regular</span></span><span class="num">488 layers · 9 styles</span><span class="badge miss">missing</span></div>
+          <div class="wrow"><span class="fam">Inter <span>Medium</span></span><span class="num">74 layers · 2 styles</span><span class="badge ok">installed</span></div>
+          <div class="wrow"><span class="fam">Inter <span>Regular</span></span><span class="num">131 layers · 3 styles</span><span class="badge ok">installed</span></div>
         </div>
       </div>
-      <figcaption>Schematic view, not a screenshot</figcaption>
-    </figure>
+    </div>
+
+    <div class="actions">
+      <a class="button" href="#install">Install</a>
+      <a class="button secondary" href="#questions">Questions</a>
+    </div>
+    <p class="fineprint">The plugin view is a drawing. Free and open source under the MIT license. The Figma Community listing follows with the first release.</p>
   </div>
 
-  <section id="what">
-    <p class="label">What it does</p>
-    <h2>Four tabs, in the order you need them.</h2>
-    <div class="steps">
-      <div class="step"><span class="n">01 · Fonts</span><h3>See what the file uses</h3><p>Lists every font in text layers and in local text styles, and marks the ones that are not installed on this machine.</p></div>
-      <div class="step"><span class="n">02 · Replace</span><h3>Swap a font everywhere</h3><p>Loose text, components, instance overrides, local styles and mixed text runs. Components change before their instances, so instances keep only the overrides they really have. A preview shows the counts first.</p></div>
-      <div class="step"><span class="n">03 · Styles</span><h3>Build text styles from variables</h3><p>Creates or updates text styles from a variable collection and binds family, size and line height to the variables.</p></div>
-      <div class="step"><span class="n">04 · Assign</span><h3>Attach loose text to styles</h3><p>Gives loose text the one local style that matches its family, weight, size and line height exactly. If more than one fits, the text stays as it is and goes on a list.</p></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="two">
-      <div>
-        <p class="label">Safe by design</p>
-        <h2>It changes your file and nothing else.</h2>
-        <ul class="plain">
-          <li>No network access. The manifest allows no domains.</li>
-          <li>Nothing is uploaded. Fonts load from your machine through the desktop app.</li>
-          <li>Every change has a preview, and every run is one undo step.</li>
-          <li>Text whose font family is bound to a variable is skipped and listed, never unbound.</li>
-          <li>The setup is stored in the file, so the next person runs the same configuration.</li>
-        </ul>
-      </div>
-      <div>
-        <p class="label">One limit</p>
-        <div class="note">
-          <h3>The font has to be on every machine.</h3>
-          <p>This limit belongs to Figma. People without the font installed see it as missing, and no plugin changes that. Local Type Kit shows you where that is the case. In the browser, Figma's font installer is needed as well.</p>
-        </div>
-      </div>
+  <section id="how">
+    <h2>Four tabs, in the order you need them</h2>
+    <div class="grid">
+      <div><span class="n">01 · Fonts</span><h3>See what the file uses</h3><p>Lists every font in text layers and in local text styles, and marks the ones that are not installed on this machine.</p></div>
+      <div><span class="n">02 · Replace</span><h3>Swap a font everywhere</h3><p>Loose text, components, instance overrides, local styles and mixed text runs. Components change first, so instances keep only the overrides they really have. A preview shows the counts first.</p></div>
+      <div><span class="n">03 · Styles</span><h3>Build text styles from variables</h3><p>Creates or updates text styles from a variable collection and binds family, size and line height to the variables.</p></div>
+      <div><span class="n">04 · Assign</span><h3>Attach loose text to styles</h3><p>Gives loose text the one local style that matches it exactly. If more than one fits, the text stays as it is and goes on a list.</p></div>
     </div>
   </section>
 
   <section id="install">
-    <p class="label">Install</p>
-    <h2>Two files, no build step.</h2>
-    <div class="two">
-      <ol class="install">
-        <li>Download or clone the repository.</li>
-        <li>In the Figma desktop app: Plugins → Development → Import plugin from manifest, and pick <code>manifest.json</code>.</li>
-        <li>Open a design file and run Plugins → Development → Local Type Kit.</li>
-      </ol>
-      <p style="color: var(--muted)">The Figma Community listing and the GitHub repository follow with the first release.</p>
-    </div>
+    <h2>Two files, no build step</h2>
+    <ol class="install">
+      <li>Download or clone the repository.</li>
+      <li>In the Figma desktop app, choose Plugins → Development → Import plugin from manifest and pick <code>manifest.json</code>.</li>
+      <li>Open a design file and run Plugins → Development → Local Type Kit.</li>
+    </ol>
   </section>
 
-  <footer>
-    <span>Local Type Kit · MIT license</span>
-    <span>Made by David Latz</span>
-  </footer>
-</div>
+  <section id="questions">
+    <h2>Questions</h2>
+    <details><summary>Does the plugin send anything over the network?</summary><p>No. The manifest allows no network domain at all, and nothing is uploaded. Fonts load from your machine through the desktop app.</p></details>
+    <details><summary>Can I undo a run?</summary><p>Yes. Every change shows a preview first, and every run is one undo step.</p></details>
+    <details><summary>What happens to text whose font is bound to a variable?</summary><p>It is skipped and listed. The plugin never removes a variable binding.</p></details>
+    <details><summary>Where is the setup stored?</summary><p>In the Figma file itself. The next person who opens the plugin there runs the same configuration.</p></details>
+    <details><summary>Why does a colleague still see the font as missing?</summary><p>That limit belongs to Figma: the font has to be installed on every machine that edits the file, and no plugin changes that. Local Type Kit shows you where it is missing. In the browser, Figma's font installer is needed as well.</p></details>
+    <details><summary>What does it cost?</summary><p>Nothing. It is open source under the MIT license: two files, no build step, no dependencies.</p></details>
+  </section>
+
+</main>
+
+<footer class="feet">
+  <div class="footer-display" aria-hidden="true"><span>Local Type Kit</span><div class="footer-glass">Local Type Kit</div><div class="footer-hot">Local Type Kit</div></div>
+  <div class="feet-over">
+  <div class="feet-row">
+    <span class="feet-mark">Local Type Kit</span>
+    <span class="feet-links">MIT license</span>
+    <a class="feet-house" href="https://davidlatz.de">David Latz</a>
+  </div>
+  <p class="feet-note">Not affiliated with Figma.</p>
+  </div>
+</footer>
+
+<script>
+/* Nur die Abweichung wird gespeichert. Ohne Wahl folgt die Seite weiter dem
+   System, auch wenn es sich waehrend des Besuchs aendert. */
+(function () {
+  var root = document.documentElement;
+  var button = document.getElementById("theme");
+  if (!button) return;
+  button.addEventListener("click", function () {
+    var dark = matchMedia("(prefers-color-scheme: dark)").matches;
+    var current = root.getAttribute("data-theme") || (dark ? "dark" : "light");
+    var next = current === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("local-type-kit-theme", next); } catch (e) {}
+  });
+})();
+</script>
+
+<script>
+/* Die Wortmarke nimmt keine Maus an, also hoert der ganze Fuss zu. */
+(function () {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!matchMedia("(hover: hover)").matches) return;
+  var feet = document.querySelector(".feet");
+  var mark = document.querySelector(".footer-display");
+  if (!feet || !mark) return;
+  feet.addEventListener("mousemove", function (e) {
+    var r = mark.getBoundingClientRect();
+    mark.style.setProperty("--frost-x", (e.clientX - r.left) + "px");
+    mark.style.setProperty("--frost-y", (e.clientY - r.top) + "px");
+    mark.classList.add("frosting");
+  });
+  feet.addEventListener("mouseleave", function () { mark.classList.remove("frosting"); });
+})();
+</script>
+
 </body>
 </html>

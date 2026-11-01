@@ -1,0 +1,137 @@
+{
+  "_note": "Alle sichtbaren Texte der Seite. index.html und de/index.html werden daraus erzeugt: python3 build.py. Nie die erzeugten Dateien von Hand bearbeiten, sie werden ueberschrieben.",
+  "lang_other_href": { "en": "de/", "de": "../" },
+  "lang_switch_label": { "en": "Auf Deutsch", "de": "In English" },
+  "lang_other_short": { "en": "DE", "de": "EN" },
+  "home_href": { "en": "./", "de": "./" },
+  "theme_label": { "en": "Switch appearance", "de": "Darstellung wechseln" },
+  "footer_size": { "en": "21.9vw", "de": "21.9vw" },
+  "title": {
+    "en": "Local Type Kit – Figma plugin for locally installed fonts",
+    "de": "Local Type Kit – Figma-Plugin für lokal installierte Schriften"
+  },
+  "description": {
+    "en": "Check, replace and style locally installed fonts across a whole Figma file. No network, no upload. Free and open source.",
+    "de": "Lokal installierte Schriften in einer ganzen Figma-Datei prüfen, tauschen und als Stile anlegen. Ohne Netz, ohne Upload. Kostenlos und quelloffen."
+  },
+  "nav_how": { "en": "What it does", "de": "Was es kann" },
+  "nav_install": { "en": "Install", "de": "Installieren" },
+  "nav_questions": { "en": "Questions", "de": "Fragen" },
+  "hero_h1": {
+    "en": "Your typeface<br>stays on your machine",
+    "de": "Deine Hausschrift<br>bleibt auf dem Rechner"
+  },
+  "hero_lede": {
+    "en": "Many brand fonts may not be uploaded to a shared font service. The Figma desktop app can still use them. Local Type Kit does the repetitive work around them, across the whole file.",
+    "de": "Viele Hausschriften dürfen in keinen geteilten Schriftendienst. Die Figma-Desktop-App kann sie trotzdem benutzen. Local Type Kit erledigt die Fleißarbeit drumherum, in der ganzen Datei."
+  },
+  "hero_shot_alt": {
+    "en": "Drawing of the plugin window: the Fonts tab lists Brand Sans as missing and Inter as installed, with the number of layers and styles for each.",
+    "de": "Zeichnung des Plugin-Fensters: Der Reiter Fonts zeigt Brand Sans als fehlend und Inter als installiert, jeweils mit der Zahl der Ebenen und Stile."
+  },
+  "win_hint": {
+    "en": "Fonts used in this file, in text and in local styles.",
+    "de": "Schriften in dieser Datei, in Text und in lokalen Stilen."
+  },
+  "win_layers": { "en": "layers", "de": "Ebenen" },
+  "win_styles": { "en": "styles", "de": "Stile" },
+  "win_missing": { "en": "missing", "de": "fehlt" },
+  "win_installed": { "en": "installed", "de": "installiert" },
+  "cta_install": { "en": "Install", "de": "Installieren" },
+  "cta_questions": { "en": "Questions", "de": "Fragen" },
+  "fineprint": {
+    "en": "The plugin view is a drawing. Free and open source under the MIT license. The Figma Community listing follows with the first release.",
+    "de": "Die Ansicht des Plugins ist gezeichnet. Kostenlos und quelloffen unter MIT-Lizenz. Der Eintrag in der Figma Community folgt mit der ersten Ausgabe."
+  },
+  "how_h": {
+    "en": "Four tabs, in the order you need them",
+    "de": "Vier Reiter, in der Reihenfolge, in der du sie brauchst"
+  },
+  "g1_h": { "en": "See what the file uses", "de": "Sehen, was die Datei benutzt" },
+  "g1_p": {
+    "en": "Lists every font in text layers and in local text styles, and marks the ones that are not installed on this machine.",
+    "de": "Listet jede Schrift in Textebenen und in lokalen Textstilen und markiert die, die auf diesem Rechner fehlen."
+  },
+  "g2_h": { "en": "Swap a font everywhere", "de": "Eine Schrift überall tauschen" },
+  "g2_p": {
+    "en": "Loose text, components, instance overrides, local styles and mixed text runs. Components change first, so instances keep only the overrides they really have. A preview shows the counts first.",
+    "de": "Loser Text, Komponenten, Abweichungen in Instanzen, lokale Stile und gemischte Textläufe. Komponenten kommen zuerst dran, damit Instanzen nur ihre eigenen Abweichungen behalten. Eine Vorschau zeigt vorher die Zahlen."
+  },
+  "g3_h": { "en": "Build text styles from variables", "de": "Textstile aus Variablen bauen" },
+  "g3_p": {
+    "en": "Creates or updates text styles from a variable collection and binds family, size and line height to the variables.",
+    "de": "Legt Textstile aus einer Variablensammlung an oder aktualisiert sie und bindet Familie, Größe und Zeilenhöhe an die Variablen."
+  },
+  "g4_h": { "en": "Attach loose text to styles", "de": "Losen Text an Stile hängen" },
+  "g4_p": {
+    "en": "Gives loose text the one local style that matches it exactly. If more than one fits, the text stays as it is and goes on a list.",
+    "de": "Gibt losem Text den einen lokalen Stil, der genau passt. Passen mehrere, bleibt der Text, wie er ist, und landet auf einer Liste."
+  },
+  "install_h": { "en": "Two files, no build step", "de": "Zwei Dateien, kein Build" },
+  "install_1": {
+    "en": "Download or clone the repository.",
+    "de": "Repository herunterladen oder klonen."
+  },
+  "install_2": {
+    "en": "In the Figma desktop app, choose Plugins → Development → Import plugin from manifest and pick <code>manifest.json</code>.",
+    "de": "In der Figma-Desktop-App Plugins → Development → Import plugin from manifest wählen und <code>manifest.json</code> auswählen."
+  },
+  "install_3": {
+    "en": "Open a design file and run Plugins → Development → Local Type Kit.",
+    "de": "Eine Designdatei öffnen und Plugins → Development → Local Type Kit starten."
+  },
+  "faq_h": { "en": "Questions", "de": "Fragen" },
+  "faq1_q": {
+    "en": "Does the plugin send anything over the network?",
+    "de": "Schickt das Plugin etwas übers Netz?"
+  },
+  "faq1_a": {
+    "en": "No. The manifest allows no network domain at all, and nothing is uploaded. Fonts load from your machine through the desktop app.",
+    "de": "Nein. Das Manifest erlaubt keine einzige Domain, und nichts wird hochgeladen. Die Schriften kommen über die Desktop-App von deinem Rechner."
+  },
+  "faq2_q": {
+    "en": "Can I undo a run?",
+    "de": "Kann ich einen Lauf rückgängig machen?"
+  },
+  "faq2_a": {
+    "en": "Yes. Every change shows a preview first, and every run is one undo step.",
+    "de": "Ja. Jede Änderung zeigt vorher eine Vorschau, und jeder Lauf ist ein einziger Rückgängig-Schritt."
+  },
+  "faq3_q": {
+    "en": "What happens to text whose font is bound to a variable?",
+    "de": "Was passiert mit Text, dessen Schrift an eine Variable gebunden ist?"
+  },
+  "faq3_a": {
+    "en": "It is skipped and listed. The plugin never removes a variable binding.",
+    "de": "Er wird übersprungen und aufgelistet. Das Plugin löst nie eine Bindung an eine Variable."
+  },
+  "faq4_q": {
+    "en": "Where is the setup stored?",
+    "de": "Wo liegt die Einrichtung?"
+  },
+  "faq4_a": {
+    "en": "In the Figma file itself. The next person who opens the plugin there runs the same configuration.",
+    "de": "In der Figma-Datei selbst. Wer das Plugin dort als Nächstes öffnet, arbeitet mit derselben Konfiguration."
+  },
+  "faq5_q": {
+    "en": "Why does a colleague still see the font as missing?",
+    "de": "Warum sieht eine Kollegin die Schrift trotzdem als fehlend?"
+  },
+  "faq5_a": {
+    "en": "That limit belongs to Figma: the font has to be installed on every machine that edits the file, and no plugin changes that. Local Type Kit shows you where it is missing. In the browser, Figma's font installer is needed as well.",
+    "de": "Die Grenze liegt bei Figma: Die Schrift muss auf jedem Rechner installiert sein, der die Datei bearbeitet, und kein Plugin ändert das. Local Type Kit zeigt dir, wo sie fehlt. Im Browser braucht es zusätzlich Figmas Font-Installer."
+  },
+  "faq6_q": {
+    "en": "What does it cost?",
+    "de": "Was kostet es?"
+  },
+  "faq6_a": {
+    "en": "Nothing. It is open source under the MIT license: two files, no build step, no dependencies.",
+    "de": "Nichts. Es ist quelloffen unter MIT-Lizenz, zwei Dateien ohne Build und ohne Abhängigkeiten."
+  },
+  "footer_licence": { "en": "MIT license", "de": "MIT-Lizenz" },
+  "footer_note": {
+    "en": "Not affiliated with Figma.",
+    "de": "Kein Produkt von Figma."
+  }
+}

@@ -1,4 +1,5 @@
-# Web fonts for site/ stay local: Perfectly Nineties is commercial, Geist would need its OFL text alongside
+# Web fonts for site/ stay local until each OFL text lies next to its font (Instrument Serif has none yet)
 site/fonts/
+site/assets/fonts/
 .vercel/
 site/.vercel/
