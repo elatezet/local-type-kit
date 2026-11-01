@@ -1,4 +1,4 @@
-// Local Type – work with locally installed fonts across a whole Figma file.
+// Local Type Kit – work with locally installed fonts across a whole Figma file.
 // Scan which fonts a file uses, replace fonts everywhere, build text styles from variables, assign styles to loose text.
 // Runs only on your machine: no network access, no font upload. The last configuration is kept in the file itself.
 
