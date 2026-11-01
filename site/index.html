@@ -227,6 +227,14 @@ body { overflow-x: clip; }
   -webkit-mask-composite: source-in; mask-composite: intersect;
 }
 @property --frost-r { syntax: "<length>"; inherits: true; initial-value: 0px; }
+/* Feines Rauschen ueber der Unschaerfe bricht die Farbstufen im Verlauf auf (David, 01.11.2026). */
+.footer-display::after {
+  content: ""; position: absolute; inset: 0 0 -4rem; z-index: 3; pointer-events: none;
+  opacity: .09; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  -webkit-mask-image: linear-gradient(to bottom, transparent 10%, #000 35%, #000 75%, transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 10%, #000 35%, #000 75%, transparent 100%);
+}
 .footer-display { --frost-x: 50%; --frost-y: 50%; transition: --frost-r .45s ease; }
 .footer-display.frosting { --frost-r: 22vw; }
 .footer-hot {
