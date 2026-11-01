@@ -181,6 +181,11 @@ code { background: var(--bg-2); border: 1px solid var(--border); border-radius: 
 .grid p { font-size: .96rem; margin: 0; }
 
 section > h2 { margin: 0 0 1.5rem; font-size: 1.6rem; }
+/* Abschnittstitel in der Schrift der Headline, mittig (David, 01.11.2026). */
+#how > h2 {
+  font-family: var(--font-display); font-weight: 400; text-align: center;
+  font-size: clamp(2.2rem, 4.6vw, 3.2rem); letter-spacing: -.01em; margin-bottom: 2.5rem;
+}
 section > p { max-width: var(--measure); }
 
 ol.install { margin: 0; padding-left: 1.3rem; max-width: var(--measure); color: var(--fg-2); }
@@ -239,9 +244,11 @@ body { overflow-x: clip; }
   display: flex; align-items: baseline; justify-content: space-between;
   gap: var(--gl-gap) 1.5rem; flex-wrap: wrap;
 }
-.feet-mark { font-family: var(--font-display); font-size: 1.7rem; color: var(--fg); }
+/* Name und Absender im Fuss in Inter, die grosse Wortmarke darueber bleibt Serif (David, 01.11.2026). */
+.feet-mark { font-family: var(--font-sans); font-size: .95rem; font-weight: 500; color: var(--fg); }
 .feet-links { display: flex; gap: .55rem; flex-wrap: wrap; color: var(--fg-3); font-size: .95rem; }
-.feet-house { font-family: var(--font-display); font-size: 1.7rem; color: var(--fg); text-decoration: none; }
+.feet-house { font-family: var(--font-sans); font-size: .95rem; font-weight: 500; color: var(--fg); text-decoration: none; }
+.feet-house:hover { text-decoration: underline; }
 .feet-note { color: var(--fg-3); font-size: .82rem; margin: 1.5rem 0 0; }
 </style>
 </head>

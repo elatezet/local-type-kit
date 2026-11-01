@@ -181,6 +181,11 @@ code { background: var(--bg-2); border: 1px solid var(--border); border-radius: 
 .grid p { font-size: .96rem; margin: 0; }
 
 section > h2 { margin: 0 0 1.5rem; font-size: 1.6rem; }
+/* Abschnittstitel in der Schrift der Headline, mittig (David, 01.11.2026). */
+#how > h2 {
+  font-family: var(--font-display); font-weight: 400; text-align: center;
+  font-size: clamp(2.2rem, 4.6vw, 3.2rem); letter-spacing: -.01em; margin-bottom: 2.5rem;
+}
 section > p { max-width: var(--measure); }
 
 ol.install { margin: 0; padding-left: 1.3rem; max-width: var(--measure); color: var(--fg-2); }
@@ -239,9 +244,11 @@ body { overflow-x: clip; }
   display: flex; align-items: baseline; justify-content: space-between;
   gap: var(--gl-gap) 1.5rem; flex-wrap: wrap;
 }
-.feet-mark { font-family: var(--font-display); font-size: 1.7rem; color: var(--fg); }
+/* Name und Absender im Fuss in Inter, die grosse Wortmarke darueber bleibt Serif (David, 01.11.2026). */
+.feet-mark { font-family: var(--font-sans); font-size: .95rem; font-weight: 500; color: var(--fg); }
 .feet-links { display: flex; gap: .55rem; flex-wrap: wrap; color: var(--fg-3); font-size: .95rem; }
-.feet-house { font-family: var(--font-display); font-size: 1.7rem; color: var(--fg); text-decoration: none; }
+.feet-house { font-family: var(--font-sans); font-size: .95rem; font-weight: 500; color: var(--fg); text-decoration: none; }
+.feet-house:hover { text-decoration: underline; }
 .feet-note { color: var(--fg-3); font-size: .82rem; margin: 1.5rem 0 0; }
 </style>
 </head>
@@ -268,10 +275,10 @@ body { overflow-x: clip; }
 
   <div class="hero">
     <h1>Deine Hausschrift<br>bleibt auf dem Rechner</h1>
-    <p class="lede">Viele Hausschriften dürfen in keinen geteilten Schriftendienst. Die Figma-Desktop-App kann sie trotzdem benutzen. Local Type Kit erledigt die Fleißarbeit drumherum, in der ganzen Datei.</p>
+    <p class="lede">Viele Hausschriften dürfen in keinen geteilten Schriftendienst. Local Type Kit arbeitet mit ihnen in der ganzen Datei, Textstile und Instanzen eingeschlossen, und schickt nichts übers Netz.</p>
 
     <div class="keyvisual">
-      <div class="win" role="img" aria-label="Zeichnung des Plugin-Fensters: Der Reiter Fonts zeigt Brand Sans als fehlend und Inter als installiert, jeweils mit der Zahl der Ebenen und Stile.">
+      <div class="win" role="img" aria-label="Das Plugin-Fenster: Der Reiter Fonts zeigt Brand Sans als fehlend und Inter als installiert, jeweils mit der Zahl der Ebenen und Stile.">
         <div class="win-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="win-title">Local Type Kit</span></div>
         <div class="tabs"><span class="tab on">Fonts</span><span class="tab">Replace</span><span class="tab">Styles</span><span class="tab">Assign</span></div>
         <div class="win-body">
@@ -288,11 +295,11 @@ body { overflow-x: clip; }
       <a class="button" href="#install">Installieren</a>
       <a class="button secondary" href="#questions">Fragen</a>
     </div>
-    <p class="fineprint">Die Ansicht des Plugins ist gezeichnet. Kostenlos und quelloffen unter MIT-Lizenz. Der Eintrag in der Figma Community folgt mit der ersten Ausgabe.</p>
+    <p class="fineprint">Kostenlos und quelloffen unter MIT-Lizenz. Der Eintrag in der Figma Community folgt mit der ersten Ausgabe.</p>
   </div>
 
   <section id="how">
-    <h2>Vier Reiter, in der Reihenfolge, in der du sie brauchst</h2>
+    <h2>Features</h2>
     <div class="grid">
       <div><span class="n">01 · Fonts</span><h3>Sehen, was die Datei benutzt</h3><p>Listet jede Schrift in Textebenen und in lokalen Textstilen und markiert die, die auf diesem Rechner fehlen.</p></div>
       <div><span class="n">02 · Replace</span><h3>Eine Schrift überall tauschen</h3><p>Loser Text, Komponenten, Abweichungen in Instanzen, lokale Stile und gemischte Textläufe. Komponenten kommen zuerst dran, damit Instanzen nur ihre eigenen Abweichungen behalten. Eine Vorschau zeigt vorher die Zahlen.</p></div>

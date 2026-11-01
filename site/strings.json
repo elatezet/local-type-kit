@@ -22,12 +22,12 @@
     "de": "Deine Hausschrift<br>bleibt auf dem Rechner"
   },
   "hero_lede": {
-    "en": "Many brand fonts may not be uploaded to a shared font service. The Figma desktop app can still use them. Local Type Kit does the repetitive work around them, across the whole file.",
-    "de": "Viele Hausschriften dürfen in keinen geteilten Schriftendienst. Die Figma-Desktop-App kann sie trotzdem benutzen. Local Type Kit erledigt die Fleißarbeit drumherum, in der ganzen Datei."
+    "en": "Many brand fonts may not be uploaded to a shared font service. Local Type Kit works with them across the whole file, including text styles and instance overrides, and sends nothing over the network.",
+    "de": "Viele Hausschriften dürfen in keinen geteilten Schriftendienst. Local Type Kit arbeitet mit ihnen in der ganzen Datei, Textstile und Instanzen eingeschlossen, und schickt nichts übers Netz."
   },
   "hero_shot_alt": {
-    "en": "Drawing of the plugin window: the Fonts tab lists Brand Sans as missing and Inter as installed, with the number of layers and styles for each.",
-    "de": "Zeichnung des Plugin-Fensters: Der Reiter Fonts zeigt Brand Sans als fehlend und Inter als installiert, jeweils mit der Zahl der Ebenen und Stile."
+    "en": "The plugin window: the Fonts tab lists Brand Sans as missing and Inter as installed, with the number of layers and styles for each.",
+    "de": "Das Plugin-Fenster: Der Reiter Fonts zeigt Brand Sans als fehlend und Inter als installiert, jeweils mit der Zahl der Ebenen und Stile."
   },
   "win_hint": {
     "en": "Fonts used in this file, in text and in local styles.",
@@ -40,13 +40,10 @@
   "cta_install": { "en": "Install", "de": "Installieren" },
   "cta_questions": { "en": "Questions", "de": "Fragen" },
   "fineprint": {
-    "en": "The plugin view is a drawing. Free and open source under the MIT license. The Figma Community listing follows with the first release.",
-    "de": "Die Ansicht des Plugins ist gezeichnet. Kostenlos und quelloffen unter MIT-Lizenz. Der Eintrag in der Figma Community folgt mit der ersten Ausgabe."
+    "en": "Free and open source under the MIT license. The Figma Community listing follows with the first release.",
+    "de": "Kostenlos und quelloffen unter MIT-Lizenz. Der Eintrag in der Figma Community folgt mit der ersten Ausgabe."
   },
-  "how_h": {
-    "en": "Four tabs, in the order you need them",
-    "de": "Vier Reiter, in der Reihenfolge, in der du sie brauchst"
-  },
+  "how_h": { "en": "Features", "de": "Features" },
   "g1_h": { "en": "See what the file uses", "de": "Sehen, was die Datei benutzt" },
   "g1_p": {
     "en": "Lists every font in text layers and in local text styles, and marks the ones that are not installed on this machine.",
