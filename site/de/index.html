@@ -207,7 +207,8 @@ details p { margin: .85rem 0 0; max-width: var(--measure); }
    ist auf die Breite von „Local Type Kit" gemessen. */
 body { overflow-x: clip; }
 .footer-display {
-  position: relative; overflow: hidden; isolation: isolate;
+  /* Nur seitlich beschneiden, damit die Unschaerfe nach unten auslaufen kann. */
+  position: relative; overflow-x: clip; overflow-y: visible; isolation: isolate;
   width: 100vw; left: 50%; transform: translateX(-50%);
   margin: 0; user-select: none; pointer-events: none;
 }
@@ -228,14 +229,16 @@ body { overflow-x: clip; }
 .footer-display { --frost-x: 50%; --frost-y: 50%; transition: --frost-r .45s ease; }
 .footer-display.frosting { --frost-r: 22vw; }
 .footer-hot {
-  position: absolute; inset: 0; filter: blur(22px);
+  position: absolute; inset: 0 0 -4rem; filter: blur(22px);
   -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), #000 0%, transparent 70%);
           mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), #000 0%, transparent 70%);
 }
 .footer-glass {
-  position: absolute; inset: 0; filter: blur(13px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 20%, #000b 60%, #0008 100%);
-          mask-image: linear-gradient(to bottom, transparent 20%, #000b 60%, #0008 100%);
+  /* Die Lage reicht unter die Zeile hinaus und laeuft dort bis transparent aus,
+     statt an der Kante der Zeile abzureissen (David, 01.11.2026). */
+  position: absolute; inset: 0 0 -4rem; filter: blur(13px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 15%, #000b 45%, #0008 65%, transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 15%, #000b 45%, #0008 65%, transparent 100%);
 }
 
 .feet { position: relative; border-top: 1px dotted var(--border); margin-top: 4rem; padding: 2rem 0 100px; }
