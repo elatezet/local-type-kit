@@ -1,0 +1,162 @@
+<style>
+  :root { font: 12px/1.45 Inter, system-ui, sans-serif; }
+  body { margin: 0; background: var(--figma-color-bg); color: var(--figma-color-text); }
+  nav { display: flex; border-bottom: 1px solid var(--figma-color-border); }
+  nav button { flex: 1; padding: 10px 0; background: none; border: 0; color: var(--figma-color-text-secondary); font: inherit; cursor: pointer; }
+  nav button[aria-selected="true"] { color: var(--figma-color-text); font-weight: 600; box-shadow: inset 0 -2px var(--figma-color-text); }
+  section { padding: 12px 16px; display: grid; gap: 10px; }
+  p { margin: 0; color: var(--figma-color-text-secondary); }
+  table { width: 100%; border-collapse: collapse; }
+  td, th { text-align: left; padding: 5px 4px; border-bottom: 1px solid var(--figma-color-border); vertical-align: middle; }
+  th { font-weight: 500; color: var(--figma-color-text-secondary); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .missing { color: var(--figma-color-text-danger); }
+  .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  input, select, textarea { font: inherit; color: inherit; background: var(--figma-color-bg-secondary); border: 1px solid var(--figma-color-border); border-radius: 4px; padding: 5px 6px; min-width: 0; }
+  textarea { width: 100%; box-sizing: border-box; height: 220px; font-family: ui-monospace, Menlo, monospace; font-size: 11px; }
+  button.act { padding: 6px 12px; border-radius: 4px; border: 1px solid var(--figma-color-border); background: var(--figma-color-bg-secondary); color: inherit; font: inherit; cursor: pointer; }
+  button.primary { background: var(--figma-color-bg-brand); color: var(--figma-color-text-onbrand); border-color: transparent; }
+  .map { display: grid; grid-template-columns: 1fr auto 1fr 90px auto; gap: 6px; align-items: center; }
+  pre { margin: 0; white-space: pre-wrap; font-family: ui-monospace, Menlo, monospace; font-size: 11px; background: var(--figma-color-bg-secondary); padding: 8px; border-radius: 4px; max-height: 180px; overflow: auto; }
+  [hidden] { display: none !important; }
+</style>
+
+<nav>
+  <button data-tab="fonts" aria-selected="true">Fonts</button>
+  <button data-tab="replace">Replace</button>
+  <button data-tab="styles">Styles</button>
+</nav>
+
+<section id="fonts">
+  <p>Fonts used in this file, in text and in local styles. Missing means the font is not installed on this machine.</p>
+  <table><thead><tr><th>Font</th><th class="num">Text</th><th class="num">Styles</th><th></th></tr></thead><tbody id="usedRows"></tbody></table>
+  <div class="row"><button class="act" id="rescan">Rescan</button></div>
+</section>
+
+<section id="replace" hidden>
+  <p>Replace fonts everywhere: loose text, components, instance overrides and local styles. Text that uses a style follows the style.</p>
+  <div id="mapRows" class="map"></div>
+  <datalist id="familyList"></datalist>
+  <div class="row">
+    <button class="act" id="addMap">Add row</button>
+    <button class="act" id="replacePreview">Preview</button>
+    <button class="act primary" id="replaceApply">Replace</button>
+  </div>
+  <pre id="replaceOut" hidden></pre>
+</section>
+
+<section id="styles" hidden>
+  <p>Create or update text styles from a variable collection, then give loose text the style that matches it exactly. The configuration is saved in this file.</p>
+  <textarea id="config" spellcheck="false"></textarea>
+  <div class="row">
+    <button class="act primary" id="buildStyles">Create styles</button>
+    <button class="act" id="assignPreview">Preview assignment</button>
+    <button class="act" id="assignApply">Assign styles</button>
+  </div>
+  <pre id="stylesOut" hidden></pre>
+</section>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const send = (type, data = {}) => parent.postMessage({ pluginMessage: { type, ...data } }, "*");
+let used = [], families = {};
+
+const EXAMPLE = {
+  collection: "Typography",
+  sizeSuffix: "/font-size",
+  lineHeightSuffix: "/line-height",
+  styles: [
+    { name: "heading-1", group: "heading-1", familyVariable: "font/heading", style: "Bold" },
+    { name: "body", group: "body", familyVariable: "font/body", style: "Regular" }
+  ]
+};
+
+document.querySelectorAll("nav button").forEach((b) => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach((x) => x.setAttribute("aria-selected", x === b));
+  document.querySelectorAll("section").forEach((s) => s.hidden = s.id !== b.dataset.tab);
+});
+
+function show(id, text) { $(id).hidden = false; $(id).textContent = text; }
+
+function renderUsed() {
+  $("usedRows").innerHTML = "";
+  for (const u of used) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td class="${u.available ? "" : "missing"}"></td><td class="num">${u.nodes}</td><td class="num">${u.styles}</td><td><button class="act">Replace…</button></td>`;
+    tr.cells[0].textContent = `${u.family} ${u.style}${u.available ? "" : " (missing)"}`;
+    tr.querySelector("button").onclick = () => { addMapRow(u); document.querySelector('[data-tab="replace"]').click(); };
+    $("usedRows").append(tr);
+  }
+  $("familyList").innerHTML = Object.keys(families).sort().map((f) => `<option value="${f.replace(/"/g, "&quot;")}">`).join("");
+}
+
+function addMapRow(from) {
+  const wrap = $("mapRows");
+  const fromSel = document.createElement("select");
+  fromSel.innerHTML = used.map((u, i) => `<option value="${i}">${u.family} ${u.style}</option>`).join("");
+  if (from) fromSel.value = used.indexOf(from);
+  const arrow = document.createElement("span"); arrow.textContent = "→";
+  const fam = document.createElement("input"); fam.setAttribute("list", "familyList"); fam.placeholder = "Family";
+  const sty = document.createElement("select");
+  const del = document.createElement("button"); del.className = "act"; del.textContent = "×";
+  const fill = () => {
+    const styles = families[fam.value] || [];
+    const want = used[fromSel.value] ? used[fromSel.value].style : "";
+    sty.innerHTML = styles.map((s) => `<option${s === want ? " selected" : ""}>${s}</option>`).join("");
+  };
+  fam.oninput = fill; fromSel.onchange = fill;
+  const els = [fromSel, arrow, fam, sty, del];
+  del.onclick = () => els.forEach((e) => e.remove());
+  wrap.append(...els);
+}
+
+function mapping() {
+  const els = [...$("mapRows").children];
+  const rows = [];
+  for (let i = 0; i < els.length; i += 5) {
+    const from = used[els[i].value], family = els[i + 2].value, style = els[i + 3].value;
+    if (from && family && style) rows.push({ from: { family: from.family, style: from.style }, to: { family, style } });
+  }
+  return rows;
+}
+
+function readConfig() {
+  const config = JSON.parse($("config").value);
+  send("saveConfig", { config });
+  return config;
+}
+
+$("rescan").onclick = () => send("scan");
+$("addMap").onclick = () => addMapRow();
+$("replacePreview").onclick = () => send("replacePreview", { mapping: mapping() });
+$("replaceApply").onclick = () => send("replaceApply", { mapping: mapping() });
+$("buildStyles").onclick = () => { try { send("styles", { config: readConfig() }); } catch (e) { show("stylesOut", "Configuration is not valid JSON: " + e.message); } };
+$("assignPreview").onclick = () => send("assignPreview");
+$("assignApply").onclick = () => send("assignApply");
+
+const fmtReplace = (r, done) =>
+  `${done ? "Replaced" : "Would replace"}: ${r.segments} text runs in ${r.nodes} layers, ${r.styles} styles.\n` +
+  (done ? "" : "Instances are counted too; most of them follow their component and need no change of their own.\n") +
+  `${r.viaStyle} runs follow a style and change with it.` + (r.skipped.length ? `\nSkipped:\n- ${r.skipped.join("\n- ")}` : "");
+const fmtAssign = (r, done) =>
+  `${done ? "Assigned" : "Would assign"}: ${r.assigned} layers. Without match: ${r.unmatched}.` +
+  (r.ambiguous.length ? `\nMore than one style fits, left alone:\n- ${r.ambiguous.join("\n- ")}` : "");
+
+onmessage = (e) => {
+  const m = e.data.pluginMessage;
+  if (!m) return;
+  const out = m.type.startsWith("replace") ? "replaceOut" : "stylesOut";
+  if (!m.ok) { show(out, "Error: " + m.error); return; }
+  const r = m.result;
+  if (m.type === "scan") { used = r.used; families = r.families; renderUsed(); }
+  if (m.type === "replacePreview") show(out, fmtReplace(r, false));
+  if (m.type === "replaceApply") { show(out, fmtReplace(r, true)); send("scan"); }
+  if (m.type === "styles") show(out, [...r.done, ...r.errors.map((x) => "Error: " + x)].join("\n") || "Nothing to do.");
+  if (m.type === "assignPreview") show(out, fmtAssign(r, false));
+  if (m.type === "assignApply") show(out, fmtAssign(r, true));
+  if (m.type === "loadConfig") $("config").value = JSON.stringify(r || EXAMPLE, null, 2);
+};
+
+send("loadConfig");
+send("scan");
+</script>
