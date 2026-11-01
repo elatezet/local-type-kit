@@ -1,11 +1,29 @@
 {
   "_note": "Alle sichtbaren Texte der Seite. index.html und de/index.html werden daraus erzeugt: python3 build.py. Nie die erzeugten Dateien von Hand bearbeiten, sie werden ueberschrieben.",
-  "lang_other_href": { "en": "de/", "de": "../" },
-  "lang_switch_label": { "en": "Auf Deutsch", "de": "In English" },
-  "lang_other_short": { "en": "DE", "de": "EN" },
-  "home_href": { "en": "./", "de": "./" },
-  "theme_label": { "en": "Switch appearance", "de": "Darstellung wechseln" },
-  "footer_size": { "en": "21.9vw", "de": "21.9vw" },
+  "lang_other_href": {
+    "en": "de/",
+    "de": "../"
+  },
+  "lang_switch_label": {
+    "en": "Auf Deutsch",
+    "de": "In English"
+  },
+  "lang_other_short": {
+    "en": "DE",
+    "de": "EN"
+  },
+  "home_href": {
+    "en": "./",
+    "de": "./"
+  },
+  "theme_label": {
+    "en": "Switch appearance",
+    "de": "Darstellung wechseln"
+  },
+  "footer_size": {
+    "en": "21.9vw",
+    "de": "21.9vw"
+  },
   "title": {
     "en": "Local Type Kit – Figma plugin for locally installed fonts",
     "de": "Local Type Kit – Figma-Plugin für lokal installierte Schriften"
@@ -14,9 +32,18 @@
     "en": "Check, replace and style locally installed fonts across a whole Figma file. No network, no upload. Free and open source.",
     "de": "Lokal installierte Schriften in einer ganzen Figma-Datei prüfen, tauschen und als Stile anlegen. Ohne Netz, ohne Upload. Kostenlos und quelloffen."
   },
-  "nav_how": { "en": "What it does", "de": "Was es kann" },
-  "nav_install": { "en": "Install", "de": "Installieren" },
-  "nav_questions": { "en": "Questions", "de": "Fragen" },
+  "nav_how": {
+    "en": "What it does",
+    "de": "Was es kann"
+  },
+  "nav_install": {
+    "en": "Install",
+    "de": "Installieren"
+  },
+  "nav_questions": {
+    "en": "Questions",
+    "de": "Fragen"
+  },
   "hero_h1": {
     "en": "Your typeface<br>stays on your machine",
     "de": "Deine Hausschrift<br>bleibt auf dem Rechner"
@@ -33,38 +60,74 @@
     "en": "Fonts used in this file, in text and in local styles.",
     "de": "Schriften in dieser Datei, in Text und in lokalen Stilen."
   },
-  "win_layers": { "en": "layers", "de": "Ebenen" },
-  "win_styles": { "en": "styles", "de": "Stile" },
-  "win_missing": { "en": "missing", "de": "fehlt" },
-  "win_installed": { "en": "installed", "de": "installiert" },
-  "cta_install": { "en": "Install", "de": "Installieren" },
-  "cta_questions": { "en": "Questions", "de": "Fragen" },
-  "fineprint": {
-    "en": "Free and open source under the MIT license. The Figma Community listing follows with the first release.",
-    "de": "Kostenlos und quelloffen unter MIT-Lizenz. Der Eintrag in der Figma Community folgt mit der ersten Ausgabe."
+  "win_layers": {
+    "en": "layers",
+    "de": "Ebenen"
   },
-  "how_h": { "en": "Features", "de": "Features" },
-  "g1_h": { "en": "See what the file uses", "de": "Sehen, was die Datei benutzt" },
+  "win_styles": {
+    "en": "styles",
+    "de": "Stile"
+  },
+  "win_missing": {
+    "en": "missing",
+    "de": "fehlt"
+  },
+  "win_installed": {
+    "en": "installed",
+    "de": "installiert"
+  },
+  "cta_install": {
+    "en": "Install",
+    "de": "Installieren"
+  },
+  "cta_questions": {
+    "en": "Questions",
+    "de": "Fragen"
+  },
+  "fineprint": {
+    "en": "Free and open source under the MIT license.",
+    "de": "Kostenlos und quelloffen unter MIT-Lizenz."
+  },
+  "how_h": {
+    "en": "Features",
+    "de": "Features"
+  },
+  "g1_h": {
+    "en": "See what the file uses",
+    "de": "Sehen, was die Datei benutzt"
+  },
   "g1_p": {
     "en": "Lists every font in text layers and in local text styles, and marks the ones that are not installed on this machine.",
     "de": "Listet jede Schrift in Textebenen und in lokalen Textstilen und markiert die, die auf diesem Rechner fehlen."
   },
-  "g2_h": { "en": "Swap a font everywhere", "de": "Eine Schrift überall tauschen" },
+  "g2_h": {
+    "en": "Swap a font everywhere",
+    "de": "Eine Schrift überall tauschen"
+  },
   "g2_p": {
     "en": "Loose text, components, instance overrides, local styles and mixed text runs. Components change first, so instances keep only the overrides they really have. A preview shows the counts first.",
     "de": "Loser Text, Komponenten, Abweichungen in Instanzen, lokale Stile und gemischte Textläufe. Komponenten kommen zuerst dran, damit Instanzen nur ihre eigenen Abweichungen behalten. Eine Vorschau zeigt vorher die Zahlen."
   },
-  "g3_h": { "en": "Build text styles from variables", "de": "Textstile aus Variablen bauen" },
+  "g3_h": {
+    "en": "Build text styles from variables",
+    "de": "Textstile aus Variablen bauen"
+  },
   "g3_p": {
     "en": "Creates or updates text styles from a variable collection and binds family, size and line height to the variables.",
     "de": "Legt Textstile aus einer Variablensammlung an oder aktualisiert sie und bindet Familie, Größe und Zeilenhöhe an die Variablen."
   },
-  "g4_h": { "en": "Attach loose text to styles", "de": "Losen Text an Stile hängen" },
+  "g4_h": {
+    "en": "Attach loose text to styles",
+    "de": "Losen Text an Stile hängen"
+  },
   "g4_p": {
     "en": "Gives loose text the one local style that matches it exactly. If more than one fits, the text stays as it is and goes on a list.",
     "de": "Gibt losem Text den einen lokalen Stil, der genau passt. Passen mehrere, bleibt der Text, wie er ist, und landet auf einer Liste."
   },
-  "install_h": { "en": "Two files, no build step", "de": "Zwei Dateien, kein Build" },
+  "install_h": {
+    "en": "Two files, no build step",
+    "de": "Zwei Dateien, kein Build"
+  },
   "install_1": {
     "en": "Download or clone the repository.",
     "de": "Repository herunterladen oder klonen."
@@ -77,7 +140,10 @@
     "en": "Open a design file and run Plugins → Development → Local Type Kit.",
     "de": "Eine Designdatei öffnen und Plugins → Development → Local Type Kit starten."
   },
-  "faq_h": { "en": "Questions", "de": "Fragen" },
+  "faq_h": {
+    "en": "Questions",
+    "de": "Fragen"
+  },
   "faq1_q": {
     "en": "Does the plugin send anything over the network?",
     "de": "Schickt das Plugin etwas übers Netz?"
@@ -126,7 +192,10 @@
     "en": "Nothing. It is open source under the MIT license: two files, no build step, no dependencies.",
     "de": "Nichts. Es ist quelloffen unter MIT-Lizenz, zwei Dateien ohne Build und ohne Abhängigkeiten."
   },
-  "footer_licence": { "en": "MIT license", "de": "MIT-Lizenz" },
+  "footer_licence": {
+    "en": "MIT license",
+    "de": "MIT-Lizenz"
+  },
   "footer_note": {
     "en": "Not affiliated with Figma.",
     "de": "Kein Produkt von Figma."

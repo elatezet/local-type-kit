@@ -112,7 +112,7 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 .chip {
   display: inline-flex; align-items: center; gap: .35rem;
   font: inherit; font-size: .8rem; letter-spacing: .04em; color: var(--fg-2);
-  border: 1px solid var(--border); border-radius: 6px; padding: .3rem .65rem;
+  border: 1px solid var(--border); border-radius: 6px; padding: .55rem .8rem; min-height: 2.25rem;
   background: none; cursor: pointer; line-height: 1; text-decoration: none;
   transition: border-color .15s, color .15s;
 }
@@ -132,7 +132,8 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
   font-size: clamp(3rem, 8.6vw, 5.8rem); line-height: .98;
   margin: 0 auto 1.4rem; letter-spacing: -.01em;
 }
-.lede { font-size: 1.2rem; margin: 0 auto 2.25rem; max-width: var(--measure); }
+/* Fliesstext im zentrierten Hero linksbuendig (David, 01.11.2026). */
+.lede { font-size: 1.2rem; margin: 0 auto 2.25rem; max-width: var(--measure); text-align: left; }
 
 /* Das Plugin-Fenster als Zeichnung, solange es kein Bildschirmfoto aus einer
    neutralen Demo-Datei gibt. Die Unterzeile sagt das offen. */
@@ -297,7 +298,7 @@ body { overflow-x: clip; }
       <a class="button" href="#install">Installieren</a>
       <a class="button secondary" href="#questions">Fragen</a>
     </div>
-    <p class="fineprint">Kostenlos und quelloffen unter MIT-Lizenz. Der Eintrag in der Figma Community folgt mit der ersten Ausgabe.</p>
+    <p class="fineprint">Kostenlos und quelloffen unter MIT-Lizenz.</p>
   </div>
 
   <section id="how">
