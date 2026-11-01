@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Local Type Kit – Figma plugin for locally installed fonts</title>
+<meta name="description" content="Check, replace and style locally installed fonts across a whole Figma file. No network, no upload.">
+<style>
+  @font-face { font-family: "Geist"; src: url("fonts/GeistVariable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+  @font-face { font-family: "Geist Mono"; src: url("fonts/GeistMonoVariable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+  @font-face { font-family: "Perfectly Nineties"; src: url("fonts/PerfectlyNineties-Regular.woff") format("woff"); font-weight: 400; font-display: swap; }
+
+  :root {
+    --bg: #fefdfb;
+    --surface: #f5f5f4;
+    --fg: #1c1917;
+    --body: #44403c;
+    --muted: #78716c;
+    --faint: #a8a29e;
+    --border: #e7e5e4;
+    --neg: #a8412c;
+    --neg-soft: #fce7e2;
+    --pos: #1d6b48;
+    --pos-soft: #e2f4ea;
+    --display: "Perfectly Nineties", Georgia, serif;
+    --sans: "Geist", system-ui, sans-serif;
+    --mono: "Geist Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--body); font-family: var(--sans); font-size: 17px; line-height: 1.6; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+  @media (min-width: 720px) { .wrap { padding: 0 40px; } }
+
+  .label { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
+  h1, h2 { font-family: var(--display); font-weight: 400; color: var(--fg); margin: 0; }
+  h1 { font-size: clamp(44px, 8vw, 84px); line-height: 1.02; }
+  h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.1; margin-bottom: 24px; }
+  h3 { font-size: 17px; font-weight: 600; color: var(--fg); margin: 0 0 6px; }
+  p { margin: 0 0 12px; }
+  a { color: var(--fg); text-underline-offset: 3px; }
+  code { font-family: var(--mono); font-size: 14px; background: var(--surface); padding: 1px 6px; border-radius: 4px; }
+
+  header.top { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  header.top .name { font-weight: 600; color: var(--fg); }
+  header.top nav a { color: var(--muted); text-decoration: none; margin-left: 20px; }
+  header.top nav a:hover { color: var(--fg); }
+
+  .hero { display: grid; gap: 48px; padding: 72px 0 80px; align-items: center; }
+  @media (min-width: 900px) { .hero { grid-template-columns: 1.05fr 1fr; } }
+  .lead { font-size: 20px; line-height: 1.5; color: var(--body); margin: 24px 0 28px; max-width: 34em; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-family: var(--mono); font-size: 12px; color: var(--body); border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px; background: var(--bg); }
+
+  /* schematic plugin window */
+  figure { margin: 0; }
+  .win { background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 1px 2px rgba(28,25,23,.04), 0 12px 32px rgba(28,25,23,.06); overflow: hidden; font-size: 13px; }
+  .win-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
+  .win-title { margin-left: 8px; font-weight: 600; color: var(--fg); }
+  .tabs { display: flex; gap: 2px; padding: 8px 10px 0; border-bottom: 1px solid var(--border); }
+  .tab { padding: 6px 10px 8px; color: var(--muted); border-bottom: 2px solid transparent; }
+  .tab.on { color: var(--fg); border-bottom-color: var(--fg); font-weight: 600; }
+  .win-body { padding: 14px; }
+  .win-body .hint { color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+  .row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .row:last-child { border-bottom: 0; }
+  .fam { color: var(--fg); }
+  .fam span { color: var(--muted); }
+  .num { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .badge { font-family: var(--mono); font-size: 11px; border-radius: 4px; padding: 2px 6px; }
+  .badge.ok { color: var(--pos); background: var(--pos-soft); }
+  .badge.miss { color: var(--neg); background: var(--neg-soft); }
+  figcaption { font-family: var(--mono); font-size: 11px; color: var(--faint); margin-top: 10px; text-transform: uppercase; letter-spacing: .06em; }
+
+  section { padding: 72px 0; border-top: 1px solid var(--border); }
+  .steps { display: grid; gap: 40px 48px; }
+  @media (min-width: 720px) { .steps { grid-template-columns: 1fr 1fr; } }
+  .step .n { font-family: var(--mono); font-size: 13px; color: var(--faint); display: block; margin-bottom: 10px; }
+  .step p { color: var(--body); }
+
+  .two { display: grid; gap: 48px; }
+  @media (min-width: 860px) { .two { grid-template-columns: 1fr 1fr; } }
+  ul.plain { list-style: none; padding: 0; margin: 0; }
+  ul.plain li { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  ul.plain li:first-child { border-top: 1px solid var(--border); }
+  .note { background: var(--surface); border-radius: 8px; padding: 20px 22px; }
+  .note h3 { margin-bottom: 8px; }
+  ol.install { padding-left: 1.3em; margin: 0; }
+  ol.install li { padding: 6px 0; }
+
+  footer { border-top: 1px solid var(--border); padding: 32px 0 48px; font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="name">Local Type Kit</span>
+    <nav><a href="#what">What it does</a><a href="#install">Install</a></nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <p class="label">Figma plugin · open source</p>
+      <h1>Your typeface stays on your machine.</h1>
+      <p class="lead">Licensed brand fonts often may not be uploaded to a shared font service. The Figma desktop app can still use them. Local Type Kit does the repetitive work around them across a whole file.</p>
+      <div class="meta">
+        <span class="chip">No network access</span>
+        <span class="chip">Nothing uploaded</span>
+        <span class="chip">MIT license</span>
+      </div>
+    </div>
+    <figure>
+      <div class="win" aria-hidden="true">
+        <div class="win-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="win-title">Local Type Kit</span></div>
+        <div class="tabs"><span class="tab on">Fonts</span><span class="tab">Replace</span><span class="tab">Styles</span><span class="tab">Assign</span></div>
+        <div class="win-body">
+          <div class="hint">Fonts used in this file, in text and in local styles.</div>
+          <div class="row"><span class="fam">Brand Sans <span>Bold</span></span><span class="num">212 layers · 6 styles</span><span class="badge miss">missing</span></div>
+          <div class="row"><span class="fam">Brand Sans <span>Regular</span></span><span class="num">488 layers · 9 styles</span><span class="badge miss">missing</span></div>
+          <div class="row"><span class="fam">Inter <span>Medium</span></span><span class="num">74 layers · 2 styles</span><span class="badge ok">installed</span></div>
+          <div class="row"><span class="fam">Inter <span>Regular</span></span><span class="num">131 layers · 3 styles</span><span class="badge ok">installed</span></div>
+        </div>
+      </div>
+      <figcaption>Schematic view, not a screenshot</figcaption>
+    </figure>
+  </div>
+
+  <section id="what">
+    <p class="label">What it does</p>
+    <h2>Four tabs, in the order you need them.</h2>
+    <div class="steps">
+      <div class="step"><span class="n">01 · Fonts</span><h3>See what the file uses</h3><p>Lists every font in text layers and in local text styles, and marks the ones that are not installed on this machine.</p></div>
+      <div class="step"><span class="n">02 · Replace</span><h3>Swap a font everywhere</h3><p>Loose text, components, instance overrides, local styles and mixed text runs. Components change before their instances, so instances keep only the overrides they really have. A preview shows the counts first.</p></div>
+      <div class="step"><span class="n">03 · Styles</span><h3>Build text styles from variables</h3><p>Creates or updates text styles from a variable collection and binds family, size and line height to the variables.</p></div>
+      <div class="step"><span class="n">04 · Assign</span><h3>Attach loose text to styles</h3><p>Gives loose text the one local style that matches its family, weight, size and line height exactly. If more than one fits, the text stays as it is and goes on a list.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="two">
+      <div>
+        <p class="label">Safe by design</p>
+        <h2>It changes your file and nothing else.</h2>
+        <ul class="plain">
+          <li>No network access. The manifest allows no domains.</li>
+          <li>Nothing is uploaded. Fonts load from your machine through the desktop app.</li>
+          <li>Every change has a preview, and every run is one undo step.</li>
+          <li>Text whose font family is bound to a variable is skipped and listed, never unbound.</li>
+          <li>The setup is stored in the file, so the next person runs the same configuration.</li>
+        </ul>
+      </div>
+      <div>
+        <p class="label">One limit</p>
+        <div class="note">
+          <h3>The font has to be on every machine.</h3>
+          <p>This limit belongs to Figma. People without the font installed see it as missing, and no plugin changes that. Local Type Kit shows you where that is the case. In the browser, Figma's font installer is needed as well.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="install">
+    <p class="label">Install</p>
+    <h2>Two files, no build step.</h2>
+    <div class="two">
+      <ol class="install">
+        <li>Download or clone the repository.</li>
+        <li>In the Figma desktop app: Plugins → Development → Import plugin from manifest, and pick <code>manifest.json</code>.</li>
+        <li>Open a design file and run Plugins → Development → Local Type Kit.</li>
+      </ol>
+      <p style="color: var(--muted)">The Figma Community listing and the GitHub repository follow with the first release.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>Local Type Kit · MIT license</span>
+    <span>Made by David Latz</span>
+  </footer>
+</div>
+</body>
+</html>
