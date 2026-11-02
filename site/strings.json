@@ -129,8 +129,8 @@
     "de": "Zwei Dateien, kein Build"
   },
   "install_1": {
-    "en": "Download or clone the repository.",
-    "de": "Repository herunterladen oder klonen."
+    "en": "Download or clone the <a href=\"https://github.com/elatezet/local-type-kit\">repository on GitHub</a>.",
+    "de": "Das <a href=\"https://github.com/elatezet/local-type-kit\">Repository auf GitHub</a> herunterladen oder klonen."
   },
   "install_2": {
     "en": "In the Figma desktop app, choose Plugins → Development → Import plugin from manifest and pick <code>manifest.json</code>.",
