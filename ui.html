@@ -16,6 +16,10 @@
   textarea { width: 100%; box-sizing: border-box; height: 220px; font-family: ui-monospace, Menlo, monospace; font-size: 11px; }
   button.act { padding: 6px 12px; border-radius: 4px; border: 1px solid var(--figma-color-border); background: var(--figma-color-bg-secondary); color: inherit; font: inherit; cursor: pointer; }
   button.primary { background: var(--figma-color-bg-brand); color: var(--figma-color-text-onbrand); border-color: transparent; }
+  .scope { display: inline-flex; border: 1px solid var(--figma-color-border); border-radius: 4px; overflow: hidden; }
+  .scope label { padding: 5px 10px; cursor: pointer; color: var(--figma-color-text-secondary); }
+  .scope input { position: absolute; opacity: 0; pointer-events: none; }
+  .scope label:has(input:checked) { background: var(--figma-color-bg-secondary); color: var(--figma-color-text); font-weight: 600; }
   .fam { border: 1px solid var(--figma-color-border); border-radius: 6px; padding: 8px; display: grid; gap: 6px; }
   .fam-head { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: center; }
   .fam-name { font-weight: 600; }
@@ -42,6 +46,14 @@
   <p>Pick a new family for the fonts you want to replace. Styles are matched by name; check them before you replace. Families without a new family stay as they are. Loose text, components, instance overrides and local styles all change; text that uses a style follows the style.</p>
   <div id="famRows" style="display:grid;gap:8px"></div>
   <datalist id="familyList"></datalist>
+  <div class="row">
+    <span>Replace in</span>
+    <span class="scope">
+      <label><input type="radio" name="scope" value="selection">Selection</label>
+      <label><input type="radio" name="scope" value="page">This page</label>
+      <label><input type="radio" name="scope" value="document" checked>Whole file</label>
+    </span>
+  </div>
   <div class="row">
     <button class="act" id="replacePreview">Preview</button>
     <button class="act primary" id="replaceApply">Replace</button>
@@ -156,14 +168,16 @@ function readConfig() {
 }
 
 $("rescan").onclick = () => send("scan");
-$("replacePreview").onclick = () => send("replacePreview", { mapping: mapping() });
-$("replaceApply").onclick = () => send("replaceApply", { mapping: mapping() });
+const scope = () => document.querySelector('input[name="scope"]:checked').value;
+$("replacePreview").onclick = () => send("replacePreview", { mapping: mapping(), scope: scope() });
+$("replaceApply").onclick = () => send("replaceApply", { mapping: mapping(), scope: scope() });
 $("buildStyles").onclick = () => { try { send("styles", { config: readConfig() }); } catch (e) { show("stylesOut", "Configuration is not valid JSON: " + e.message); } };
 $("assignPreview").onclick = () => send("assignPreview");
 $("assignApply").onclick = () => send("assignApply");
 
 const fmtReplace = (r, done) =>
-  `${done ? "Replaced" : "Would replace"}: ${r.segments} text runs in ${r.nodes} layers, ${r.styles} styles.\n` +
+  `${done ? "Replaced" : "Would replace"} in ${{ selection: "the selection", page: "this page", document: "the whole file" }[r.scope]}: ${r.segments} text runs in ${r.nodes} layers, ${r.styles} styles.\n` +
+  (r.scope === "document" ? "" : "Local styles belong to the whole file and stay as they are.\n") +
   (done ? "" : "Instances are counted too; most of them follow their component and need no change of their own.\n") +
   `${r.viaStyle} runs follow a style and change with it.` + (r.skipped.length ? `\nSkipped:\n- ${r.skipped.join("\n- ")}` : "");
 const fmtAssign = (r, done) =>

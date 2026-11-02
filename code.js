@@ -11,6 +11,20 @@ async function allTextNodes() {
   return figma.root.findAllWithCriteria({ types: ["TEXT"] });
 }
 
+// scope: "document" | "page" | "selection"
+async function textNodesIn(scope) {
+  if (scope === "page") return figma.currentPage.findAllWithCriteria({ types: ["TEXT"] });
+  if (scope === "selection") {
+    const out = new Set();
+    for (const n of figma.currentPage.selection) {
+      if (n.type === "TEXT") out.add(n);
+      if ("findAllWithCriteria" in n) for (const t of n.findAllWithCriteria({ types: ["TEXT"] })) out.add(t);
+    }
+    return [...out];
+  }
+  return allTextNodes();
+}
+
 function inInstance(n) {
   for (let p = n.parent; p && p.type !== "PAGE"; p = p.parent) if (p.type === "INSTANCE") return true;
   return false;
@@ -46,13 +60,15 @@ async function scan() {
 
 // ---- Replace fonts across the file ----
 // mapping: [{ from: {family, style}, to: {family, style} }]
-async function replaceFonts(mapping, apply) {
+// Local styles belong to the whole file and only change when the scope is the document.
+async function replaceFonts(mapping, apply, scope = "document") {
   const m = new Map(mapping.map((r) => [key(r.from), r.to]));
-  const res = { nodes: 0, segments: 0, styles: 0, viaStyle: 0, skipped: [] };
+  const res = { scope, nodes: 0, segments: 0, styles: 0, viaStyle: 0, skipped: [] };
+  if (scope === "selection" && figma.currentPage.selection.length === 0) throw new Error("Nothing is selected.");
   if (apply) for (const r of mapping) await figma.loadFontAsync(r.to);
 
   // Styles first: text that uses a style follows it and is not touched directly.
-  for (const st of await figma.getLocalTextStylesAsync()) {
+  for (const st of scope === "document" ? await figma.getLocalTextStylesAsync() : []) {
     const to = m.get(key(st.fontName));
     if (!to) continue;
     if (st.boundVariables && st.boundVariables.fontFamily) { res.skipped.push(`Style "${st.name}": family is bound to a variable`); continue; }
@@ -61,7 +77,7 @@ async function replaceFonts(mapping, apply) {
   }
 
   // Main components and loose text first, instances after, so instances only keep real overrides.
-  const nodes = await allTextNodes();
+  const nodes = await textNodesIn(scope);
   const ordered = [...nodes.filter((n) => !inInstance(n)), ...nodes.filter(inInstance)];
   for (const n of ordered) {
     let hit = false;
@@ -162,8 +178,8 @@ async function assignStyles(apply) {
 // ---- Plugin shell ----
 const handlers = {
   scan: () => scan(),
-  replacePreview: (msg) => replaceFonts(msg.mapping, false),
-  replaceApply: (msg) => replaceFonts(msg.mapping, true),
+  replacePreview: (msg) => replaceFonts(msg.mapping, false, msg.scope),
+  replaceApply: (msg) => replaceFonts(msg.mapping, true, msg.scope),
   styles: (msg) => stylesFromVariables(msg.config),
   assignPreview: () => assignStyles(false),
   assignApply: () => assignStyles(true),
