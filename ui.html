@@ -16,7 +16,12 @@
   textarea { width: 100%; box-sizing: border-box; height: 220px; font-family: ui-monospace, Menlo, monospace; font-size: 11px; }
   button.act { padding: 6px 12px; border-radius: 4px; border: 1px solid var(--figma-color-border); background: var(--figma-color-bg-secondary); color: inherit; font: inherit; cursor: pointer; }
   button.primary { background: var(--figma-color-bg-brand); color: var(--figma-color-text-onbrand); border-color: transparent; }
-  .map { display: grid; grid-template-columns: 1fr auto 1fr 90px auto; gap: 6px; align-items: center; }
+  .fam { border: 1px solid var(--figma-color-border); border-radius: 6px; padding: 8px; display: grid; gap: 6px; }
+  .fam-head { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: center; }
+  .fam-name { font-weight: 600; }
+  .fam-styles { display: grid; grid-template-columns: 1fr auto 1fr; gap: 4px 6px; align-items: center; }
+  .fam-styles span.from { color: var(--figma-color-text-secondary); }
+  .fam-styles select.unmatched { border-color: var(--figma-color-border-danger); }
   pre { margin: 0; white-space: pre-wrap; font-family: ui-monospace, Menlo, monospace; font-size: 11px; background: var(--figma-color-bg-secondary); padding: 8px; border-radius: 4px; max-height: 180px; overflow: auto; }
   [hidden] { display: none !important; }
 </style>
@@ -34,11 +39,10 @@
 </section>
 
 <section id="replace" hidden>
-  <p>Replace fonts everywhere: loose text, components, instance overrides and local styles. Text that uses a style follows the style.</p>
-  <div id="mapRows" class="map"></div>
+  <p>Pick a new family for the fonts you want to replace. Styles are matched by name; check them before you replace. Families without a new family stay as they are. Loose text, components, instance overrides and local styles all change; text that uses a style follows the style.</p>
+  <div id="famRows" style="display:grid;gap:8px"></div>
   <datalist id="familyList"></datalist>
   <div class="row">
-    <button class="act" id="addMap">Add row</button>
     <button class="act" id="replacePreview">Preview</button>
     <button class="act primary" id="replaceApply">Replace</button>
   </div>
@@ -84,39 +88,64 @@ function renderUsed() {
     const tr = document.createElement("tr");
     tr.innerHTML = `<td class="${u.available ? "" : "missing"}"></td><td class="num">${u.nodes}</td><td class="num">${u.styles}</td><td><button class="act">Replace…</button></td>`;
     tr.cells[0].textContent = `${u.family} ${u.style}${u.available ? "" : " (missing)"}`;
-    tr.querySelector("button").onclick = () => { addMapRow(u); document.querySelector('[data-tab="replace"]').click(); };
+    tr.querySelector("button").onclick = () => {
+      document.querySelector('[data-tab="replace"]').click();
+      const box = [...$("famRows").querySelectorAll(".fam")].find((f) => f.dataset.family === u.family);
+      if (box) box.querySelector("input").focus();
+    };
     $("usedRows").append(tr);
   }
   $("familyList").innerHTML = Object.keys(families).sort().map((f) => `<option value="${f.replace(/"/g, "&quot;")}">`).join("");
+  renderReplace();
 }
 
-function addMapRow(from) {
-  const wrap = $("mapRows");
-  const fromSel = document.createElement("select");
-  fromSel.innerHTML = used.map((u, i) => `<option value="${i}">${u.family} ${u.style}</option>`).join("");
-  if (from) fromSel.value = used.indexOf(from);
-  const arrow = document.createElement("span"); arrow.textContent = "→";
-  const fam = document.createElement("input"); fam.setAttribute("list", "familyList"); fam.placeholder = "Family";
-  const sty = document.createElement("select");
-  const del = document.createElement("button"); del.className = "act"; del.textContent = "×";
-  const fill = () => {
-    const styles = families[fam.value] || [];
-    const want = used[fromSel.value] ? used[fromSel.value].style : "";
-    sty.innerHTML = styles.map((s) => `<option${s === want ? " selected" : ""}>${s}</option>`).join("");
-  };
-  fam.oninput = fill; fromSel.onchange = fill;
-  const els = [fromSel, arrow, fam, sty, del];
-  del.onclick = () => els.forEach((e) => e.remove());
-  wrap.append(...els);
+function renderReplace() {
+  const wrap = $("famRows");
+  const keep = {};
+  wrap.querySelectorAll(".fam").forEach((f) => { keep[f.dataset.family] = f.querySelector("input").value; });
+  wrap.innerHTML = "";
+  const byFamily = {};
+  for (const u of used) (byFamily[u.family] = byFamily[u.family] || []).push(u);
+  for (const family of Object.keys(byFamily).sort()) {
+    const box = document.createElement("div"); box.className = "fam"; box.dataset.family = family;
+    const head = document.createElement("div"); head.className = "fam-head";
+    const name = document.createElement("span"); name.className = "fam-name"; name.textContent = family;
+    const arrow = document.createElement("span"); arrow.textContent = "→";
+    const target = document.createElement("input"); target.setAttribute("list", "familyList"); target.placeholder = "New family"; target.value = keep[family] || "";
+    head.append(name, arrow, target);
+    const rows = document.createElement("div"); rows.className = "fam-styles";
+    const fill = () => {
+      rows.innerHTML = "";
+      const avail = families[target.value];
+      rows.hidden = !avail;
+      if (!avail) return;
+      for (const u of byFamily[family]) {
+        const from = document.createElement("span"); from.className = "from"; from.textContent = u.style;
+        const a = document.createElement("span"); a.textContent = "→";
+        const sel = document.createElement("select"); sel.dataset.style = u.style;
+        const norm = (x) => x.toLowerCase().replace(/[\s_-]/g, "");
+        const match = avail.find((x) => x === u.style) || avail.find((x) => norm(x) === norm(u.style));
+        sel.innerHTML = `<option value="">Keep ${u.style}</option>` + avail.map((x) => `<option${x === match ? " selected" : ""}>${x}</option>`).join("");
+        sel.classList.toggle("unmatched", !match);
+        sel.onchange = () => sel.classList.toggle("unmatched", !sel.value);
+        rows.append(from, a, sel);
+      }
+    };
+    target.oninput = fill; fill();
+    box.append(head, rows);
+    wrap.append(box);
+  }
 }
 
 function mapping() {
-  const els = [...$("mapRows").children];
   const rows = [];
-  for (let i = 0; i < els.length; i += 5) {
-    const from = used[els[i].value], family = els[i + 2].value, style = els[i + 3].value;
-    if (from && family && style) rows.push({ from: { family: from.family, style: from.style }, to: { family, style } });
-  }
+  $("famRows").querySelectorAll(".fam").forEach((f) => {
+    const family = f.querySelector("input").value;
+    if (!families[family]) return;
+    f.querySelectorAll("select").forEach((sel) => {
+      if (sel.value) rows.push({ from: { family: f.dataset.family, style: sel.dataset.style }, to: { family, style: sel.value } });
+    });
+  });
   return rows;
 }
 
@@ -127,7 +156,6 @@ function readConfig() {
 }
 
 $("rescan").onclick = () => send("scan");
-$("addMap").onclick = () => addMapRow();
 $("replacePreview").onclick = () => send("replacePreview", { mapping: mapping() });
 $("replaceApply").onclick = () => send("replaceApply", { mapping: mapping() });
 $("buildStyles").onclick = () => { try { send("styles", { config: readConfig() }); } catch (e) { show("stylesOut", "Configuration is not valid JSON: " + e.message); } };
