@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset="utf-8">
 <style>
-  :root { font: 450 11px/16px Inter, system-ui, sans-serif; --row: 32px; --ctl: 24px; color-scheme: light dark; }
+  :root { font: 450 11px/16px Inter, system-ui, sans-serif; --row: 40px; --ctl: 24px; color-scheme: light dark; }
   * { box-sizing: border-box; }
   html, body { height: 100%; }
   body { margin: 0; display: flex; flex-direction: column; background: var(--figma-color-bg); color: var(--figma-color-text); }
@@ -11,7 +11,7 @@
   p { margin: 0; color: var(--figma-color-text-secondary); }
   h2 { margin: 0; font-size: 11px; font-weight: 550; }
 
-  header { display: flex; align-items: center; gap: 4px; height: 40px; padding: 0 8px 0 12px; border-bottom: 1px solid var(--figma-color-border); flex: none; }
+  header { display: flex; align-items: center; gap: 4px; height: 48px; padding: 0 12px 0 16px; border-bottom: 1px solid var(--figma-color-border); flex: none; }
   nav { display: flex; gap: 2px; flex: 1; }
   nav button { height: var(--ctl); padding: 0 8px; border: 0; border-radius: 5px; background: none; color: var(--figma-color-text-secondary); font-weight: 550; cursor: default; }
   nav button:hover { color: var(--figma-color-text); }
@@ -23,9 +23,9 @@
   .icon.busy svg { animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  main { flex: 1; overflow: auto; padding: 8px 0; }
-  .pad { padding: 0 12px; }
-  footer { flex: none; border-top: 1px solid var(--figma-color-border); padding: 12px; display: grid; gap: 8px; }
+  main { flex: 1; overflow: auto; padding: 12px 0; }
+  .pad { padding: 0 16px; }
+  footer { flex: none; border-top: 1px solid var(--figma-color-border); padding: 16px; display: grid; gap: 12px; }
 
   .btn { height: var(--ctl); padding: 0 8px; border-radius: 5px; border: 1px solid var(--figma-color-border); background: none; font-weight: 550; cursor: default; }
   .btn:hover:not(:disabled) { background: var(--figma-color-bg-hover, var(--figma-color-bg-secondary)); }
@@ -41,36 +41,37 @@
   select { appearance: none; padding-right: 22px; background-image: var(--chev); background-repeat: no-repeat; background-position: right 4px center; }
   input[type="checkbox"] { margin: 0; accent-color: var(--figma-color-bg-brand); }
 
-  .banner, .status { display: flex; gap: 8px; align-items: flex-start; padding: 8px; border-radius: 5px; background: var(--figma-color-bg-secondary); }
-  .banner { margin: 0 12px 8px; }
+  .banner, .status { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: 6px; background: var(--figma-color-bg-secondary); }
+  .banner { margin: 0 16px 12px; }
   .banner svg, .status > svg { margin-top: 0; }
   .status .txt { flex: 1; display: grid; gap: 4px; }
   .status details summary { color: var(--figma-color-text-secondary); cursor: default; }
   .status ul { margin: 4px 0 0; padding-left: 16px; color: var(--figma-color-text-secondary); }
   .ok > svg { color: var(--figma-color-icon-success, #14ae5c); }
-  .warn > svg, .w { color: var(--figma-color-icon-warning, #e5a000); }
+  .warn > svg { color: var(--figma-color-icon-warning, #e5a000); }
+  .dot { flex: none; width: 6px; height: 6px; margin: 0 4px; border-radius: 50%; background: var(--figma-color-icon-warning, #e5a000); }
   .err { background: var(--figma-color-bg-danger-tertiary, var(--figma-color-bg-secondary)); color: var(--figma-color-text-danger); }
   .err > svg { color: var(--figma-color-icon-danger, currentColor); }
   .info > svg { color: var(--figma-color-icon-secondary, var(--figma-color-text-secondary)); }
 
   .fam { border-bottom: 1px solid var(--figma-color-border); }
   .fam:last-child { border-bottom: 0; }
-  .fam-row { width: 100%; height: var(--row); display: flex; align-items: center; gap: 4px; padding: 0 12px 0 4px; border: 0; background: none; text-align: left; cursor: default; }
+  .fam-row { width: 100%; height: var(--row); display: flex; align-items: center; gap: 4px; padding: 0 16px 0 8px; border: 0; background: none; text-align: left; cursor: default; }
   .fam-row:hover { background: var(--figma-color-bg-hover, var(--figma-color-bg-secondary)); }
   .fam-row .chev { color: var(--figma-color-icon-tertiary, var(--figma-color-text-tertiary)); transition: transform 0.12s; }
   .fam-row[aria-expanded="true"] .chev { transform: rotate(90deg); }
   .fam-name { font-size: 12px; font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .fam-to { color: var(--figma-color-text-brand, var(--figma-color-text)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; gap: 4px; align-items: center; }
   .meta { margin-left: auto; padding-left: 8px; color: var(--figma-color-text-secondary); white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .fam-body { padding: 0 12px 12px 28px; display: grid; gap: 4px; }
-  .grid { display: grid; grid-template-columns: 1fr 16px 1fr; gap: 4px 8px; align-items: center; min-height: var(--ctl); }
+  .fam-body { padding: 4px 16px 16px 32px; display: grid; gap: 8px; }
+  .grid { display: grid; grid-template-columns: 1fr 16px 1fr; gap: 8px 8px; align-items: center; min-height: var(--ctl); }
   .grid .arrow { color: var(--figma-color-icon-tertiary, var(--figma-color-text-tertiary)); }
   .from { display: flex; align-items: center; gap: 4px; min-width: 0; }
   .from .s { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .from .n { margin-left: auto; color: var(--figma-color-text-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .lbl { color: var(--figma-color-text-secondary); }
   .cell { display: flex; align-items: center; gap: 4px; min-width: 0; }
-  .empty { padding: 24px 12px; text-align: center; color: var(--figma-color-text-secondary); }
+  .empty { padding: 32px 16px; text-align: center; color: var(--figma-color-text-secondary); }
 
   .seg { display: grid; grid-template-columns: repeat(3, 1fr); padding: 2px; gap: 2px; border-radius: 5px; background: var(--figma-color-bg-secondary); }
   .seg button { height: 20px; display: flex; align-items: center; justify-content: center; gap: 4px; padding: 0 8px; border: 1px solid transparent; border-radius: 4px; background: none; color: var(--figma-color-text-secondary); cursor: default; }
@@ -87,12 +88,12 @@
   #menu li b { font-weight: 650; }
   #menu li.none { color: var(--figma-color-text-menu-secondary, #aaa); }
 
-  .block { display: grid; gap: 8px; padding: 4px 12px 16px; }
-  .block + .block { border-top: 1px solid var(--figma-color-border); padding-top: 16px; }
+  .block { display: grid; gap: 12px; padding: 4px 16px 20px; }
+  .block + .block { border-top: 1px solid var(--figma-color-border); padding-top: 20px; }
   .field { display: grid; grid-template-columns: 80px 1fr; gap: 8px; align-items: center; }
-  .srow { display: grid; grid-template-columns: 16px 1fr 1.25fr 84px; gap: 8px; align-items: center; min-height: var(--row); }
+  .srow { display: grid; grid-template-columns: 16px 1fr 1.25fr 84px; gap: 8px; align-items: center; min-height: var(--row); padding: 4px 0; }
   .srow.head { min-height: 16px; color: var(--figma-color-text-secondary); }
-  .srow .grp { display: grid; min-width: 0; }
+  .srow .grp { display: grid; gap: 4px; min-width: 0; }
   .srow .grp small { font-size: 11px; color: var(--figma-color-text-secondary); font-variant-numeric: tabular-nums; }
   details.more summary { color: var(--figma-color-text-secondary); cursor: default; }
   details.more .field { margin-top: 8px; }
@@ -281,7 +282,7 @@ function renderFonts() {
     if (f.missing && !open.size && !Object.keys(targets).length) open.add(f.family);
     const box = document.createElement("div"); box.className = "fam";
     const row = document.createElement("button"); row.className = "fam-row"; row.setAttribute("aria-expanded", open.has(f.family));
-    row.innerHTML = `<span class="chev">${I.chev}</span>${f.missing ? `<span class="w" title="Not installed on this machine">${I.warn}</span>` : ""}<span class="fam-name"></span><span class="fam-to" hidden>${I.arrow}<span></span></span><span class="meta"></span>`;
+    row.innerHTML = `<span class="chev">${I.chev}</span><span class="fam-name"></span>${f.missing ? `<span class="dot" title="Not installed on this machine"></span>` : ""}<span class="fam-to" hidden>${I.arrow}<span></span></span><span class="meta"></span>`;
     row.querySelector(".fam-name").textContent = f.family;
     row.querySelector(".meta").textContent = [plural(f.nodes, "layer", "layers"), f.styles ? plural(f.styles, "style", "styles") : ""].filter(Boolean).join(" · ");
     const showTo = () => { const t = families[targets[f.family]] ? targets[f.family] : ""; row.querySelector(".fam-to").hidden = !t; row.querySelector(".fam-to span").textContent = t; };
@@ -300,7 +301,7 @@ function renderFonts() {
       const avail = families[targets[f.family]];
       for (const u of f.list) {
         const from = document.createElement("span"); from.className = "from";
-        from.innerHTML = `${u.available ? "" : `<span class="w" title="Not installed on this machine">${I.warn}</span>`}<span class="s"></span><span class="n"></span>`;
+        from.innerHTML = `<span class="s"></span>${u.available ? "" : `<span class="dot" title="Not installed on this machine"></span>`}<span class="n"></span>`;
         from.querySelector(".s").textContent = u.style;
         from.querySelector(".n").textContent = [u.nodes ? plural(u.nodes, "layer", "layers") : "", u.styles ? plural(u.styles, "style", "styles") : ""].filter(Boolean).join(" · ");
         rows.append(from);
@@ -312,7 +313,7 @@ function renderFonts() {
         const match = avail.find((x) => x === u.style) || avail.find((x) => norm(x) === norm(u.style));
         const chosen = k in choices ? choices[k] : match || "";
         sel.innerHTML = `<option value="">Keep ${esc(u.style)} unchanged</option>` + avail.map((x) => `<option${x === chosen ? " selected" : ""}>${esc(x)}</option>`).join("");
-        const mark = () => { const w = cell.querySelector(".w"); if (!sel.value && !w) cell.insertAdjacentHTML("afterbegin", `<span class="w" title="No style with this name in ${esc(targets[f.family])}. Pick one, or it stays as it is.">${I.warn}</span>`); if (sel.value && w) w.remove(); };
+        const mark = () => { const w = cell.querySelector(".dot"); if (!sel.value && !w) cell.insertAdjacentHTML("afterbegin", `<span class="dot" title="No style with this name in ${esc(targets[f.family])}. Pick one, or it stays as it is."></span>`); if (sel.value && w) w.remove(); };
         sel.onchange = () => { choices[k] = sel.value; mark(); changed(); };
         cell.append(sel); mark();
         rows.append(arrow, cell);
@@ -425,8 +426,8 @@ function renderStyles() {
       const styles = families[family] || [];
       const want = weight.value || (saved && saved.style) || "Regular";
       weight.innerHTML = styles.length ? styles.map((s) => `<option${s === want ? " selected" : ""}>${esc(s)}</option>`).join("") : `<option value="">Not installed</option>`;
-      const w = row.querySelector(".cell .w"); if (w) w.remove();
-      if (!styles.length && family) row.querySelector(".cell").insertAdjacentHTML("afterbegin", `<span class="w" title="${esc(family)} is not installed on this machine">${I.warn}</span>`);
+      const w = row.querySelector(".cell .dot"); if (w) w.remove();
+      if (!styles.length && family) row.querySelector(".cell").insertAdjacentHTML("afterbegin", `<span class="dot" title="${esc(family)} is not installed on this machine"></span>`);
     };
     fam.onchange = fillWeight; fillWeight();
     wrap.append(row);

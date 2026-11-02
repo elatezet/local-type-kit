@@ -227,7 +227,7 @@ function context() {
 
 // Set globalThis.LOCAL_TYPE_KIT_NO_UI = true before this file to use the functions above without the window.
 if (typeof figma !== "undefined" && !globalThis.LOCAL_TYPE_KIT_NO_UI) {
-  figma.showUI(__html__, { width: 440, height: 640, themeColors: true });
+  figma.showUI(__html__, { width: 440, height: 680, themeColors: true });
   const post = (type, result) => figma.ui.postMessage({ type, ok: true, result });
   figma.ui.onmessage = async (msg) => {
     try {
