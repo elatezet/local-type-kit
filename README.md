@@ -53,6 +53,23 @@ The Styles tab takes JSON. Variable names are `<group><sizeSuffix>` and `<group>
 }
 ```
 
+## Scripting
+
+The functions in `code.js` are plain Plugin API code and also run without the plugin window, for example from a script or an automation that executes Plugin API code in a file. Set the flag, include `code.js`, then call the functions directly:
+
+```js
+globalThis.LOCAL_TYPE_KIT_NO_UI = true;
+// … contents of code.js …
+const { used } = await scan();
+const mapping = [{ from: { family: "Inter", style: "Regular" }, to: { family: "Brand Sans", style: "Regular" } }];
+const preview = await replaceFonts(mapping, false, "document"); // "selection" | "page" | "document"
+await replaceFonts(mapping, true, "document");
+await stylesFromVariables({ collection: "Typography", styles: [{ name: "body", familyVariable: "font/body", style: "Regular" }] });
+await assignStyles(true);
+```
+
+Outside the plugin there is no undo step per run, and the saved configuration is not available.
+
 ## Contributing
 
 Issues and pull requests are welcome. The plugin is two files, `code.js` and `ui.html`, with no build step and no dependencies. Please keep it that way, and keep the manifest free of network domains.
