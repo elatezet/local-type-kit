@@ -130,6 +130,27 @@
     });
     sync("fonts");
   });
+  // Das Fenster laesst sich an der Titelleiste verschieben wie in Figma; ein Doppelklick bringt es zurueck.
+  var win = frame.closest(".win"), bar = win && win.querySelector(".win-bar");
+  if (bar) {
+    var dx = 0, dy = 0, start = null;
+    var place = function () { win.style.transform = dx || dy ? "translate(" + dx + "px," + dy + "px)" : ""; };
+    bar.addEventListener("pointerdown", function (e) {
+      if (e.button !== 0) return;
+      start = { x: e.clientX - dx, y: e.clientY - dy };
+      bar.setPointerCapture(e.pointerId);
+      win.classList.add("dragging");
+    });
+    bar.addEventListener("pointermove", function (e) {
+      if (!start) return;
+      dx = e.clientX - start.x; dy = e.clientY - start.y; place();
+    });
+    var stop = function () { start = null; win.classList.remove("dragging"); };
+    bar.addEventListener("pointerup", stop);
+    bar.addEventListener("pointercancel", stop);
+    bar.addEventListener("dblclick", function () { dx = dy = 0; win.classList.add("settle"); place(); setTimeout(function () { win.classList.remove("settle"); }, 300); });
+  }
+
   // Erst jetzt laden, damit die ersten Nachrichten des Plugins schon eine Antwort finden.
   frame.src = frame.getAttribute("data-src");
 })();
