@@ -5,9 +5,9 @@
   body { margin: 0; padding: 24px; display: flex; gap: 24px; background: #888; font: 12px system-ui; }
   iframe { width: 440px; height: 680px; border: 0; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,.3); }
 </style>
-<!-- Opens ui.html twice, dark and light, and answers its messages with sample data instead of a Figma file. -->
-<iframe id="dark" src="../ui.html"></iframe>
-<iframe id="light" src="../ui.html"></iframe>
+<!-- Opens ui.html twice, dark in English and light in German, and answers its messages with sample data instead of a Figma file. -->
+<iframe id="dark" src="../ui.html?lang=en"></iframe>
+<iframe id="light" src="../ui.html?lang=de"></iframe>
 <script>
 const THEMES = {
   dark: { bg: "#2c2c2c", "bg-secondary": "#383838", "bg-hover": "#383838", "bg-brand": "#0d99ff", "bg-brand-hover": "#0a84e0", "bg-menu": "#1e1e1e", "bg-menu-selected": "#0d99ff", "bg-danger-tertiary": "#4d2b2b",

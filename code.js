@@ -233,8 +233,9 @@ if (typeof figma !== "undefined" && !globalThis.LOCAL_TYPE_KIT_NO_UI) {
     try {
       const result = await handlers[msg.type](msg);
       post(msg.type, result);
-      if (msg.type === "replaceApply") figma.notify(`Replaced ${result.segments} text runs. One undo reverts the whole run.`);
-      if (msg.type === "assignApply") figma.notify(`Assigned styles to ${result.assigned} layers.`);
+      const de = msg.lang === "de";
+      if (msg.type === "replaceApply") figma.notify(de ? `${result.segments} Textläufe ersetzt. Ein Rückgängig nimmt den ganzen Lauf zurück.` : `Replaced ${result.segments} text runs. One undo reverts the whole run.`);
+      if (msg.type === "assignApply") figma.notify(de ? `Stile für ${result.assigned} Ebenen zugewiesen.` : `Assigned styles to ${result.assigned} layers.`);
     } catch (e) {
       figma.ui.postMessage({ type: msg.type, ok: false, error: e.message });
     }

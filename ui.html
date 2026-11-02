@@ -54,23 +54,24 @@
   .err > svg { color: var(--figma-color-icon-danger, currentColor); }
   .info > svg { color: var(--figma-color-icon-secondary, var(--figma-color-text-secondary)); }
 
+  .tr { display: grid; grid-template-columns: minmax(0, 1fr) 44px 40px 144px; gap: 12px; align-items: center; padding: 0 16px; min-height: 40px; }
+  .th { position: sticky; top: -12px; z-index: 1; min-height: 28px; background: var(--figma-color-bg); color: var(--figma-color-text-secondary); border-bottom: 1px solid var(--figma-color-border); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--figma-color-text-secondary); }
+  .th .num { color: inherit; }
   .fam { border-bottom: 1px solid var(--figma-color-border); }
   .fam:last-child { border-bottom: 0; }
-  .fam-row { width: 100%; height: var(--row); display: flex; align-items: center; gap: 4px; padding: 0 16px 0 8px; border: 0; background: none; text-align: left; cursor: default; }
-  .fam-row:hover { background: var(--figma-color-bg-hover, var(--figma-color-bg-secondary)); }
-  .fam-row .chev { color: var(--figma-color-icon-tertiary, var(--figma-color-text-tertiary)); transition: transform 0.12s; }
-  .fam-row[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  .fam-row .name { display: flex; align-items: center; min-width: 0; margin-left: -6px; padding: 0; border: 0; background: none; text-align: left; cursor: default; }
+  .fam-row .chev { color: var(--figma-color-icon-tertiary, var(--figma-color-text-tertiary)); transition: transform 0.12s; margin-right: 2px; }
+  .fam-row .name[aria-expanded="true"] .chev { transform: rotate(90deg); }
   .fam-name { font-size: 12px; font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .fam-to { color: var(--figma-color-text-brand, var(--figma-color-text)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; gap: 4px; align-items: center; }
-  .meta { margin-left: auto; padding-left: 8px; color: var(--figma-color-text-secondary); white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .fam-body { padding: 4px 16px 16px 32px; display: grid; gap: 8px; }
-  .grid { display: grid; grid-template-columns: 1fr 16px 1fr; gap: 8px 8px; align-items: center; min-height: var(--ctl); }
-  .grid .arrow { color: var(--figma-color-icon-tertiary, var(--figma-color-text-tertiary)); }
-  .from { display: flex; align-items: center; gap: 4px; min-width: 0; }
-  .from .s { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .from .n { margin-left: auto; color: var(--figma-color-text-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .lbl { color: var(--figma-color-text-secondary); }
-  .cell { display: flex; align-items: center; gap: 4px; min-width: 0; }
+  .fam-row .num { color: var(--figma-color-text); }
+  .fam-styles { padding-bottom: 8px; }
+  .style-row { min-height: 32px; }
+  .sname { display: flex; align-items: center; min-width: 0; padding-left: 12px; }
+  .sname .s { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .target, .cell { display: flex; align-items: center; min-width: 0; }
+  .target .combo, .cell select { flex: 1; min-width: 0; }
+  .cell select.unmatched { padding-left: 20px; background-image: radial-gradient(circle 3px at 10px 50%, var(--figma-color-icon-warning, #e5a000) 98%, transparent), var(--chev); background-position: 0 0, right 4px center; }
   .empty { padding: 32px 16px; text-align: center; color: var(--figma-color-text-secondary); }
 
   .seg { display: grid; grid-template-columns: repeat(3, 1fr); padding: 2px; gap: 2px; border-radius: 5px; background: var(--figma-color-bg-secondary); }
@@ -101,18 +102,18 @@
 
 <header>
   <nav role="tablist">
-    <button role="tab" data-tab="fonts" aria-selected="true">Fonts</button>
-    <button role="tab" data-tab="styles" aria-selected="false">Styles</button>
+    <button role="tab" data-tab="fonts" aria-selected="true" data-de="Schriften">Fonts</button>
+    <button role="tab" data-tab="styles" aria-selected="false" data-de="Stile">Styles</button>
   </nav>
-  <button class="icon" id="refresh" title="Scan again"></button>
+  <button class="icon" id="refresh"></button>
 </header>
 
 <main id="fonts">
   <div id="banner" class="banner warn" hidden></div>
-  <div id="list"><div class="empty">Scanning this file…</div></div>
+  <div id="list"><div class="empty" data-de="Datei wird gelesen …">Scanning this file…</div></div>
 </main>
 <footer id="fontsFoot">
-  <h2>Replace in</h2>
+  <h2 data-de="Ersetzen in">Replace in</h2>
   <div class="seg" role="radiogroup" id="scope">
     <button role="radio" data-scope="selection" aria-checked="false"></button>
     <button role="radio" data-scope="page" aria-checked="false"></button>
@@ -121,32 +122,32 @@
   <div class="hint" id="scopeHint"></div>
   <div id="replaceOut" hidden></div>
   <div class="actions">
-    <button class="btn" id="replacePreview" disabled>Preview</button>
-    <button class="btn primary" id="replaceApply" disabled>Replace</button>
+    <button class="btn" id="replacePreview" disabled data-de="Vorschau">Preview</button>
+    <button class="btn primary" id="replaceApply" disabled data-de="Ersetzen">Replace</button>
   </div>
 </footer>
 
 <main id="styles" hidden>
   <div class="block">
-    <h2>Text styles from variables</h2>
-    <p>Creates or updates one text style per variable group and binds size, line height and family to the variables.</p>
-    <div class="field"><span class="lbl">Collection</span><select id="collection"></select></div>
+    <h2 data-de="Textstile aus Variablen">Text styles from variables</h2>
+    <p data-de="Legt pro Variablengruppe einen Textstil an oder aktualisiert ihn und bindet Größe, Zeilenhöhe und Familie an die Variablen.">Creates or updates one text style per variable group and binds size, line height and family to the variables.</p>
+    <div class="field"><span class="lbl" data-de="Sammlung">Collection</span><select id="collection"></select></div>
     <div id="groups"></div>
     <details class="more">
-      <summary>Variable names</summary>
-      <div class="field"><span class="lbl">Size ends in</span><input type="text" id="sizeSuffix" value="/font-size"></div>
-      <div class="field"><span class="lbl">Line height</span><input type="text" id="lhSuffix" value="/line-height"></div>
+      <summary data-de="Variablennamen">Variable names</summary>
+      <div class="field"><span class="lbl" data-de="Größe endet auf">Size ends in</span><input type="text" id="sizeSuffix" value="/font-size"></div>
+      <div class="field"><span class="lbl" data-de="Zeilenhöhe endet auf">Line height</span><input type="text" id="lhSuffix" value="/line-height"></div>
     </details>
     <div id="stylesOut" hidden></div>
-    <div class="actions"><button class="btn primary" id="buildStyles" disabled>Create styles</button></div>
+    <div class="actions"><button class="btn primary" id="buildStyles" disabled data-de="Stile anlegen">Create styles</button></div>
   </div>
   <div class="block">
-    <h2>Attach loose text to styles</h2>
-    <p>Gives text without a style the one local style that matches its font, size and line height exactly. If more than one fits, the text stays as it is.</p>
+    <h2 data-de="Losen Text an Stile hängen">Attach loose text to styles</h2>
+    <p data-de="Gibt Text ohne Stil den einen lokalen Stil, der in Schrift, Größe und Zeilenhöhe genau passt. Passen mehrere, bleibt der Text, wie er ist.">Gives text without a style the one local style that matches its font, size and line height exactly. If more than one fits, the text stays as it is.</p>
     <div id="assignOut" hidden></div>
     <div class="actions">
-      <button class="btn" id="assignPreview">Preview</button>
-      <button class="btn primary" id="assignApply">Assign styles</button>
+      <button class="btn" id="assignPreview" data-de="Vorschau">Preview</button>
+      <button class="btn primary" id="assignApply" data-de="Stile zuweisen">Assign styles</button>
     </div>
   </div>
 </main>
@@ -155,9 +156,14 @@
 
 <script>
 const $ = (id) => document.getElementById(id);
-const send = (type, data = {}) => parent.postMessage({ pluginMessage: { type, ...data } }, "*");
+const send = (type, data = {}) => parent.postMessage({ pluginMessage: { type, lang: DE ? "de" : "en", ...data } }, "*");
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+// German when the system language is German, English otherwise. ?lang=de forces it, for testing outside Figma.
+const DE = (new URLSearchParams(location.search).get("lang") || navigator.language || "").toLowerCase().startsWith("de");
+const t = (en, de) => (DE ? de : en);
+if (DE) document.documentElement.lang = "de";
+document.querySelectorAll("[data-de]").forEach((el) => { if (DE) el.textContent = el.dataset.de; });
 
 // 16px icons drawn in currentColor; the plugin has no network access, so nothing is loaded from outside.
 const svg = (d) => `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
@@ -176,7 +182,8 @@ const I = {
 };
 document.documentElement.style.setProperty("--chev", `url("data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6.5 8 9.5l3-3"/></svg>')}")`);
 $("refresh").innerHTML = I.refresh;
-const SCOPE = { selection: ["Selection", I.selection], page: ["This page", I.page], document: ["Whole file", I.file] };
+$("refresh").title = t("Scan again", "Neu einlesen");
+const SCOPE = { selection: [t("Selection", "Auswahl"), I.selection], page: [t("This page", "Diese Seite"), I.page], document: [t("Whole file", "Ganze Datei"), I.file] };
 document.querySelectorAll("#scope button").forEach((b) => { const [t, i] = SCOPE[b.dataset.scope]; b.innerHTML = `${i}<span>${t}</span>`; });
 
 // ---- Status lines ----
@@ -222,7 +229,7 @@ function openMenu(input) {
         const label = q && at >= 0 ? `${esc(f.slice(0, at))}<b>${esc(f.slice(at, at + q.length))}</b>${esc(f.slice(at + q.length))}` : esc(f);
         return `<li role="option" data-i="${i}" aria-selected="${i === menuIndex}">${label}</li>`;
       }).join("")
-    : `<li class="none">No installed family matches</li>`;
+    : `<li class="none">${t("No installed family matches", "Keine installierte Familie passt")}</li>`;
   const r = input.getBoundingClientRect();
   menu.style.left = `${r.left}px`; menu.style.width = `${r.width}px`;
   const below = innerHeight - r.bottom - 8;
@@ -253,7 +260,6 @@ function combo(input) {
   input.replaceWith(wrap); wrap.append(input); wrap.insertAdjacentHTML("afterbegin", I.search);
   return wrap;
 }
-$("list").addEventListener("scroll", closeMenu, true);
 $("fonts").addEventListener("scroll", closeMenu);
 
 // ---- Fonts: one list, each family opens into its replacement ----
@@ -273,61 +279,52 @@ function renderFonts() {
   $("banner").hidden = !missing.length;
   if (missing.length) {
     $("banner").innerHTML = `${I.warn}<span></span>`;
-    $("banner").querySelector("span").textContent = `${plural(missing.length, "font is", "fonts are")} not installed on this machine. Open a family to replace it with one that is.`;
+    $("banner").querySelector("span").textContent = t(`${plural(missing.length, "font is", "fonts are")} not installed on this machine. Pick a family that is to replace it.`, `${plural(missing.length, "Schrift fehlt", "Schriften fehlen")} auf diesem Rechner. Wähle eine installierte Familie als Ersatz.`);
   }
 
   const list = $("list");
-  list.innerHTML = fams.length ? "" : `<div class="empty">This file has no text yet.</div>`;
+  list.innerHTML = fams.length ? `<div class="tr th"><span>${t("Font", "Schrift")}</span><span class="num">${t("Layers", "Ebenen")}</span><span class="num">${t("Styles", "Stile")}</span><span>${t("Replace with", "Ersetzen durch")}</span></div>` : `<div class="empty">${t("This file has no text yet.", "Diese Datei enthält noch keinen Text.")}</div>`;
   for (const f of fams) {
-    if (f.missing && !open.size && !Object.keys(targets).length) open.add(f.family);
     const box = document.createElement("div"); box.className = "fam";
-    const row = document.createElement("button"); row.className = "fam-row"; row.setAttribute("aria-expanded", open.has(f.family));
-    row.innerHTML = `<span class="chev">${I.chev}</span><span class="fam-name"></span>${f.missing ? `<span class="dot" title="Not installed on this machine"></span>` : ""}<span class="fam-to" hidden>${I.arrow}<span></span></span><span class="meta"></span>`;
+    const row = document.createElement("div"); row.className = "tr fam-row";
+    row.innerHTML = `<button class="name" aria-expanded="${open.has(f.family)}"><span class="chev">${I.chev}</span><span class="fam-name"></span>${f.missing ? `<span class="dot" title="${t("Not installed on this machine", "Auf diesem Rechner nicht installiert")}"></span>` : ""}</button><span class="num">${f.nodes}</span><span class="num">${f.styles || "–"}</span><span class="target"></span>`;
     row.querySelector(".fam-name").textContent = f.family;
-    row.querySelector(".meta").textContent = [plural(f.nodes, "layer", "layers"), f.styles ? plural(f.styles, "style", "styles") : ""].filter(Boolean).join(" · ");
-    const showTo = () => { const t = families[targets[f.family]] ? targets[f.family] : ""; row.querySelector(".fam-to").hidden = !t; row.querySelector(".fam-to span").textContent = t; };
-    showTo();
+    const input = document.createElement("input"); input.type = "text"; input.placeholder = t("Family", "Familie"); input.value = targets[f.family] || "";
+    row.querySelector(".target").append(combo(input));
+    const toggle = row.querySelector(".name");
+    const rows = document.createElement("div"); rows.className = "fam-styles"; rows.hidden = !open.has(f.family);
+    const setOpen = (o) => { rows.hidden = !o; toggle.setAttribute("aria-expanded", o); o ? open.add(f.family) : open.delete(f.family); };
+    toggle.onclick = () => setOpen(rows.hidden);
 
-    const body = document.createElement("div"); body.className = "fam-body"; body.hidden = !open.has(f.family);
-    row.onclick = () => { const o = body.hidden; body.hidden = !o; row.setAttribute("aria-expanded", o); o ? open.add(f.family) : open.delete(f.family); };
-
-    const head = document.createElement("div"); head.className = "grid";
-    const input = document.createElement("input"); input.type = "text"; input.placeholder = "Replace with…"; input.value = targets[f.family] || "";
-    head.innerHTML = `<span class="lbl">Replace with</span><span></span>`;
-    head.append(combo(input));
-    const rows = document.createElement("div"); rows.className = "grid";
     const fill = () => {
       rows.innerHTML = "";
       const avail = families[targets[f.family]];
       for (const u of f.list) {
-        const from = document.createElement("span"); from.className = "from";
-        from.innerHTML = `<span class="s"></span>${u.available ? "" : `<span class="dot" title="Not installed on this machine"></span>`}<span class="n"></span>`;
-        from.querySelector(".s").textContent = u.style;
-        from.querySelector(".n").textContent = [u.nodes ? plural(u.nodes, "layer", "layers") : "", u.styles ? plural(u.styles, "style", "styles") : ""].filter(Boolean).join(" · ");
-        rows.append(from);
-        if (!avail) { rows.append(document.createElement("span"), document.createElement("span")); continue; }
-        const arrow = document.createElement("span"); arrow.className = "arrow"; arrow.innerHTML = I.arrow;
-        const cell = document.createElement("span"); cell.className = "cell";
-        const sel = document.createElement("select");
-        const k = `${f.family}\u0000${u.style}`;
-        const match = avail.find((x) => x === u.style) || avail.find((x) => norm(x) === norm(u.style));
-        const chosen = k in choices ? choices[k] : match || "";
-        sel.innerHTML = `<option value="">Keep ${esc(u.style)} unchanged</option>` + avail.map((x) => `<option${x === chosen ? " selected" : ""}>${esc(x)}</option>`).join("");
-        const mark = () => { const w = cell.querySelector(".dot"); if (!sel.value && !w) cell.insertAdjacentHTML("afterbegin", `<span class="dot" title="No style with this name in ${esc(targets[f.family])}. Pick one, or it stays as it is."></span>`); if (sel.value && w) w.remove(); };
-        sel.onchange = () => { choices[k] = sel.value; mark(); changed(); };
-        cell.append(sel); mark();
-        rows.append(arrow, cell);
+        const tr = document.createElement("div"); tr.className = "tr style-row";
+        tr.innerHTML = `<span class="sname"><span class="s"></span>${u.available ? "" : `<span class="dot" title="${t("Not installed on this machine", "Auf diesem Rechner nicht installiert")}"></span>`}</span><span class="num">${u.nodes || "–"}</span><span class="num">${u.styles || "–"}</span><span class="cell"></span>`;
+        tr.querySelector(".s").textContent = u.style;
+        const cell = tr.querySelector(".cell");
+        if (avail) {
+          const sel = document.createElement("select");
+          const k = `${f.family}\u0000${u.style}`;
+          const match = avail.find((x) => x === u.style) || avail.find((x) => norm(x) === norm(u.style));
+          const chosen = k in choices ? choices[k] : match || "";
+          sel.innerHTML = `<option value="">${t(`Keep ${esc(u.style)}`, `${esc(u.style)} behalten`)}</option>` + avail.map((x) => `<option${x === chosen ? " selected" : ""}>${esc(x)}</option>`).join("");
+          const mark = () => { sel.classList.toggle("unmatched", !sel.value); sel.title = sel.value ? "" : t(`No style with this name in ${targets[f.family]}. Pick one, or it stays as it is.`, `Kein Schnitt mit diesem Namen in ${targets[f.family]}. Wähle einen, sonst bleibt er, wie er ist.`); };
+          sel.onchange = () => { choices[k] = sel.value; mark(); changed(); };
+          cell.append(sel); mark();
+        }
+        rows.append(tr);
       }
     };
     input.addEventListener("change", () => {
       if (targets[f.family] === input.value) return;
       targets[f.family] = input.value;
       for (const k of Object.keys(choices)) if (k.startsWith(f.family + "\u0000")) delete choices[k];
-      showTo(); fill(); changed();
+      fill(); if (families[input.value]) setOpen(true); changed();
     });
     fill();
-    body.append(head, rows);
-    box.append(row, body);
+    box.append(row, rows);
     list.append(box);
   }
   updateFoot();
@@ -354,9 +351,9 @@ function updateFoot() {
     b.disabled = b.dataset.scope === "selection" && !ctx.selected && scope !== "selection";
   });
   $("scopeHint").textContent = {
-    selection: ctx.selected ? `${plural(ctx.selected, "selected layer", "selected layers")} and everything inside. Local styles stay as they are.` : "Select layers on the canvas first.",
-    page: `Everything on “${ctx.page}”. Local styles stay as they are.`,
-    document: "Every page, local text styles included.",
+    selection: ctx.selected ? t(`${plural(ctx.selected, "selected layer", "selected layers")} and everything inside. Local styles stay as they are.`, `${plural(ctx.selected, "ausgewählte Ebene", "ausgewählte Ebenen")} samt Inhalt. Lokale Stile bleiben, wie sie sind.`) : t("Select layers on the canvas first.", "Wähle zuerst Ebenen auf der Arbeitsfläche aus."),
+    page: t(`Everything on “${ctx.page}”. Local styles stay as they are.`, `Alles auf „${ctx.page}“. Lokale Stile bleiben, wie sie sind.`),
+    document: t("Every page, local text styles included.", "Alle Seiten, lokale Textstile eingeschlossen."),
   }[scope];
   const ready = mapping().length > 0 && !(scope === "selection" && !ctx.selected);
   $("replacePreview").disabled = $("replaceApply").disabled = busy || !ready;
@@ -368,19 +365,22 @@ function run(type) { busy = true; updateFoot(); send(type, { mapping: mapping(),
 $("replacePreview").onclick = () => run("replacePreview");
 $("replaceApply").onclick = () => run("replaceApply");
 
-const WHERE = { selection: "the selection", page: "this page", document: "the whole file" };
+const WHERE = DE ? { selection: "in der Auswahl", page: "auf dieser Seite", document: "in der ganzen Datei" } : { selection: "in the selection", page: "on this page", document: "in the whole file" };
 function replaceResult(r, done) {
-  const parts = [plural(r.segments, "text run", "text runs") + " in " + plural(r.nodes, "layer", "layers")];
-  if (r.styles) parts.push(plural(r.styles, "style", "styles"));
+  const where = WHERE[r.scope], one = r.viaStyle === 1, keepsStyle = r.scope !== "document";
+  const parts = [DE ? `${plural(r.segments, "Textlauf", "Textläufe")} in ${plural(r.nodes, "Ebene", "Ebenen")}` : `${plural(r.segments, "text run", "text runs")} in ${plural(r.nodes, "layer", "layers")}`];
+  if (r.styles) parts.push(DE ? plural(r.styles, "Stil", "Stile") : plural(r.styles, "style", "styles"));
   const notes = [];
-  const one = r.viaStyle === 1;
-  if (r.viaStyle) notes.push(`${plural(r.viaStyle, "run follows", "runs follow")} a style and ${r.scope === "document" ? (one ? "changes" : "change") + " with it" : one ? "stays as it is" : "stay as they are"}.`);
-  if (!done && r.inInstances) notes.push(`${r.inInstances} of the runs sit in instances; most follow their component.`);
-  if (done) notes.push("One undo reverts the whole run.");
+  if (r.viaStyle) notes.push(DE
+    ? `${plural(r.viaStyle, "Lauf folgt", "Läufe folgen")} einem Stil und ${keepsStyle ? (one ? "bleibt, wie er ist" : "bleiben, wie sie sind") : (one ? "ändert sich" : "ändern sich") + " mit ihm"}.`
+    : `${plural(r.viaStyle, "run follows", "runs follow")} a style and ${keepsStyle ? (one ? "stays as it is" : "stay as they are") : (one ? "changes" : "change") + " with it"}.`);
+  if (!done && r.inInstances) notes.push(t(`${r.inInstances} of the runs sit in instances; most follow their component.`, `${r.inInstances} der Läufe liegen in Instanzen, die meisten folgen ihrer Komponente.`));
+  if (done) notes.push(t("One undo reverts the whole run.", "Ein Rückgängig nimmt den ganzen Lauf zurück."));
   const nothing = !r.segments && !r.styles;
+  const head = DE ? `${done ? "Ersetzt" : "Wird ersetzt"} ${where}` : `${done ? "Replaced" : "Will replace"} ${where}`;
   status("replaceOut", r.skipped.length ? "warn" : nothing ? "info" : done ? "ok" : "info",
-    nothing ? `Nothing to replace in ${WHERE[r.scope]}.` : `${done ? "Replaced" : "Will replace"} in ${WHERE[r.scope]}: ${parts.join(", ")}. ${notes.join(" ")}`.trim(),
-    [[plural(r.skipped.length, "item skipped", "items skipped"), r.skipped]]);
+    nothing ? t(`Nothing to replace ${where}.`, `Nichts zu ersetzen ${where}.`) : `${head}: ${parts.join(", ")}. ${notes.join(" ")}`.trim(),
+    [[t(plural(r.skipped.length, "item skipped", "items skipped"), `${r.skipped.length} übersprungen`), r.skipped]]);
 }
 
 // ---- Scanning: on open, after a run, and when the file changed and the window is used again ----
@@ -402,12 +402,12 @@ function groupsOf(col) {
 function renderStyles() {
   const sel = $("collection");
   const current = sel.value || (config && config.collection) || "";
-  sel.innerHTML = collections.length ? collections.map((c) => `<option${c.name === current ? " selected" : ""}>${esc(c.name)}</option>`).join("") : `<option value="">No variable collections in this file</option>`;
+  sel.innerHTML = collections.length ? collections.map((c) => `<option${c.name === current ? " selected" : ""}>${esc(c.name)}</option>`).join("") : `<option value="">${t("No variable collections in this file", "Keine Variablensammlung in dieser Datei")}</option>`;
   const col = collections.find((c) => c.name === sel.value);
   const wrap = $("groups"); wrap.innerHTML = "";
   const groups = col ? groupsOf(col) : [];
-  if (col && !groups.length) wrap.innerHTML = `<p>No group in “${esc(col.name)}” has both ${esc($("sizeSuffix").value)} and ${esc($("lhSuffix").value)}. Check the variable names below.</p>`;
-  if (groups.length) wrap.insertAdjacentHTML("beforeend", `<div class="srow head"><span></span><span>Style</span><span>Family</span><span>Weight</span></div>`);
+  if (col && !groups.length) wrap.innerHTML = `<p>${t(`No group in “${esc(col.name)}” has both ${esc($("sizeSuffix").value)} and ${esc($("lhSuffix").value)}. Check the variable names below.`, `Keine Gruppe in „${esc(col.name)}“ hat ${esc($("sizeSuffix").value)} und ${esc($("lhSuffix").value)}. Prüfe unten die Variablennamen.`)}</p>`;
+  if (groups.length) wrap.insertAdjacentHTML("beforeend", `<div class="srow head"><span></span><span>${t("Style", "Stil")}</span><span>${t("Family", "Familie")}</span><span>${t("Weight", "Schnitt")}</span></div>`);
   const strings = col ? col.vars.filter((v) => v.type === "STRING") : [];
   for (const g of groups) {
     const saved = config && config.collection === col.name ? config.styles.find((s) => (s.group || s.name) === g.group) : null;
@@ -416,7 +416,7 @@ function renderStyles() {
     const famVar = saved ? saved.familyVariable : (strings.find((v) => g.group.toLowerCase().includes(v.name.split("/").pop().toLowerCase())) || guess("body") || strings[0] || {}).name;
     row.innerHTML = `<input type="checkbox"${!config || saved ? " checked" : ""}>
       <span class="grp"><input type="text" class="name"><small>${esc(String(Math.round(g.size * 100) / 100))} / ${esc(String(Math.round(g.lh * 100) / 100))}</small></span>
-      <select class="fam">${strings.map((v) => `<option value="${esc(v.name)}"${v.name === famVar ? " selected" : ""} title="${esc(v.name)}">${esc(v.value)} · ${esc(v.name.split("/").pop())}</option>`).join("")}${saved && saved.family ? `<option value="" selected data-family="${esc(saved.family)}">${esc(saved.family)}</option>` : ""}${!strings.length && !(saved && saved.family) ? `<option value="">No string variables</option>` : ""}</select>
+      <select class="fam">${strings.map((v) => `<option value="${esc(v.name)}"${v.name === famVar ? " selected" : ""} title="${esc(v.name)}">${esc(v.value)} · ${esc(v.name.split("/").pop())}</option>`).join("")}${saved && saved.family ? `<option value="" selected data-family="${esc(saved.family)}">${esc(saved.family)}</option>` : ""}${!strings.length && !(saved && saved.family) ? `<option value="">${t("No string variables", "Keine Text-Variablen")}</option>` : ""}</select>
       <span class="cell"><select class="weight"></select></span>`;
     row.querySelector(".name").value = saved ? saved.name : g.group;
     const fam = row.querySelector(".fam"), weight = row.querySelector(".weight");
@@ -425,9 +425,9 @@ function renderStyles() {
       const family = opt ? (opt.value ? (strings.find((v) => v.name === opt.value) || {}).value : opt.dataset.family) : "";
       const styles = families[family] || [];
       const want = weight.value || (saved && saved.style) || "Regular";
-      weight.innerHTML = styles.length ? styles.map((s) => `<option${s === want ? " selected" : ""}>${esc(s)}</option>`).join("") : `<option value="">Not installed</option>`;
+      weight.innerHTML = styles.length ? styles.map((s) => `<option${s === want ? " selected" : ""}>${esc(s)}</option>`).join("") : `<option value="">${t("Not installed", "Nicht installiert")}</option>`;
       const w = row.querySelector(".cell .dot"); if (w) w.remove();
-      if (!styles.length && family) row.querySelector(".cell").insertAdjacentHTML("afterbegin", `<span class="dot" title="${esc(family)} is not installed on this machine"></span>`);
+      if (!styles.length && family) row.querySelector(".cell").insertAdjacentHTML("afterbegin", `<span class="dot" title="${esc(t(`${family} is not installed on this machine`, `${family} ist auf diesem Rechner nicht installiert`))}"></span>`);
     };
     fam.onchange = fillWeight; fillWeight();
     wrap.append(row);
@@ -448,16 +448,18 @@ function readForm() {
 }
 $("buildStyles").onclick = () => {
   config = readForm();
-  if (!config.styles.length) { status("stylesOut", "info", "Tick at least one style."); return; }
+  if (!config.styles.length) { status("stylesOut", "info", t("Tick at least one style.", "Wähle mindestens einen Stil aus.")); return; }
   send("saveConfig", { config });
   send("styles", { config });
 };
 $("assignPreview").onclick = () => send("assignPreview");
 $("assignApply").onclick = () => send("assignApply");
 const assignResult = (r, done) => status("assignOut", r.ambiguous.length ? "warn" : r.assigned ? (done ? "ok" : "info") : "info",
-  r.assigned ? `${done ? "Assigned" : "Will assign"} a style to ${plural(r.assigned, "layer", "layers")}. ${plural(r.unmatched, "layer has", "layers have")} no exact match.${done ? " One undo reverts the whole run." : ""}`
-    : `No loose text matches a local style exactly. ${plural(r.unmatched, "layer has", "layers have")} no match.`,
-  [[`${plural(r.ambiguous.length, "layer fits", "layers fit")} more than one style and stays as it is`, r.ambiguous]]);
+  r.assigned
+    ? (DE ? `${done ? "Zugewiesen" : "Wird zugewiesen"}: ein Stil für ${plural(r.assigned, "Ebene", "Ebenen")}. ${plural(r.unmatched, "Ebene hat", "Ebenen haben")} keinen genauen Treffer.${done ? " Ein Rückgängig nimmt den ganzen Lauf zurück." : ""}`
+          : `${done ? "Assigned" : "Will assign"} a style to ${plural(r.assigned, "layer", "layers")}. ${plural(r.unmatched, "layer has", "layers have")} no exact match.${done ? " One undo reverts the whole run." : ""}`)
+    : t(`No loose text matches a local style exactly. ${plural(r.unmatched, "layer has", "layers have")} no match.`, `Kein loser Text passt genau zu einem lokalen Stil. ${plural(r.unmatched, "Ebene hat", "Ebenen haben")} keinen Treffer.`),
+  [[t(`${plural(r.ambiguous.length, "layer fits", "layers fit")} more than one style and stays as it is`, `${plural(r.ambiguous.length, "Ebene passt", "Ebenen passen")} zu mehreren Stilen und ${r.ambiguous.length === 1 ? "bleibt, wie sie ist" : "bleiben, wie sie sind"}`), r.ambiguous]]);
 
 // ---- Messages from the plugin ----
 onmessage = (e) => {
@@ -471,13 +473,13 @@ onmessage = (e) => {
   const r = m.result;
   if (m.type === "scan") { used = r.used; families = r.families; $("refresh").classList.remove("busy"); quietUntil = Date.now() + 1000; renderFonts(); }
   if (m.type === "context") { ctx = r; updateFoot(); }
-  if (m.type === "changed") { if (Date.now() > quietUntil && !busy) { stale = true; $("refresh").classList.add("stale"); $("refresh").title = "The file changed. Scan again"; } }
+  if (m.type === "changed") { if (Date.now() > quietUntil && !busy) { stale = true; $("refresh").classList.add("stale"); $("refresh").title = t("The file changed. Scan again", "Die Datei hat sich geändert. Neu einlesen"); } }
   if (m.type === "replacePreview") { busy = false; replaceResult(r, false); updateFoot(); }
   if (m.type === "replaceApply") { busy = false; quietUntil = Date.now() + 2000; replaceResult(r, true); scan(); }
   if (m.type === "variables") { collections = r; renderStyles(); }
   if (m.type === "styles") status("stylesOut", r.errors.length ? (r.done.length ? "warn" : "err") : "ok",
-    r.done.length ? `${plural(r.done.length, "style", "styles")} created or updated.${r.done.length ? " One undo reverts the whole run." : ""}` : "No style was created.",
-    [["Details", r.done], [plural(r.errors.length, "problem", "problems"), r.errors]]);
+    r.done.length ? t(`${plural(r.done.length, "style", "styles")} created or updated. One undo reverts the whole run.`, `${plural(r.done.length, "Stil", "Stile")} angelegt oder aktualisiert. Ein Rückgängig nimmt den ganzen Lauf zurück.`) : t("No style was created.", "Kein Stil wurde angelegt."),
+    [["Details", r.done], [t(plural(r.errors.length, "problem", "problems"), plural(r.errors.length, "Problem", "Probleme")), r.errors]]);
   if (m.type === "assignPreview") assignResult(r, false);
   if (m.type === "assignApply") assignResult(r, true);
   if (m.type === "loadConfig") { config = r; if (r) { $("sizeSuffix").value = r.sizeSuffix || "/font-size"; $("lhSuffix").value = r.lineHeightSuffix || "/line-height"; } }
