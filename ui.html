@@ -155,7 +155,7 @@ function mapping() {
     const family = f.querySelector("input").value;
     if (!families[family]) return;
     f.querySelectorAll("select").forEach((sel) => {
-      if (sel.value) rows.push({ from: { family: f.dataset.family, style: sel.dataset.style }, to: { family, style: sel.value } });
+      if (sel.value && !(family === f.dataset.family && sel.value === sel.dataset.style)) rows.push({ from: { family: f.dataset.family, style: sel.dataset.style }, to: { family, style: sel.value } });
     });
   });
   return rows;
@@ -175,11 +175,14 @@ $("buildStyles").onclick = () => { try { send("styles", { config: readConfig() }
 $("assignPreview").onclick = () => send("assignPreview");
 $("assignApply").onclick = () => send("assignApply");
 
-const fmtReplace = (r, done) =>
+const fmtReplace = (r, done) => (
   `${done ? "Replaced" : "Would replace"} in ${{ selection: "the selection", page: "this page", document: "the whole file" }[r.scope]}: ${r.segments} text runs in ${r.nodes} layers, ${r.styles} styles.\n` +
   (r.scope === "document" ? "" : "Local styles belong to the whole file and stay as they are.\n") +
-  (done || !r.inInstances ? "" : `${r.inInstances} of these runs are in instances; most of them follow their component and need no change of their own.\n`) +
-  `${r.viaStyle} runs follow a style and change with it.` + (r.skipped.length ? `\nSkipped:\n- ${r.skipped.join("\n- ")}` : "");
+  (done || !r.inInstances ? "" : `${r.inInstances === 1 ? "1 of these runs is" : `${r.inInstances} of these runs are`} in instances; most of them follow their component and need no change of their own.\n`) +
+  (r.viaStyle === 0 ? "" : r.scope === "document"
+    ? (r.viaStyle === 1 ? "1 run follows a style and changes with it." : `${r.viaStyle} runs follow a style and change with it.`)
+    : (r.viaStyle === 1 ? "1 run follows a style and stays as it is." : `${r.viaStyle} runs follow a style and stay as they are.`)) + (r.skipped.length ? `\nSkipped:\n- ${r.skipped.join("\n- ")}` : "")
+).replace(/\n{2,}/g, "\n").trim();
 const fmtAssign = (r, done) =>
   `${done ? "Assigned" : "Would assign"}: ${r.assigned} layers. Without match: ${r.unmatched}.` +
   (r.ambiguous.length ? `\nMore than one style fits, left alone:\n- ${r.ambiguous.join("\n- ")}` : "");
