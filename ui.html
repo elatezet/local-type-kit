@@ -178,7 +178,7 @@ $("assignApply").onclick = () => send("assignApply");
 const fmtReplace = (r, done) =>
   `${done ? "Replaced" : "Would replace"} in ${{ selection: "the selection", page: "this page", document: "the whole file" }[r.scope]}: ${r.segments} text runs in ${r.nodes} layers, ${r.styles} styles.\n` +
   (r.scope === "document" ? "" : "Local styles belong to the whole file and stay as they are.\n") +
-  (done ? "" : "Instances are counted too; most of them follow their component and need no change of their own.\n") +
+  (done || !r.inInstances ? "" : `${r.inInstances} of these runs are in instances; most of them follow their component and need no change of their own.\n`) +
   `${r.viaStyle} runs follow a style and change with it.` + (r.skipped.length ? `\nSkipped:\n- ${r.skipped.join("\n- ")}` : "");
 const fmtAssign = (r, done) =>
   `${done ? "Assigned" : "Would assign"}: ${r.assigned} layers. Without match: ${r.unmatched}.` +

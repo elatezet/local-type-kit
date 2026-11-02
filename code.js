@@ -6,8 +6,9 @@ const key = (f) => `${f.family}\u0000${f.style}`;
 const round = (n) => Math.round(n * 100) / 100;
 const lhKey = (lh) => (lh.unit === "AUTO" ? "auto" : `${lh.unit}:${round(lh.value)}`);
 
+// Outside the plugin (scripts run through the Plugin API) some calls are missing; they are optional there.
 async function allTextNodes() {
-  await figma.loadAllPagesAsync();
+  try { await figma.loadAllPagesAsync(); } catch (e) { /* pages are already loaded */ }
   return figma.root.findAllWithCriteria({ types: ["TEXT"] });
 }
 
@@ -23,6 +24,15 @@ async function textNodesIn(scope) {
     return [...out];
   }
   return allTextNodes();
+}
+
+function commit() {
+  try { figma.commitUndo(); } catch (e) { /* no undo step outside the plugin */ }
+}
+
+async function loadFontsOf(n) {
+  const fonts = n.characters.length ? n.getRangeAllFontNames(0, n.characters.length) : [n.fontName];
+  for (const f of fonts) { try { await figma.loadFontAsync(f); } catch (e) { /* missing on this machine */ } }
 }
 
 function inInstance(n) {
@@ -63,7 +73,7 @@ async function scan() {
 // Local styles belong to the whole file and only change when the scope is the document.
 async function replaceFonts(mapping, apply, scope = "document") {
   const m = new Map(mapping.map((r) => [key(r.from), r.to]));
-  const res = { scope, nodes: 0, segments: 0, styles: 0, viaStyle: 0, skipped: [] };
+  const res = { scope, nodes: 0, segments: 0, inInstances: 0, styles: 0, viaStyle: 0, skipped: [] };
   if (scope === "selection" && figma.currentPage.selection.length === 0) throw new Error("Nothing is selected.");
   if (apply) for (const r of mapping) await figma.loadFontAsync(r.to);
 
@@ -81,6 +91,7 @@ async function replaceFonts(mapping, apply, scope = "document") {
   const ordered = [...nodes.filter((n) => !inInstance(n)), ...nodes.filter(inInstance)];
   for (const n of ordered) {
     let hit = false;
+    let loaded = false;
     for (const s of segments(n, ["fontName", "textStyleId"])) {
       const to = m.get(key(s.fontName));
       if (!to) continue;
@@ -88,7 +99,10 @@ async function replaceFonts(mapping, apply, scope = "document") {
       if (n.boundVariables && n.boundVariables.fontFamily) { res.skipped.push(`"${n.name}": family is bound to a variable`); continue; }
       hit = true;
       res.segments++;
+      if (inInstance(n)) res.inInstances++;
       if (!apply) continue;
+      // Figma only edits a text layer once every font already in it is loaded; a missing font cannot be loaded and is left to the edit itself.
+      if (!loaded) { loaded = true; await loadFontsOf(n); }
       try {
         if (s.start === s.end) n.fontName = to;
         else n.setRangeFontName(s.start, s.end, to);
@@ -98,7 +112,7 @@ async function replaceFonts(mapping, apply, scope = "document") {
     }
     if (hit) res.nodes++;
   }
-  if (apply) figma.commitUndo();
+  if (apply) commit();
   return res;
 }
 
@@ -126,7 +140,9 @@ async function stylesFromVariables(config) {
     const vLh = vars[group + lhSuffix];
     const vFam = s.familyVariable ? vars[s.familyVariable] : null;
     const family = vFam ? vFam.valuesByMode[modeId] : s.family;
-    if (!vSize || !vLh || (s.familyVariable && !vFam) || !family) { errors.push(`${s.name}: variable missing`); continue; }
+    const missing = [!vSize && group + sizeSuffix, !vLh && group + lhSuffix, s.familyVariable && !vFam && s.familyVariable].filter(Boolean);
+    if (missing.length) { errors.push(`${s.name}: variable ${missing.join(", ")} not found in "${config.collection}"`); continue; }
+    if (!family) { errors.push(`${s.name}: no family given`); continue; }
     const fontName = { family, style: s.style || "Regular" };
     if (!avail.has(key(fontName))) { errors.push(`${s.name}: "${family} ${fontName.style}" is not installed on this machine`); continue; }
     await figma.loadFontAsync(fontName);
@@ -145,7 +161,7 @@ async function stylesFromVariables(config) {
     if (s.description) style.description = s.description;
     done.push(`${created ? "created" : "updated"}: ${s.name} (${family} ${fontName.style} ${size}/${round(lh)})`);
   }
-  figma.commitUndo();
+  commit();
   return { done, errors };
 }
 
@@ -171,7 +187,7 @@ async function assignStyles(apply) {
       await n.setTextStyleIdAsync(hits[0].id);
     }
   }
-  if (apply) figma.commitUndo();
+  if (apply) commit();
   return res;
 }
 
@@ -187,7 +203,8 @@ const handlers = {
   loadConfig: () => { const c = figma.root.getPluginData("config"); return c ? JSON.parse(c) : null; },
 };
 
-if (typeof figma !== "undefined" && !globalThis.__LOCAL_TYPE_TEST__) {
+// Set globalThis.LOCAL_TYPE_KIT_NO_UI = true before this file to use the functions above without the window.
+if (typeof figma !== "undefined" && !globalThis.LOCAL_TYPE_KIT_NO_UI) {
   figma.showUI(__html__, { width: 440, height: 600, themeColors: true });
   figma.ui.onmessage = async (msg) => {
     try {
