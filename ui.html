@@ -1,207 +1,488 @@
+<!doctype html>
+<meta charset="utf-8">
 <style>
-  :root { font: 12px/1.45 Inter, system-ui, sans-serif; }
-  body { margin: 0; background: var(--figma-color-bg); color: var(--figma-color-text); }
-  nav { display: flex; border-bottom: 1px solid var(--figma-color-border); }
-  nav button { flex: 1; padding: 10px 0; background: none; border: 0; color: var(--figma-color-text-secondary); font: inherit; cursor: pointer; }
-  nav button[aria-selected="true"] { color: var(--figma-color-text); font-weight: 600; box-shadow: inset 0 -2px var(--figma-color-text); }
-  section { padding: 12px 16px; display: grid; gap: 10px; }
-  p { margin: 0; color: var(--figma-color-text-secondary); }
-  table { width: 100%; border-collapse: collapse; font: inherit; }
-  td, th { text-align: left; padding: 5px 4px; border-bottom: 1px solid var(--figma-color-border); vertical-align: middle; }
-  th { font-weight: 500; color: var(--figma-color-text-secondary); }
-  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
-  .missing { color: var(--figma-color-text-danger); }
-  .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-  input, select, textarea { font: inherit; color: inherit; background: var(--figma-color-bg-secondary); border: 1px solid var(--figma-color-border); border-radius: 4px; padding: 5px 6px; min-width: 0; }
-  textarea { width: 100%; box-sizing: border-box; height: 220px; font-family: ui-monospace, Menlo, monospace; font-size: 11px; }
-  button.act { padding: 6px 12px; border-radius: 4px; border: 1px solid var(--figma-color-border); background: var(--figma-color-bg-secondary); color: inherit; font: inherit; cursor: pointer; }
-  button.primary { background: var(--figma-color-bg-brand); color: var(--figma-color-text-onbrand); border-color: transparent; }
-  .scope { display: inline-flex; border: 1px solid var(--figma-color-border); border-radius: 4px; overflow: hidden; }
-  .scope label { padding: 5px 10px; cursor: pointer; color: var(--figma-color-text-secondary); }
-  .scope input { position: absolute; opacity: 0; pointer-events: none; }
-  .scope label:has(input:checked) { background: var(--figma-color-bg-secondary); color: var(--figma-color-text); font-weight: 600; }
-  .fam { border: 1px solid var(--figma-color-border); border-radius: 6px; padding: 8px; display: grid; gap: 6px; }
-  .fam-head { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: center; }
-  .fam-name { font-weight: 600; }
-  .fam-styles { display: grid; grid-template-columns: 1fr auto 1fr; gap: 4px 6px; align-items: center; }
-  .fam-styles span.from { color: var(--figma-color-text-secondary); }
-  .fam-styles select.unmatched { border-color: var(--figma-color-border-danger); }
-  pre { margin: 0; white-space: pre-wrap; font-family: ui-monospace, Menlo, monospace; font-size: 11px; background: var(--figma-color-bg-secondary); padding: 8px; border-radius: 4px; max-height: 180px; overflow: auto; }
+  :root { font: 450 11px/16px Inter, system-ui, sans-serif; --row: 32px; --ctl: 24px; color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; display: flex; flex-direction: column; background: var(--figma-color-bg); color: var(--figma-color-text); }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex: none; display: block; }
   [hidden] { display: none !important; }
+  p { margin: 0; color: var(--figma-color-text-secondary); }
+  h2 { margin: 0; font-size: 11px; font-weight: 550; }
+
+  header { display: flex; align-items: center; gap: 4px; height: 40px; padding: 0 8px 0 12px; border-bottom: 1px solid var(--figma-color-border); flex: none; }
+  nav { display: flex; gap: 2px; flex: 1; }
+  nav button { height: var(--ctl); padding: 0 8px; border: 0; border-radius: 5px; background: none; color: var(--figma-color-text-secondary); font-weight: 550; cursor: default; }
+  nav button:hover { color: var(--figma-color-text); }
+  nav button[aria-selected="true"] { color: var(--figma-color-text); background: var(--figma-color-bg-secondary); }
+
+  .icon { position: relative; width: var(--ctl); height: var(--ctl); display: grid; place-items: center; border: 0; border-radius: 5px; background: none; color: var(--figma-color-icon-secondary, var(--figma-color-text-secondary)); cursor: default; }
+  .icon:hover { background: var(--figma-color-bg-hover, var(--figma-color-bg-secondary)); color: var(--figma-color-icon, var(--figma-color-text)); }
+  .icon.stale::after { content: ""; position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--figma-color-icon-brand, var(--figma-color-bg-brand)); }
+  .icon.busy svg { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  main { flex: 1; overflow: auto; padding: 8px 0; }
+  .pad { padding: 0 12px; }
+  footer { flex: none; border-top: 1px solid var(--figma-color-border); padding: 12px; display: grid; gap: 8px; }
+
+  .btn { height: var(--ctl); padding: 0 8px; border-radius: 5px; border: 1px solid var(--figma-color-border); background: none; font-weight: 550; cursor: default; }
+  .btn:hover:not(:disabled) { background: var(--figma-color-bg-hover, var(--figma-color-bg-secondary)); }
+  .btn.primary { background: var(--figma-color-bg-brand); color: var(--figma-color-text-onbrand); border-color: transparent; }
+  .btn.primary:hover:not(:disabled) { background: var(--figma-color-bg-brand-hover, var(--figma-color-bg-brand)); }
+  .btn:disabled { opacity: 0.4; }
+  .actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+  input[type="text"], select { height: var(--ctl); width: 100%; min-width: 0; padding: 0 7px; border: 1px solid transparent; border-radius: 5px; background: var(--figma-color-bg-secondary); outline: none; }
+  input[type="text"]:hover, select:hover { border-color: var(--figma-color-border); }
+  input[type="text"]:focus, select:focus { border-color: var(--figma-color-border-selected); }
+  input::placeholder { color: var(--figma-color-text-tertiary, var(--figma-color-text-secondary)); }
+  select { appearance: none; padding-right: 22px; background-image: var(--chev); background-repeat: no-repeat; background-position: right 4px center; }
+  input[type="checkbox"] { margin: 0; accent-color: var(--figma-color-bg-brand); }
+
+  .banner, .status { display: flex; gap: 8px; align-items: flex-start; padding: 8px; border-radius: 5px; background: var(--figma-color-bg-secondary); }
+  .banner { margin: 0 12px 8px; }
+  .banner svg, .status > svg { margin-top: 0; }
+  .status .txt { flex: 1; display: grid; gap: 4px; }
+  .status details summary { color: var(--figma-color-text-secondary); cursor: default; }
+  .status ul { margin: 4px 0 0; padding-left: 16px; color: var(--figma-color-text-secondary); }
+  .ok > svg { color: var(--figma-color-icon-success, #14ae5c); }
+  .warn > svg, .w { color: var(--figma-color-icon-warning, #e5a000); }
+  .err { background: var(--figma-color-bg-danger-tertiary, var(--figma-color-bg-secondary)); color: var(--figma-color-text-danger); }
+  .err > svg { color: var(--figma-color-icon-danger, currentColor); }
+  .info > svg { color: var(--figma-color-icon-secondary, var(--figma-color-text-secondary)); }
+
+  .fam { border-bottom: 1px solid var(--figma-color-border); }
+  .fam:last-child { border-bottom: 0; }
+  .fam-row { width: 100%; height: var(--row); display: flex; align-items: center; gap: 4px; padding: 0 12px 0 4px; border: 0; background: none; text-align: left; cursor: default; }
+  .fam-row:hover { background: var(--figma-color-bg-hover, var(--figma-color-bg-secondary)); }
+  .fam-row .chev { color: var(--figma-color-icon-tertiary, var(--figma-color-text-tertiary)); transition: transform 0.12s; }
+  .fam-row[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  .fam-name { font-size: 12px; font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fam-to { color: var(--figma-color-text-brand, var(--figma-color-text)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; gap: 4px; align-items: center; }
+  .meta { margin-left: auto; padding-left: 8px; color: var(--figma-color-text-secondary); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .fam-body { padding: 0 12px 12px 28px; display: grid; gap: 4px; }
+  .grid { display: grid; grid-template-columns: 1fr 16px 1fr; gap: 4px 8px; align-items: center; min-height: var(--ctl); }
+  .grid .arrow { color: var(--figma-color-icon-tertiary, var(--figma-color-text-tertiary)); }
+  .from { display: flex; align-items: center; gap: 4px; min-width: 0; }
+  .from .s { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .from .n { margin-left: auto; color: var(--figma-color-text-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .lbl { color: var(--figma-color-text-secondary); }
+  .cell { display: flex; align-items: center; gap: 4px; min-width: 0; }
+  .empty { padding: 24px 12px; text-align: center; color: var(--figma-color-text-secondary); }
+
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); padding: 2px; gap: 2px; border-radius: 5px; background: var(--figma-color-bg-secondary); }
+  .seg button { height: 20px; display: flex; align-items: center; justify-content: center; gap: 4px; padding: 0 8px; border: 1px solid transparent; border-radius: 4px; background: none; color: var(--figma-color-text-secondary); cursor: default; }
+  .seg button[aria-checked="true"] { background: var(--figma-color-bg); border-color: var(--figma-color-border); color: var(--figma-color-text); }
+  .seg button:disabled { opacity: 0.4; }
+  .hint { color: var(--figma-color-text-secondary); }
+
+  .combo { position: relative; }
+  .combo input { padding-left: 24px; }
+  .combo > svg { position: absolute; left: 6px; top: 4px; color: var(--figma-color-icon-tertiary, var(--figma-color-text-tertiary)); pointer-events: none; }
+  #menu { position: fixed; z-index: 10; max-height: 200px; overflow: auto; margin: 0; padding: 4px 0; list-style: none; border-radius: 5px; background: var(--figma-color-bg-menu, #1e1e1e); color: var(--figma-color-text-menu, #fff); box-shadow: 0 2px 7px rgba(0,0,0,0.15), 0 5px 17px rgba(0,0,0,0.2); }
+  #menu li { height: 24px; line-height: 24px; padding: 0 8px 0 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+  #menu li[aria-selected="true"] { background: var(--figma-color-bg-menu-selected, var(--figma-color-bg-brand)); color: var(--figma-color-text-menu-selected, #fff); }
+  #menu li b { font-weight: 650; }
+  #menu li.none { color: var(--figma-color-text-menu-secondary, #aaa); }
+
+  .block { display: grid; gap: 8px; padding: 4px 12px 16px; }
+  .block + .block { border-top: 1px solid var(--figma-color-border); padding-top: 16px; }
+  .field { display: grid; grid-template-columns: 80px 1fr; gap: 8px; align-items: center; }
+  .srow { display: grid; grid-template-columns: 16px 1fr 1.25fr 84px; gap: 8px; align-items: center; min-height: var(--row); }
+  .srow.head { min-height: 16px; color: var(--figma-color-text-secondary); }
+  .srow .grp { display: grid; min-width: 0; }
+  .srow .grp small { font-size: 11px; color: var(--figma-color-text-secondary); font-variant-numeric: tabular-nums; }
+  details.more summary { color: var(--figma-color-text-secondary); cursor: default; }
+  details.more .field { margin-top: 8px; }
 </style>
 
-<nav>
-  <button data-tab="fonts" aria-selected="true">Fonts</button>
-  <button data-tab="replace">Replace</button>
-  <button data-tab="styles">Styles</button>
-</nav>
+<header>
+  <nav role="tablist">
+    <button role="tab" data-tab="fonts" aria-selected="true">Fonts</button>
+    <button role="tab" data-tab="styles" aria-selected="false">Styles</button>
+  </nav>
+  <button class="icon" id="refresh" title="Scan again"></button>
+</header>
 
-<section id="fonts">
-  <p>Fonts used in this file, in text and in local styles. Missing means the font is not installed on this machine.</p>
-  <table><thead><tr><th>Font</th><th class="num">Text</th><th class="num">Styles</th><th></th></tr></thead><tbody id="usedRows"></tbody></table>
-  <div class="row"><button class="act" id="rescan">Rescan</button></div>
-</section>
+<main id="fonts">
+  <div id="banner" class="banner warn" hidden></div>
+  <div id="list"><div class="empty">Scanning this file…</div></div>
+</main>
+<footer id="fontsFoot">
+  <h2>Replace in</h2>
+  <div class="seg" role="radiogroup" id="scope">
+    <button role="radio" data-scope="selection" aria-checked="false"></button>
+    <button role="radio" data-scope="page" aria-checked="false"></button>
+    <button role="radio" data-scope="document" aria-checked="true"></button>
+  </div>
+  <div class="hint" id="scopeHint"></div>
+  <div id="replaceOut" hidden></div>
+  <div class="actions">
+    <button class="btn" id="replacePreview" disabled>Preview</button>
+    <button class="btn primary" id="replaceApply" disabled>Replace</button>
+  </div>
+</footer>
 
-<section id="replace" hidden>
-  <p>Pick a new family for the fonts you want to replace. Styles are matched by name; check them before you replace. Families without a new family stay as they are. Loose text, components, instance overrides and local styles all change; text that uses a style follows the style.</p>
-  <div id="famRows" style="display:grid;gap:8px"></div>
-  <datalist id="familyList"></datalist>
-  <div class="row">
-    <span>Replace in</span>
-    <span class="scope">
-      <label><input type="radio" name="scope" value="selection">Selection</label>
-      <label><input type="radio" name="scope" value="page">This page</label>
-      <label><input type="radio" name="scope" value="document" checked>Whole file</label>
-    </span>
+<main id="styles" hidden>
+  <div class="block">
+    <h2>Text styles from variables</h2>
+    <p>Creates or updates one text style per variable group and binds size, line height and family to the variables.</p>
+    <div class="field"><span class="lbl">Collection</span><select id="collection"></select></div>
+    <div id="groups"></div>
+    <details class="more">
+      <summary>Variable names</summary>
+      <div class="field"><span class="lbl">Size ends in</span><input type="text" id="sizeSuffix" value="/font-size"></div>
+      <div class="field"><span class="lbl">Line height</span><input type="text" id="lhSuffix" value="/line-height"></div>
+    </details>
+    <div id="stylesOut" hidden></div>
+    <div class="actions"><button class="btn primary" id="buildStyles" disabled>Create styles</button></div>
   </div>
-  <div class="row">
-    <button class="act" id="replacePreview">Preview</button>
-    <button class="act primary" id="replaceApply">Replace</button>
+  <div class="block">
+    <h2>Attach loose text to styles</h2>
+    <p>Gives text without a style the one local style that matches its font, size and line height exactly. If more than one fits, the text stays as it is.</p>
+    <div id="assignOut" hidden></div>
+    <div class="actions">
+      <button class="btn" id="assignPreview">Preview</button>
+      <button class="btn primary" id="assignApply">Assign styles</button>
+    </div>
   </div>
-  <pre id="replaceOut" hidden></pre>
-</section>
+</main>
 
-<section id="styles" hidden>
-  <p>Create or update text styles from a variable collection, then give loose text the style that matches it exactly. The configuration is saved in this file.</p>
-  <textarea id="config" spellcheck="false"></textarea>
-  <div class="row">
-    <button class="act primary" id="buildStyles">Create styles</button>
-    <button class="act" id="assignPreview">Preview assignment</button>
-    <button class="act" id="assignApply">Assign styles</button>
-  </div>
-  <pre id="stylesOut" hidden></pre>
-</section>
+<ul id="menu" role="listbox" hidden></ul>
 
 <script>
 const $ = (id) => document.getElementById(id);
 const send = (type, data = {}) => parent.postMessage({ pluginMessage: { type, ...data } }, "*");
-let used = [], families = {};
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
-const EXAMPLE = {
-  collection: "Typography",
-  sizeSuffix: "/font-size",
-  lineHeightSuffix: "/line-height",
-  styles: [
-    { name: "heading-1", group: "heading-1", familyVariable: "font/heading", style: "Bold" },
-    { name: "body", group: "body", familyVariable: "font/body", style: "Regular" }
-  ]
+// 16px icons drawn in currentColor; the plugin has no network access, so nothing is loaded from outside.
+const svg = (d) => `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const I = {
+  chev: svg('<path d="M6.5 4.5 10 8l-3.5 3.5"/>'),
+  arrow: svg('<path d="M3.5 8h9M9 4.5 12.5 8 9 11.5"/>'),
+  warn: svg('<path d="M8 2.5 14 13H2L8 2.5Z"/><path d="M8 6.5v3"/><circle cx="8" cy="11.25" r="0.4" fill="currentColor"/>'),
+  ok: svg('<circle cx="8" cy="8" r="5.5"/><path d="m5.75 8.1 1.6 1.6 2.9-3.2"/>'),
+  info: svg('<circle cx="8" cy="8" r="5.5"/><path d="M8 7.25v3.5"/><circle cx="8" cy="5.25" r="0.4" fill="currentColor"/>'),
+  err: svg('<circle cx="8" cy="8" r="5.5"/><path d="m6 6 4 4M10 6l-4 4"/>'),
+  refresh: svg('<path d="M12.5 8A4.5 4.5 0 1 1 11 4.6"/><path d="M11.5 2.5v2.5H9"/>'),
+  search: svg('<circle cx="7" cy="7" r="3.5"/><path d="m9.75 9.75 2.75 2.75"/>'),
+  selection: svg('<rect x="3.5" y="3.5" width="9" height="9" rx="0.5" stroke-dasharray="2 1.5"/>'),
+  page: svg('<rect x="4.5" y="2.5" width="7" height="11" rx="1"/>'),
+  file: svg('<path d="M4.5 2.5h4.5l2.5 2.5v8.5h-7z"/><path d="M9 2.5V5h2.5"/><path d="M6.5 8h3M6.5 10h3"/>'),
 };
+document.documentElement.style.setProperty("--chev", `url("data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#888" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6.5 8 9.5l3-3"/></svg>')}")`);
+$("refresh").innerHTML = I.refresh;
+const SCOPE = { selection: ["Selection", I.selection], page: ["This page", I.page], document: ["Whole file", I.file] };
+document.querySelectorAll("#scope button").forEach((b) => { const [t, i] = SCOPE[b.dataset.scope]; b.innerHTML = `${i}<span>${t}</span>`; });
 
+// ---- Status lines ----
+function status(id, kind, text, details) {
+  const el = $(id);
+  el.hidden = false;
+  el.className = `status ${kind}`;
+  el.innerHTML = `${I[kind]}<div class="txt"><span></span></div>`;
+  el.querySelector("span").textContent = text;
+  for (const [label, items] of details || []) {
+    if (!items.length) continue;
+    const d = document.createElement("details");
+    d.innerHTML = `<summary></summary><ul></ul>`;
+    d.querySelector("summary").textContent = label;
+    for (const x of items) { const li = document.createElement("li"); li.textContent = x; d.querySelector("ul").append(li); }
+    el.querySelector(".txt").append(d);
+  }
+}
+const clear = (id) => { $(id).hidden = true; };
+
+// ---- Tabs ----
 document.querySelectorAll("nav button").forEach((b) => b.onclick = () => {
   document.querySelectorAll("nav button").forEach((x) => x.setAttribute("aria-selected", x === b));
-  document.querySelectorAll("section").forEach((s) => s.hidden = s.id !== b.dataset.tab);
+  $("fonts").hidden = $("fontsFoot").hidden = b.dataset.tab !== "fonts";
+  $("styles").hidden = b.dataset.tab !== "styles";
+  if (b.dataset.tab === "styles") send("variables");
 });
 
-function show(id, text) { $(id).hidden = false; $(id).textContent = text; }
-
-function renderUsed() {
-  $("usedRows").innerHTML = "";
-  for (const u of used) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td class="${u.available ? "" : "missing"}"></td><td class="num">${u.nodes}</td><td class="num">${u.styles}</td><td><button class="act">Replace…</button></td>`;
-    tr.cells[0].textContent = `${u.family} ${u.style}${u.available ? "" : " (missing)"}`;
-    tr.querySelector("button").onclick = () => {
-      document.querySelector('[data-tab="replace"]').click();
-      const box = [...$("famRows").querySelectorAll(".fam")].find((f) => f.dataset.family === u.family);
-      if (box) box.querySelector("input").focus();
-    };
-    $("usedRows").append(tr);
-  }
-  $("familyList").innerHTML = Object.keys(families).sort().map((f) => `<option value="${f.replace(/"/g, "&quot;")}">`).join("");
-  renderReplace();
+// ---- Family combobox: one shared menu under the input that has focus ----
+const menu = $("menu");
+let menuFor = null, menuItems = [], menuIndex = -1;
+function openMenu(input) {
+  menuFor = input;
+  const q = input.value.trim().toLowerCase();
+  const all = Object.keys(families).sort((a, b) => a.localeCompare(b));
+  const starts = all.filter((f) => f.toLowerCase().startsWith(q));
+  const contains = q ? all.filter((f) => !f.toLowerCase().startsWith(q) && f.toLowerCase().includes(q)) : [];
+  menuItems = [...starts, ...contains].slice(0, 50);
+  menuIndex = menuItems.indexOf(input.value);
+  menu.innerHTML = menuItems.length
+    ? menuItems.map((f, i) => {
+        const at = f.toLowerCase().indexOf(q);
+        const label = q && at >= 0 ? `${esc(f.slice(0, at))}<b>${esc(f.slice(at, at + q.length))}</b>${esc(f.slice(at + q.length))}` : esc(f);
+        return `<li role="option" data-i="${i}" aria-selected="${i === menuIndex}">${label}</li>`;
+      }).join("")
+    : `<li class="none">No installed family matches</li>`;
+  const r = input.getBoundingClientRect();
+  menu.style.left = `${r.left}px`; menu.style.width = `${r.width}px`;
+  const below = innerHeight - r.bottom - 8;
+  menu.hidden = false;
+  const h = Math.min(menu.scrollHeight, 200);
+  menu.style.top = below >= h || below > r.top ? `${r.bottom + 4}px` : `${r.top - h - 4}px`;
 }
+function closeMenu() { menu.hidden = true; menuFor = null; }
+function pick(i) { if (!menuFor || i < 0) return; const input = menuFor; input.value = menuItems[i]; closeMenu(); input.dispatchEvent(new Event("change")); }
+menu.addEventListener("mousedown", (e) => { e.preventDefault(); const li = e.target.closest("li[data-i]"); if (li) pick(+li.dataset.i); });
+function combo(input) {
+  input.setAttribute("role", "combobox"); input.autocomplete = "off"; input.spellcheck = false;
+  input.addEventListener("focus", () => openMenu(input));
+  input.addEventListener("input", () => openMenu(input));
+  input.addEventListener("blur", () => { closeMenu(); input.dispatchEvent(new Event("change")); });
+  input.addEventListener("keydown", (e) => {
+    if (menu.hidden && e.key === "ArrowDown") { openMenu(input); return; }
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      menuIndex = Math.max(0, Math.min(menuItems.length - 1, menuIndex + (e.key === "ArrowDown" ? 1 : -1)));
+      menu.querySelectorAll("li").forEach((li, i) => li.setAttribute("aria-selected", i === menuIndex));
+      const li = menu.children[menuIndex]; if (li) li.scrollIntoView({ block: "nearest" });
+    }
+    if (e.key === "Enter") { e.preventDefault(); pick(menuIndex >= 0 ? menuIndex : (menuItems.length === 1 ? 0 : -1)); input.blur(); }
+    if (e.key === "Escape") { closeMenu(); input.blur(); }
+  });
+  const wrap = document.createElement("div"); wrap.className = "combo";
+  input.replaceWith(wrap); wrap.append(input); wrap.insertAdjacentHTML("afterbegin", I.search);
+  return wrap;
+}
+$("list").addEventListener("scroll", closeMenu, true);
+$("fonts").addEventListener("scroll", closeMenu);
 
-function renderReplace() {
-  const wrap = $("famRows");
-  const keep = {};
-  wrap.querySelectorAll(".fam").forEach((f) => { keep[f.dataset.family] = f.querySelector("input").value; });
-  wrap.innerHTML = "";
+// ---- Fonts: one list, each family opens into its replacement ----
+let used = [], families = {}, ctx = { page: "", selected: 0 }, scope = "document";
+const targets = {}, choices = {}, open = new Set();
+const norm = (x) => x.toLowerCase().replace(/[\s_-]/g, "");
+
+function renderFonts() {
   const byFamily = {};
   for (const u of used) (byFamily[u.family] = byFamily[u.family] || []).push(u);
-  for (const family of Object.keys(byFamily).sort()) {
-    const box = document.createElement("div"); box.className = "fam"; box.dataset.family = family;
-    const head = document.createElement("div"); head.className = "fam-head";
-    const name = document.createElement("span"); name.className = "fam-name"; name.textContent = family;
-    const arrow = document.createElement("span"); arrow.textContent = "→";
-    const target = document.createElement("input"); target.setAttribute("list", "familyList"); target.placeholder = "New family"; target.value = keep[family] || "";
-    head.append(name, arrow, target);
-    const rows = document.createElement("div"); rows.className = "fam-styles";
+  const fams = Object.keys(byFamily).map((family) => {
+    const list = byFamily[family];
+    return { family, list, missing: list.filter((u) => !u.available).length, nodes: list.reduce((a, u) => a + u.nodes, 0), styles: list.reduce((a, u) => a + u.styles, 0) };
+  }).sort((a, b) => (b.missing > 0) - (a.missing > 0) || b.nodes + b.styles - (a.nodes + a.styles) || a.family.localeCompare(b.family));
+
+  const missing = used.filter((u) => !u.available);
+  $("banner").hidden = !missing.length;
+  if (missing.length) {
+    $("banner").innerHTML = `${I.warn}<span></span>`;
+    $("banner").querySelector("span").textContent = `${plural(missing.length, "font is", "fonts are")} not installed on this machine. Open a family to replace it with one that is.`;
+  }
+
+  const list = $("list");
+  list.innerHTML = fams.length ? "" : `<div class="empty">This file has no text yet.</div>`;
+  for (const f of fams) {
+    if (f.missing && !open.size && !Object.keys(targets).length) open.add(f.family);
+    const box = document.createElement("div"); box.className = "fam";
+    const row = document.createElement("button"); row.className = "fam-row"; row.setAttribute("aria-expanded", open.has(f.family));
+    row.innerHTML = `<span class="chev">${I.chev}</span>${f.missing ? `<span class="w" title="Not installed on this machine">${I.warn}</span>` : ""}<span class="fam-name"></span><span class="fam-to" hidden>${I.arrow}<span></span></span><span class="meta"></span>`;
+    row.querySelector(".fam-name").textContent = f.family;
+    row.querySelector(".meta").textContent = [plural(f.nodes, "layer", "layers"), f.styles ? plural(f.styles, "style", "styles") : ""].filter(Boolean).join(" · ");
+    const showTo = () => { const t = families[targets[f.family]] ? targets[f.family] : ""; row.querySelector(".fam-to").hidden = !t; row.querySelector(".fam-to span").textContent = t; };
+    showTo();
+
+    const body = document.createElement("div"); body.className = "fam-body"; body.hidden = !open.has(f.family);
+    row.onclick = () => { const o = body.hidden; body.hidden = !o; row.setAttribute("aria-expanded", o); o ? open.add(f.family) : open.delete(f.family); };
+
+    const head = document.createElement("div"); head.className = "grid";
+    const input = document.createElement("input"); input.type = "text"; input.placeholder = "Replace with…"; input.value = targets[f.family] || "";
+    head.innerHTML = `<span class="lbl">Replace with</span><span></span>`;
+    head.append(combo(input));
+    const rows = document.createElement("div"); rows.className = "grid";
     const fill = () => {
       rows.innerHTML = "";
-      const avail = families[target.value];
-      rows.hidden = !avail;
-      if (!avail) return;
-      for (const u of byFamily[family]) {
-        const from = document.createElement("span"); from.className = "from"; from.textContent = u.style;
-        const a = document.createElement("span"); a.textContent = "→";
-        const sel = document.createElement("select"); sel.dataset.style = u.style;
-        const norm = (x) => x.toLowerCase().replace(/[\s_-]/g, "");
+      const avail = families[targets[f.family]];
+      for (const u of f.list) {
+        const from = document.createElement("span"); from.className = "from";
+        from.innerHTML = `${u.available ? "" : `<span class="w" title="Not installed on this machine">${I.warn}</span>`}<span class="s"></span><span class="n"></span>`;
+        from.querySelector(".s").textContent = u.style;
+        from.querySelector(".n").textContent = [u.nodes ? plural(u.nodes, "layer", "layers") : "", u.styles ? plural(u.styles, "style", "styles") : ""].filter(Boolean).join(" · ");
+        rows.append(from);
+        if (!avail) { rows.append(document.createElement("span"), document.createElement("span")); continue; }
+        const arrow = document.createElement("span"); arrow.className = "arrow"; arrow.innerHTML = I.arrow;
+        const cell = document.createElement("span"); cell.className = "cell";
+        const sel = document.createElement("select");
+        const k = `${f.family}\u0000${u.style}`;
         const match = avail.find((x) => x === u.style) || avail.find((x) => norm(x) === norm(u.style));
-        sel.innerHTML = `<option value="">Keep ${u.style}</option>` + avail.map((x) => `<option${x === match ? " selected" : ""}>${x}</option>`).join("");
-        sel.classList.toggle("unmatched", !match);
-        sel.onchange = () => sel.classList.toggle("unmatched", !sel.value);
-        rows.append(from, a, sel);
+        const chosen = k in choices ? choices[k] : match || "";
+        sel.innerHTML = `<option value="">Keep ${esc(u.style)} unchanged</option>` + avail.map((x) => `<option${x === chosen ? " selected" : ""}>${esc(x)}</option>`).join("");
+        const mark = () => { const w = cell.querySelector(".w"); if (!sel.value && !w) cell.insertAdjacentHTML("afterbegin", `<span class="w" title="No style with this name in ${esc(targets[f.family])}. Pick one, or it stays as it is.">${I.warn}</span>`); if (sel.value && w) w.remove(); };
+        sel.onchange = () => { choices[k] = sel.value; mark(); changed(); };
+        cell.append(sel); mark();
+        rows.append(arrow, cell);
       }
     };
-    target.oninput = fill; fill();
-    box.append(head, rows);
-    wrap.append(box);
+    input.addEventListener("change", () => {
+      if (targets[f.family] === input.value) return;
+      targets[f.family] = input.value;
+      for (const k of Object.keys(choices)) if (k.startsWith(f.family + "\u0000")) delete choices[k];
+      showTo(); fill(); changed();
+    });
+    fill();
+    body.append(head, rows);
+    box.append(row, body);
+    list.append(box);
   }
+  updateFoot();
 }
 
 function mapping() {
   const rows = [];
-  $("famRows").querySelectorAll(".fam").forEach((f) => {
-    const family = f.querySelector("input").value;
-    if (!families[family]) return;
-    f.querySelectorAll("select").forEach((sel) => {
-      if (sel.value && !(family === f.dataset.family && sel.value === sel.dataset.style)) rows.push({ from: { family: f.dataset.family, style: sel.dataset.style }, to: { family, style: sel.value } });
-    });
-  });
+  for (const u of used) {
+    const to = targets[u.family];
+    if (!families[to]) continue;
+    const k = `${u.family}\u0000${u.style}`;
+    const avail = families[to];
+    const match = avail.find((x) => x === u.style) || avail.find((x) => norm(x) === norm(u.style));
+    const style = k in choices ? choices[k] : match || "";
+    if (style && !(to === u.family && style === u.style)) rows.push({ from: { family: u.family, style: u.style }, to: { family: to, style } });
+  }
   return rows;
 }
 
-function readConfig() {
-  const config = JSON.parse($("config").value);
-  send("saveConfig", { config });
-  return config;
+let busy = false;
+function updateFoot() {
+  document.querySelectorAll("#scope button").forEach((b) => {
+    b.setAttribute("aria-checked", b.dataset.scope === scope);
+    b.disabled = b.dataset.scope === "selection" && !ctx.selected && scope !== "selection";
+  });
+  $("scopeHint").textContent = {
+    selection: ctx.selected ? `${plural(ctx.selected, "selected layer", "selected layers")} and everything inside. Local styles stay as they are.` : "Select layers on the canvas first.",
+    page: `Everything on “${ctx.page}”. Local styles stay as they are.`,
+    document: "Every page, local text styles included.",
+  }[scope];
+  const ready = mapping().length > 0 && !(scope === "selection" && !ctx.selected);
+  $("replacePreview").disabled = $("replaceApply").disabled = busy || !ready;
+}
+function changed() { clear("replaceOut"); updateFoot(); }
+document.querySelectorAll("#scope button").forEach((b) => b.onclick = () => { scope = b.dataset.scope; changed(); });
+
+function run(type) { busy = true; updateFoot(); send(type, { mapping: mapping(), scope }); }
+$("replacePreview").onclick = () => run("replacePreview");
+$("replaceApply").onclick = () => run("replaceApply");
+
+const WHERE = { selection: "the selection", page: "this page", document: "the whole file" };
+function replaceResult(r, done) {
+  const parts = [plural(r.segments, "text run", "text runs") + " in " + plural(r.nodes, "layer", "layers")];
+  if (r.styles) parts.push(plural(r.styles, "style", "styles"));
+  const notes = [];
+  const one = r.viaStyle === 1;
+  if (r.viaStyle) notes.push(`${plural(r.viaStyle, "run follows", "runs follow")} a style and ${r.scope === "document" ? (one ? "changes" : "change") + " with it" : one ? "stays as it is" : "stay as they are"}.`);
+  if (!done && r.inInstances) notes.push(`${r.inInstances} of the runs sit in instances; most follow their component.`);
+  if (done) notes.push("One undo reverts the whole run.");
+  const nothing = !r.segments && !r.styles;
+  status("replaceOut", r.skipped.length ? "warn" : nothing ? "info" : done ? "ok" : "info",
+    nothing ? `Nothing to replace in ${WHERE[r.scope]}.` : `${done ? "Replaced" : "Will replace"} in ${WHERE[r.scope]}: ${parts.join(", ")}. ${notes.join(" ")}`.trim(),
+    [[plural(r.skipped.length, "item skipped", "items skipped"), r.skipped]]);
 }
 
-$("rescan").onclick = () => send("scan");
-const scope = () => document.querySelector('input[name="scope"]:checked').value;
-$("replacePreview").onclick = () => send("replacePreview", { mapping: mapping(), scope: scope() });
-$("replaceApply").onclick = () => send("replaceApply", { mapping: mapping(), scope: scope() });
-$("buildStyles").onclick = () => { try { send("styles", { config: readConfig() }); } catch (e) { show("stylesOut", "Configuration is not valid JSON: " + e.message); } };
+// ---- Scanning: on open, after a run, and when the file changed and the window is used again ----
+let stale = false, quietUntil = 0;
+function scan() { stale = false; $("refresh").classList.remove("stale"); $("refresh").classList.add("busy"); send("scan"); }
+$("refresh").onclick = scan;
+const wake = () => { if (stale && !busy) scan(); };
+document.addEventListener("pointerenter", wake);
+window.addEventListener("focus", wake);
+
+// ---- Styles: form built from the file's variables ----
+let collections = [], config = null;
+function groupsOf(col) {
+  const sizeS = $("sizeSuffix").value, lhS = $("lhSuffix").value;
+  const byName = Object.fromEntries(col.vars.map((v) => [v.name, v]));
+  return col.vars.filter((v) => v.type === "FLOAT" && sizeS && v.name.endsWith(sizeS)).map((v) => v.name.slice(0, -sizeS.length))
+    .filter((g) => byName[g + lhS]).map((g) => ({ group: g, size: byName[g + sizeS].value, lh: byName[g + lhS].value }));
+}
+function renderStyles() {
+  const sel = $("collection");
+  const current = sel.value || (config && config.collection) || "";
+  sel.innerHTML = collections.length ? collections.map((c) => `<option${c.name === current ? " selected" : ""}>${esc(c.name)}</option>`).join("") : `<option value="">No variable collections in this file</option>`;
+  const col = collections.find((c) => c.name === sel.value);
+  const wrap = $("groups"); wrap.innerHTML = "";
+  const groups = col ? groupsOf(col) : [];
+  if (col && !groups.length) wrap.innerHTML = `<p>No group in “${esc(col.name)}” has both ${esc($("sizeSuffix").value)} and ${esc($("lhSuffix").value)}. Check the variable names below.</p>`;
+  if (groups.length) wrap.insertAdjacentHTML("beforeend", `<div class="srow head"><span></span><span>Style</span><span>Family</span><span>Weight</span></div>`);
+  const strings = col ? col.vars.filter((v) => v.type === "STRING") : [];
+  for (const g of groups) {
+    const saved = config && config.collection === col.name ? config.styles.find((s) => (s.group || s.name) === g.group) : null;
+    const row = document.createElement("div"); row.className = "srow"; row.dataset.group = g.group;
+    const guess = (word) => strings.find((v) => v.name.split("/").pop().toLowerCase() === word);
+    const famVar = saved ? saved.familyVariable : (strings.find((v) => g.group.toLowerCase().includes(v.name.split("/").pop().toLowerCase())) || guess("body") || strings[0] || {}).name;
+    row.innerHTML = `<input type="checkbox"${!config || saved ? " checked" : ""}>
+      <span class="grp"><input type="text" class="name"><small>${esc(String(Math.round(g.size * 100) / 100))} / ${esc(String(Math.round(g.lh * 100) / 100))}</small></span>
+      <select class="fam">${strings.map((v) => `<option value="${esc(v.name)}"${v.name === famVar ? " selected" : ""} title="${esc(v.name)}">${esc(v.value)} · ${esc(v.name.split("/").pop())}</option>`).join("")}${saved && saved.family ? `<option value="" selected data-family="${esc(saved.family)}">${esc(saved.family)}</option>` : ""}${!strings.length && !(saved && saved.family) ? `<option value="">No string variables</option>` : ""}</select>
+      <span class="cell"><select class="weight"></select></span>`;
+    row.querySelector(".name").value = saved ? saved.name : g.group;
+    const fam = row.querySelector(".fam"), weight = row.querySelector(".weight");
+    const fillWeight = () => {
+      const opt = fam.selectedOptions[0];
+      const family = opt ? (opt.value ? (strings.find((v) => v.name === opt.value) || {}).value : opt.dataset.family) : "";
+      const styles = families[family] || [];
+      const want = weight.value || (saved && saved.style) || "Regular";
+      weight.innerHTML = styles.length ? styles.map((s) => `<option${s === want ? " selected" : ""}>${esc(s)}</option>`).join("") : `<option value="">Not installed</option>`;
+      const w = row.querySelector(".cell .w"); if (w) w.remove();
+      if (!styles.length && family) row.querySelector(".cell").insertAdjacentHTML("afterbegin", `<span class="w" title="${esc(family)} is not installed on this machine">${I.warn}</span>`);
+    };
+    fam.onchange = fillWeight; fillWeight();
+    wrap.append(row);
+  }
+  $("buildStyles").disabled = !groups.length;
+}
+$("collection").onchange = renderStyles;
+$("sizeSuffix").onchange = $("lhSuffix").onchange = renderStyles;
+
+function readForm() {
+  const styles = [...$("groups").querySelectorAll(".srow[data-group]")].filter((r) => r.querySelector("input[type=checkbox]").checked).map((r) => {
+    const opt = r.querySelector(".fam").selectedOptions[0];
+    const s = { name: r.querySelector(".name").value.trim() || r.dataset.group, group: r.dataset.group, style: r.querySelector(".weight").value || "Regular" };
+    if (opt && opt.value) s.familyVariable = opt.value; else if (opt) s.family = opt.dataset.family;
+    return s;
+  });
+  return { collection: $("collection").value, sizeSuffix: $("sizeSuffix").value, lineHeightSuffix: $("lhSuffix").value, styles };
+}
+$("buildStyles").onclick = () => {
+  config = readForm();
+  if (!config.styles.length) { status("stylesOut", "info", "Tick at least one style."); return; }
+  send("saveConfig", { config });
+  send("styles", { config });
+};
 $("assignPreview").onclick = () => send("assignPreview");
 $("assignApply").onclick = () => send("assignApply");
+const assignResult = (r, done) => status("assignOut", r.ambiguous.length ? "warn" : r.assigned ? (done ? "ok" : "info") : "info",
+  r.assigned ? `${done ? "Assigned" : "Will assign"} a style to ${plural(r.assigned, "layer", "layers")}. ${plural(r.unmatched, "layer has", "layers have")} no exact match.${done ? " One undo reverts the whole run." : ""}`
+    : `No loose text matches a local style exactly. ${plural(r.unmatched, "layer has", "layers have")} no match.`,
+  [[`${plural(r.ambiguous.length, "layer fits", "layers fit")} more than one style and stays as it is`, r.ambiguous]]);
 
-const fmtReplace = (r, done) => (
-  `${done ? "Replaced" : "Would replace"} in ${{ selection: "the selection", page: "this page", document: "the whole file" }[r.scope]}: ${r.segments} text runs in ${r.nodes} layers, ${r.styles} styles.\n` +
-  (r.scope === "document" ? "" : "Local styles belong to the whole file and stay as they are.\n") +
-  (done || !r.inInstances ? "" : `${r.inInstances === 1 ? "1 of these runs is" : `${r.inInstances} of these runs are`} in instances; most of them follow their component and need no change of their own.\n`) +
-  (r.viaStyle === 0 ? "" : r.scope === "document"
-    ? (r.viaStyle === 1 ? "1 run follows a style and changes with it." : `${r.viaStyle} runs follow a style and change with it.`)
-    : (r.viaStyle === 1 ? "1 run follows a style and stays as it is." : `${r.viaStyle} runs follow a style and stay as they are.`)) + (r.skipped.length ? `\nSkipped:\n- ${r.skipped.join("\n- ")}` : "")
-).replace(/\n{2,}/g, "\n").trim();
-const fmtAssign = (r, done) =>
-  `${done ? "Assigned" : "Would assign"}: ${r.assigned} layers. Without match: ${r.unmatched}.` +
-  (r.ambiguous.length ? `\nMore than one style fits, left alone:\n- ${r.ambiguous.join("\n- ")}` : "");
-
+// ---- Messages from the plugin ----
 onmessage = (e) => {
   const m = e.data.pluginMessage;
   if (!m) return;
-  const out = m.type.startsWith("replace") ? "replaceOut" : "stylesOut";
-  if (!m.ok) { show(out, "Error: " + m.error); return; }
+  if (!m.ok) {
+    busy = false; updateFoot(); $("refresh").classList.remove("busy");
+    status(m.type.startsWith("replace") ? "replaceOut" : m.type.startsWith("assign") ? "assignOut" : "stylesOut", "err", m.error);
+    return;
+  }
   const r = m.result;
-  if (m.type === "scan") { used = r.used; families = r.families; renderUsed(); }
-  if (m.type === "replacePreview") show(out, fmtReplace(r, false));
-  if (m.type === "replaceApply") { show(out, fmtReplace(r, true)); send("scan"); }
-  if (m.type === "styles") show(out, [...r.done, ...r.errors.map((x) => "Error: " + x)].join("\n") || "Nothing to do.");
-  if (m.type === "assignPreview") show(out, fmtAssign(r, false));
-  if (m.type === "assignApply") show(out, fmtAssign(r, true));
-  if (m.type === "loadConfig") $("config").value = JSON.stringify(r || EXAMPLE, null, 2);
+  if (m.type === "scan") { used = r.used; families = r.families; $("refresh").classList.remove("busy"); quietUntil = Date.now() + 1000; renderFonts(); }
+  if (m.type === "context") { ctx = r; updateFoot(); }
+  if (m.type === "changed") { if (Date.now() > quietUntil && !busy) { stale = true; $("refresh").classList.add("stale"); $("refresh").title = "The file changed. Scan again"; } }
+  if (m.type === "replacePreview") { busy = false; replaceResult(r, false); updateFoot(); }
+  if (m.type === "replaceApply") { busy = false; quietUntil = Date.now() + 2000; replaceResult(r, true); scan(); }
+  if (m.type === "variables") { collections = r; renderStyles(); }
+  if (m.type === "styles") status("stylesOut", r.errors.length ? (r.done.length ? "warn" : "err") : "ok",
+    r.done.length ? `${plural(r.done.length, "style", "styles")} created or updated.${r.done.length ? " One undo reverts the whole run." : ""}` : "No style was created.",
+    [["Details", r.done], [plural(r.errors.length, "problem", "problems"), r.errors]]);
+  if (m.type === "assignPreview") assignResult(r, false);
+  if (m.type === "assignApply") assignResult(r, true);
+  if (m.type === "loadConfig") { config = r; if (r) { $("sizeSuffix").value = r.sizeSuffix || "/font-size"; $("lhSuffix").value = r.lineHeightSuffix || "/line-height"; } }
 };
 
 send("loadConfig");
-send("scan");
+send("context");
+scan();
 </script>

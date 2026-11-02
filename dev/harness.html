@@ -1,0 +1,61 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Local Type Kit – UI harness</title>
+<style>
+  body { margin: 0; padding: 24px; display: flex; gap: 24px; background: #888; font: 12px system-ui; }
+  iframe { width: 440px; height: 640px; border: 0; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,.3); }
+</style>
+<!-- Opens ui.html twice, dark and light, and answers its messages with sample data instead of a Figma file. -->
+<iframe id="dark" src="../ui.html"></iframe>
+<iframe id="light" src="../ui.html"></iframe>
+<script>
+const THEMES = {
+  dark: { bg: "#2c2c2c", "bg-secondary": "#383838", "bg-hover": "#383838", "bg-brand": "#0d99ff", "bg-brand-hover": "#0a84e0", "bg-menu": "#1e1e1e", "bg-menu-selected": "#0d99ff", "bg-danger-tertiary": "#4d2b2b",
+    text: "#ffffff", "text-secondary": "rgba(255,255,255,.7)", "text-tertiary": "rgba(255,255,255,.4)", "text-onbrand": "#fff", "text-brand": "#7cc4f8", "text-danger": "#fca397", "text-menu": "#fff", "text-menu-secondary": "rgba(255,255,255,.5)", "text-menu-selected": "#fff",
+    border: "#444444", "border-selected": "#0d99ff", icon: "#fff", "icon-secondary": "rgba(255,255,255,.7)", "icon-tertiary": "rgba(255,255,255,.4)", "icon-brand": "#0d99ff", "icon-warning": "#f7d15f", "icon-success": "#79d297", "icon-danger": "#fca397" },
+  light: { bg: "#ffffff", "bg-secondary": "#f5f5f5", "bg-hover": "#f5f5f5", "bg-brand": "#0d99ff", "bg-brand-hover": "#0a84e0", "bg-menu": "#1e1e1e", "bg-menu-selected": "#0d99ff", "bg-danger-tertiary": "#fff0ee",
+    text: "rgba(0,0,0,.9)", "text-secondary": "rgba(0,0,0,.5)", "text-tertiary": "rgba(0,0,0,.3)", "text-onbrand": "#fff", "text-brand": "#007be5", "text-danger": "#dc3412", "text-menu": "#fff", "text-menu-secondary": "rgba(255,255,255,.5)", "text-menu-selected": "#fff",
+    border: "#e6e6e6", "border-selected": "#0d99ff", icon: "rgba(0,0,0,.9)", "icon-secondary": "rgba(0,0,0,.5)", "icon-tertiary": "rgba(0,0,0,.3)", "icon-brand": "#0d99ff", "icon-warning": "#b86200", "icon-success": "#14ae5c", "icon-danger": "#dc3412" },
+};
+const FAMILIES = { "Inter": ["Thin", "Light", "Regular", "Medium", "Semi Bold", "Bold", "Extra Bold"], "Open Sans": ["Regular", "SemiBold", "Bold"], "Roboto": ["Regular", "Medium", "Bold"], "Helvetica Neue": ["Regular", "Medium", "Bold"], "Bebas Neue": ["Regular"], "Neue Haas Unica": ["Regular", "Bold"] };
+const USED = [
+  { family: "Brand Sans", style: "Regular", nodes: 62, styles: 4, available: false },
+  { family: "Brand Sans", style: "SemiBold", nodes: 31, styles: 3, available: false },
+  { family: "Brand Sans", style: "Black", nodes: 4, styles: 0, available: false },
+  { family: "Open Sans", style: "Regular", nodes: 10, styles: 2, available: true },
+  { family: "Open Sans", style: "SemiBold", nodes: 6, styles: 1, available: true },
+  { family: "Open Sans", style: "Bold", nodes: 1, styles: 1, available: true },
+  { family: "Roboto", style: "Medium", nodes: 3, styles: 0, available: true },
+];
+const VARS = [{ name: "Typography", vars: [
+  { name: "font/heading", type: "STRING", value: "Open Sans" }, { name: "font/body", type: "STRING", value: "Open Sans" },
+  { name: "heading-1/font-size", type: "FLOAT", value: 40 }, { name: "heading-1/line-height", type: "FLOAT", value: 48 },
+  { name: "heading-2/font-size", type: "FLOAT", value: 28 }, { name: "heading-2/line-height", type: "FLOAT", value: 36 },
+  { name: "body/font-size", type: "FLOAT", value: 16 }, { name: "body/line-height", type: "FLOAT", value: 24 },
+  { name: "caption/font-size", type: "FLOAT", value: 12 }, { name: "caption/line-height", type: "FLOAT", value: 16 } ] }];
+const reply = (win, type, result, ok = true) => setTimeout(() => win.postMessage({ pluginMessage: ok ? { type, ok, result } : { type, ok, error: result } }, "*"), 150);
+const handlers = {
+  scan: () => ({ used: USED, families: FAMILIES }),
+  context: () => ({ page: "Tests", selected: 0 }),
+  loadConfig: () => null,
+  saveConfig: () => true,
+  variables: () => VARS,
+  replacePreview: (m) => ({ scope: m.scope, segments: 97, nodes: 71, inInstances: 12, styles: m.scope === "document" ? 7 : 0, viaStyle: 18, skipped: [] }),
+  replaceApply: (m) => ({ scope: m.scope, segments: 97, nodes: 71, inInstances: 12, styles: m.scope === "document" ? 7 : 0, viaStyle: 18, skipped: ['"Price tag": family is bound to a variable'] }),
+  styles: (m) => ({ done: m.config.styles.map((s) => `created: ${s.name}`), errors: [] }),
+  assignPreview: () => ({ assigned: 14, unmatched: 3, ambiguous: ['"Caption": caption / body-small'] }),
+  assignApply: () => ({ assigned: 14, unmatched: 3, ambiguous: ['"Caption": caption / body-small'] }),
+};
+for (const [id, theme] of Object.entries(THEMES)) {
+  const f = document.getElementById(id);
+  f.onload = () => {
+    const css = Object.entries(theme).map(([k, v]) => `--figma-color-${k}:${v}`).join(";");
+    const st = f.contentDocument.createElement("style"); st.textContent = `:root{${css}}`;
+    f.contentDocument.head.prepend(st);
+  };
+}
+addEventListener("message", (e) => {
+  const m = e.data && e.data.pluginMessage; if (!m) return;
+  const h = handlers[m.type]; if (h) reply(e.source, m.type, h(m));
+});
+</script>

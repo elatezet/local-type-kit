@@ -165,6 +165,21 @@ async function stylesFromVariables(config) {
   return { done, errors };
 }
 
+// ---- Variables for the styles form ----
+// Number and string variables per local collection, with their value in the default mode.
+async function listVariables() {
+  const out = [];
+  for (const col of await figma.variables.getLocalVariableCollectionsAsync()) {
+    const vars = [];
+    for (const id of col.variableIds) {
+      const v = await figma.variables.getVariableByIdAsync(id);
+      if (v && (v.resolvedType === "FLOAT" || v.resolvedType === "STRING")) vars.push({ name: v.name, type: v.resolvedType, value: v.valuesByMode[col.defaultModeId] });
+    }
+    out.push({ name: col.name, vars });
+  }
+  return out;
+}
+
 // ---- Assign styles to loose text ----
 // A text node without a style gets the one local style that matches its family, weight, size and line height exactly.
 async function assignStyles(apply) {
@@ -197,21 +212,38 @@ const handlers = {
   replacePreview: (msg) => replaceFonts(msg.mapping, false, msg.scope),
   replaceApply: (msg) => replaceFonts(msg.mapping, true, msg.scope),
   styles: (msg) => stylesFromVariables(msg.config),
+  variables: () => listVariables(),
+  context: () => context(),
   assignPreview: () => assignStyles(false),
   assignApply: () => assignStyles(true),
   saveConfig: (msg) => { figma.root.setPluginData("config", JSON.stringify(msg.config)); return true; },
   loadConfig: () => { const c = figma.root.getPluginData("config"); return c ? JSON.parse(c) : null; },
 };
 
+// What the window needs to describe the scope: the current page and how much is selected.
+function context() {
+  return { page: figma.currentPage.name, selected: figma.currentPage.selection.length };
+}
+
 // Set globalThis.LOCAL_TYPE_KIT_NO_UI = true before this file to use the functions above without the window.
 if (typeof figma !== "undefined" && !globalThis.LOCAL_TYPE_KIT_NO_UI) {
-  figma.showUI(__html__, { width: 440, height: 600, themeColors: true });
+  figma.showUI(__html__, { width: 440, height: 640, themeColors: true });
+  const post = (type, result) => figma.ui.postMessage({ type, ok: true, result });
   figma.ui.onmessage = async (msg) => {
     try {
       const result = await handlers[msg.type](msg);
-      figma.ui.postMessage({ type: msg.type, ok: true, result });
+      post(msg.type, result);
+      if (msg.type === "replaceApply") figma.notify(`Replaced ${result.segments} text runs. One undo reverts the whole run.`);
+      if (msg.type === "assignApply") figma.notify(`Assigned styles to ${result.assigned} layers.`);
     } catch (e) {
       figma.ui.postMessage({ type: msg.type, ok: false, error: e.message });
     }
   };
+  // A full scan reads every page, so edits only mark the list as out of date; the window rescans when it is used next.
+  const changed = () => post("changed");
+  const watch = () => figma.currentPage.on("nodechange", changed);
+  watch();
+  figma.on("selectionchange", () => post("context", context()));
+  figma.on("currentpagechange", () => { watch(); post("context", context()); });
+  try { figma.on("stylechange", changed); } catch (e) { /* not available in every editor */ }
 }
