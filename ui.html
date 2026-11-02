@@ -92,10 +92,13 @@
   .block { display: grid; gap: 12px; padding: 4px 16px 20px; }
   .block + .block { border-top: 1px solid var(--figma-color-border); padding-top: 20px; }
   .field { display: grid; grid-template-columns: 80px 1fr; gap: 8px; align-items: center; }
-  .srow { display: grid; grid-template-columns: 16px 1fr 1.25fr 84px; gap: 8px; align-items: center; min-height: var(--row); padding: 4px 0; }
-  .srow.head { min-height: 16px; color: var(--figma-color-text-secondary); }
-  .srow .grp { display: grid; gap: 4px; min-width: 0; }
-  .srow .grp small { font-size: 11px; color: var(--figma-color-text-secondary); font-variant-numeric: tabular-nums; }
+  .srow { display: grid; grid-template-columns: 16px minmax(0, 1fr) 40px minmax(0, 1fr) 96px; gap: 8px; align-items: center; min-height: 40px; }
+  .srow.head { min-height: 28px; color: var(--figma-color-text-secondary); border-bottom: 1px solid var(--figma-color-border); }
+  .srow .num { color: var(--figma-color-text-secondary); }
+  .srow.head .num { color: inherit; }
+  .sname-cell { position: relative; min-width: 0; }
+  .sname-cell .tag { position: absolute; right: 4px; top: 4px; height: 16px; line-height: 16px; padding: 0 5px; border-radius: 3px; font-size: 10px; font-weight: 550; background: var(--figma-color-bg-brand-tertiary, var(--figma-color-bg-tertiary, var(--figma-color-bg))); color: var(--figma-color-text-brand, var(--figma-color-text)); pointer-events: none; }
+  .srow select.unmatched { padding-left: 20px; background-image: radial-gradient(circle 3px at 10px 50%, var(--figma-color-icon-warning, #e5a000) 98%, transparent), var(--chev); background-position: 0 0, right 4px center; }
   details.more summary { color: var(--figma-color-text-secondary); cursor: default; }
   details.more .field { margin-top: 8px; }
 </style>
@@ -392,7 +395,7 @@ document.addEventListener("pointerenter", wake);
 window.addEventListener("focus", wake);
 
 // ---- Styles: form built from the file's variables ----
-let collections = [], config = null;
+let collections = [], textStyles = [], config = null;
 function groupsOf(col) {
   const sizeS = $("sizeSuffix").value, lhS = $("lhSuffix").value;
   const byName = Object.fromEntries(col.vars.map((v) => [v.name, v]));
@@ -407,41 +410,62 @@ function renderStyles() {
   const wrap = $("groups"); wrap.innerHTML = "";
   const groups = col ? groupsOf(col) : [];
   if (col && !groups.length) wrap.innerHTML = `<p>${t(`No group in “${esc(col.name)}” has both ${esc($("sizeSuffix").value)} and ${esc($("lhSuffix").value)}. Check the variable names below.`, `Keine Gruppe in „${esc(col.name)}“ hat ${esc($("sizeSuffix").value)} und ${esc($("lhSuffix").value)}. Prüfe unten die Variablennamen.`)}</p>`;
-  if (groups.length) wrap.insertAdjacentHTML("beforeend", `<div class="srow head"><span></span><span>${t("Style", "Stil")}</span><span>${t("Family", "Familie")}</span><span>${t("Weight", "Schnitt")}</span></div>`);
+  if (groups.length) wrap.insertAdjacentHTML("beforeend", `<div class="srow head"><span></span><span>${t("Style", "Stil")}</span><span class="num">${t("Size", "Größe")}</span><span>${t("Family", "Familie")}</span><span>${t("Weight", "Schnitt")}</span></div>`);
   const strings = col ? col.vars.filter((v) => v.type === "STRING") : [];
+  const saved = (g) => (config && config.collection === col.name ? config.styles.find((s) => (s.group || s.name) === g) : null);
+  const guess = (g) => (strings.find((v) => g.toLowerCase().includes(v.name.split("/").pop().toLowerCase())) || strings.find((v) => v.name.split("/").pop().toLowerCase() === "body") || strings[0] || {}).name;
+  const fmt = (n) => String(Math.round(n * 100) / 100);
   for (const g of groups) {
-    const saved = config && config.collection === col.name ? config.styles.find((s) => (s.group || s.name) === g.group) : null;
+    // What the row starts with: the existing style of that name first, then the saved setup, then a guess from the variable names.
+    const sv = saved(g.group);
+    const name = sv ? sv.name : g.group;
+    const ex = textStyles.find((s) => s.name === name);
+    const famVar = (ex && ex.familyVariable) || (sv && sv.familyVariable) || guess(g.group);
+    const want = (ex && ex.style) || (sv && sv.style) || "Regular";
     const row = document.createElement("div"); row.className = "srow"; row.dataset.group = g.group;
-    const guess = (word) => strings.find((v) => v.name.split("/").pop().toLowerCase() === word);
-    const famVar = saved ? saved.familyVariable : (strings.find((v) => g.group.toLowerCase().includes(v.name.split("/").pop().toLowerCase())) || guess("body") || strings[0] || {}).name;
-    row.innerHTML = `<input type="checkbox"${!config || saved ? " checked" : ""}>
-      <span class="grp"><input type="text" class="name"><small>${esc(String(Math.round(g.size * 100) / 100))} / ${esc(String(Math.round(g.lh * 100) / 100))}</small></span>
-      <select class="fam">${strings.map((v) => `<option value="${esc(v.name)}"${v.name === famVar ? " selected" : ""} title="${esc(v.name)}">${esc(v.value)} · ${esc(v.name.split("/").pop())}</option>`).join("")}${saved && saved.family ? `<option value="" selected data-family="${esc(saved.family)}">${esc(saved.family)}</option>` : ""}${!strings.length && !(saved && saved.family) ? `<option value="">${t("No string variables", "Keine Text-Variablen")}</option>` : ""}</select>
+    row.innerHTML = `<input type="checkbox" checked>
+      <span class="sname-cell"><input type="text" class="name"><span class="tag" hidden>${t("New", "Neu")}</span></span>
+      <span class="num">${esc(fmt(g.size))}/${esc(fmt(g.lh))}</span>
+      <select class="fam">${strings.map((v) => `<option value="${esc(v.name)}"${v.name === famVar ? " selected" : ""} title="${esc(v.name)} · ${esc(v.value)}">${esc(v.name)}</option>`).join("")}${!strings.length ? `<option value="">${t("No string variables", "Keine Text-Variablen")}</option>` : ""}</select>
       <span class="cell"><select class="weight"></select></span>`;
-    row.querySelector(".name").value = saved ? saved.name : g.group;
+    const nameIn = row.querySelector(".name"); nameIn.value = name;
     const fam = row.querySelector(".fam"), weight = row.querySelector(".weight");
-    const fillWeight = () => {
-      const opt = fam.selectedOptions[0];
-      const family = opt ? (opt.value ? (strings.find((v) => v.name === opt.value) || {}).value : opt.dataset.family) : "";
+    const fillWeight = (keep) => {
+      const v = strings.find((x) => x.name === fam.value);
+      const family = v ? v.value : "";
       const styles = families[family] || [];
-      const want = weight.value || (saved && saved.style) || "Regular";
-      weight.innerHTML = styles.length ? styles.map((s) => `<option${s === want ? " selected" : ""}>${esc(s)}</option>`).join("") : `<option value="">${t("Not installed", "Nicht installiert")}</option>`;
-      const w = row.querySelector(".cell .dot"); if (w) w.remove();
-      if (!styles.length && family) row.querySelector(".cell").insertAdjacentHTML("afterbegin", `<span class="dot" title="${esc(t(`${family} is not installed on this machine`, `${family} ist auf diesem Rechner nicht installiert`))}"></span>`);
+      const pickStyle = keep && weight.value ? weight.value : want;
+      weight.innerHTML = styles.length ? styles.map((x) => `<option${x === pickStyle ? " selected" : ""}>${esc(x)}</option>`).join("") : `<option value="">${t("Not installed", "Nicht installiert")}</option>`;
+      weight.classList.toggle("unmatched", !styles.length);
+      weight.title = styles.length ? family : t(`${family} is not installed on this machine`, `${family} ist auf diesem Rechner nicht installiert`);
+      fam.title = family ? `${fam.value} = ${family}` : "";
     };
-    fam.onchange = fillWeight; fillWeight();
+    const markNew = () => { row.querySelector(".tag").hidden = textStyles.some((x) => x.name === (nameIn.value.trim() || g.group)); updateBuild(); };
+    fam.onchange = () => fillWeight(true);
+    nameIn.oninput = markNew;
+    row.querySelector("input[type=checkbox]").onchange = updateBuild;
+    fillWeight(false); markNew();
     wrap.append(row);
   }
-  $("buildStyles").disabled = !groups.length;
+  updateBuild();
+}
+function updateBuild() {
+  const rows = [...$("groups").querySelectorAll(".srow[data-group]")].filter((r) => r.querySelector("input[type=checkbox]").checked);
+  const fresh = rows.filter((r) => !r.querySelector(".tag").hidden).length, old = rows.length - fresh;
+  const b = $("buildStyles");
+  b.disabled = !rows.length;
+  b.textContent = !fresh ? t(old === 1 ? "Update 1 style" : `Update ${old} styles`, old === 1 ? "1 Stil aktualisieren" : `${old} Stile aktualisieren`)
+    : !old ? t(fresh === 1 ? "Create 1 style" : `Create ${fresh} styles`, fresh === 1 ? "1 Stil anlegen" : `${fresh} Stile anlegen`)
+    : t(`Create ${fresh}, update ${old}`, `${fresh} anlegen, ${old} aktualisieren`);
+  if (!rows.length) b.textContent = t("Create styles", "Stile anlegen");
 }
 $("collection").onchange = renderStyles;
 $("sizeSuffix").onchange = $("lhSuffix").onchange = renderStyles;
 
 function readForm() {
   const styles = [...$("groups").querySelectorAll(".srow[data-group]")].filter((r) => r.querySelector("input[type=checkbox]").checked).map((r) => {
-    const opt = r.querySelector(".fam").selectedOptions[0];
     const s = { name: r.querySelector(".name").value.trim() || r.dataset.group, group: r.dataset.group, style: r.querySelector(".weight").value || "Regular" };
-    if (opt && opt.value) s.familyVariable = opt.value; else if (opt) s.family = opt.dataset.family;
+    if (r.querySelector(".fam").value) s.familyVariable = r.querySelector(".fam").value;
     return s;
   });
   return { collection: $("collection").value, sizeSuffix: $("sizeSuffix").value, lineHeightSuffix: $("lhSuffix").value, styles };
@@ -476,9 +500,15 @@ onmessage = (e) => {
   if (m.type === "changed") { if (Date.now() > quietUntil && !busy) { stale = true; $("refresh").classList.add("stale"); $("refresh").title = t("The file changed. Scan again", "Die Datei hat sich geändert. Neu einlesen"); } }
   if (m.type === "replacePreview") { busy = false; replaceResult(r, false); updateFoot(); }
   if (m.type === "replaceApply") { busy = false; quietUntil = Date.now() + 2000; replaceResult(r, true); scan(); }
-  if (m.type === "variables") { collections = r; renderStyles(); }
+  if (m.type === "variables") { collections = r.collections; textStyles = r.styles; renderStyles(); }
+  if (m.type === "styles") send("variables");
   if (m.type === "styles") status("stylesOut", r.errors.length ? (r.done.length ? "warn" : "err") : "ok",
-    r.done.length ? t(`${plural(r.done.length, "style", "styles")} created or updated. One undo reverts the whole run.`, `${plural(r.done.length, "Stil", "Stile")} angelegt oder aktualisiert. Ein Rückgängig nimmt den ganzen Lauf zurück.`) : t("No style was created.", "Kein Stil wurde angelegt."),
+    r.done.length ? (() => {
+      const made = r.done.filter((x) => x.startsWith("created")).length, upd = r.done.length - made;
+      const what = DE ? [made && `${plural(made, "Stil", "Stile")} angelegt`, upd && `${plural(upd, "Stil", "Stile")} aktualisiert`].filter(Boolean).join(", ")
+        : [made && `${plural(made, "style", "styles")} created`, upd && `${plural(upd, "style", "styles")} updated`].filter(Boolean).join(", ");
+      return `${what.charAt(0).toUpperCase() + what.slice(1)}. ${t("One undo reverts the whole run.", "Ein Rückgängig nimmt den ganzen Lauf zurück.")}`;
+    })() : t("No style was created.", "Kein Stil wurde angelegt."),
     [["Details", r.done], [t(plural(r.errors.length, "problem", "problems"), plural(r.errors.length, "Problem", "Probleme")), r.errors]]);
   if (m.type === "assignPreview") assignResult(r, false);
   if (m.type === "assignApply") assignResult(r, true);

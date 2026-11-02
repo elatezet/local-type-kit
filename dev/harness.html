@@ -37,9 +37,12 @@ const reply = (win, type, result, ok = true) => setTimeout(() => win.postMessage
 const handlers = {
   scan: () => ({ used: USED, families: FAMILIES }),
   context: () => ({ page: "Tests", selected: 0 }),
-  loadConfig: () => null,
+  loadConfig: () => ({ collection: "Typography", styles: [{ name: "heading-1", group: "heading-1", familyVariable: "font/heading", style: "Bold" }, { name: "body", group: "body", familyVariable: "font/body", style: "Regular" }] }),
   saveConfig: () => true,
-  variables: () => VARS,
+  variables: () => ({ collections: VARS, styles: [
+    { name: "heading-1", family: "Open Sans", style: "Bold", familyVariable: "font/heading" },
+    { name: "heading-2", family: "Open Sans", style: "SemiBold", familyVariable: "font/heading" },
+    { name: "body", family: "Open Sans", style: "Regular", familyVariable: "font/body" } ] }),
   replacePreview: (m) => ({ scope: m.scope, segments: 97, nodes: 71, inInstances: 12, styles: m.scope === "document" ? 7 : 0, viaStyle: 18, skipped: [] }),
   replaceApply: (m) => ({ scope: m.scope, segments: 97, nodes: 71, inInstances: 12, styles: m.scope === "document" ? 7 : 0, viaStyle: 18, skipped: ['"Price tag": family is bound to a variable'] }),
   styles: (m) => ({ done: m.config.styles.map((s) => `created: ${s.name}`), errors: [] }),

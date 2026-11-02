@@ -180,6 +180,17 @@ async function listVariables() {
   return out;
 }
 
+// Local text styles as the styles form shows them: font, and the variable the family is bound to, if any.
+async function listTextStyles() {
+  const out = [];
+  for (const s of await figma.getLocalTextStylesAsync()) {
+    const b = s.boundVariables && s.boundVariables.fontFamily;
+    const v = b ? await figma.variables.getVariableByIdAsync(b.id) : null;
+    out.push({ name: s.name, family: s.fontName.family, style: s.fontName.style, familyVariable: v ? v.name : null });
+  }
+  return out;
+}
+
 // ---- Assign styles to loose text ----
 // A text node without a style gets the one local style that matches its family, weight, size and line height exactly.
 async function assignStyles(apply) {
@@ -212,7 +223,7 @@ const handlers = {
   replacePreview: (msg) => replaceFonts(msg.mapping, false, msg.scope),
   replaceApply: (msg) => replaceFonts(msg.mapping, true, msg.scope),
   styles: (msg) => stylesFromVariables(msg.config),
-  variables: () => listVariables(),
+  variables: async () => ({ collections: await listVariables(), styles: await listTextStyles() }),
   context: () => context(),
   assignPreview: () => assignStyles(false),
   assignApply: () => assignStyles(true),
