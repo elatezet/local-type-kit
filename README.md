@@ -27,7 +27,7 @@ One limit belongs to Figma, not to the plugin: people without the font installed
 
 ## Install
 
-From the Figma Community: open the plugin page and click *Open in…* (link follows after the first release).
+From the Figma Community: open the [plugin page](https://www.figma.com/community/plugin/1698988995876300994) and click *Open in…*
 
 From source:
 
