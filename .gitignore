@@ -3,3 +3,5 @@ site/fonts/
 site/assets/fonts/
 .vercel/
 site/.vercel/
+dev/*.jpg
+dev/*.png

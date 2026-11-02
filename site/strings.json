@@ -33,8 +33,8 @@
     "de": "Lokal installierte Schriften in einer ganzen Figma-Datei prüfen, tauschen und als Stile anlegen. Ohne Netz, ohne Upload. Kostenlos und quelloffen."
   },
   "nav_how": {
-    "en": "What it does",
-    "de": "Was es kann"
+    "en": "Try it",
+    "de": "Ausprobieren"
   },
   "nav_install": {
     "en": "Install",
@@ -53,28 +53,8 @@
     "de": "Viele Hausschriften dürfen in keinen geteilten Schriftendienst. Local Type Kit arbeitet mit ihnen in der ganzen Datei, Textstile und Instanzen eingeschlossen, und schickt nichts übers Netz."
   },
   "hero_shot_alt": {
-    "en": "The plugin window: the Fonts tab lists Brand Sans as missing and Inter as installed, with the number of layers and styles for each.",
-    "de": "Das Plugin-Fenster: Der Reiter Fonts zeigt Brand Sans als fehlend und Inter als installiert, jeweils mit der Zahl der Ebenen und Stile."
-  },
-  "win_hint": {
-    "en": "Fonts used in this file, in text and in local styles.",
-    "de": "Schriften in dieser Datei, in Text und in lokalen Stilen."
-  },
-  "win_layers": {
-    "en": "layers",
-    "de": "Ebenen"
-  },
-  "win_styles": {
-    "en": "styles",
-    "de": "Stile"
-  },
-  "win_missing": {
-    "en": "missing",
-    "de": "fehlt"
-  },
-  "win_installed": {
-    "en": "installed",
-    "de": "installiert"
+    "en": "The Local Type Kit plugin window, working on a sample file. You can use it right here.",
+    "de": "Das Plugin-Fenster von Local Type Kit mit einer Beispieldatei. Du kannst es hier direkt bedienen."
   },
   "cta_install": {
     "en": "Install",
@@ -87,10 +67,6 @@
   "fineprint": {
     "en": "Free and open source under the MIT license.",
     "de": "Kostenlos und quelloffen unter MIT-Lizenz."
-  },
-  "how_h": {
-    "en": "Features",
-    "de": "Features"
   },
   "g1_h": {
     "en": "See what the file uses",
@@ -199,5 +175,25 @@
   "footer_note": {
     "en": "Not affiliated with Figma.",
     "de": "Kein Produkt von Figma."
+  },
+  "try_hint": {
+    "en": "This is the real plugin window, running on a sample file. Try it.",
+    "de": "Das ist das echte Plugin-Fenster, hier mit einer Beispieldatei. Probier es aus."
+  },
+  "script_h": {
+    "en": "Also runs without the window",
+    "de": "Läuft auch ohne Fenster"
+  },
+  "script_p": {
+    "en": "The same functions work from a script through Figma's Plugin API. Set one flag, load <code>code.js</code> and call <code>scan</code>, <code>replaceFonts</code>, <code>stylesFromVariables</code> or <code>assignStyles</code>. That helps when a script or an assistant prepares a file instead of a person. The <a href=\"https://github.com/elatezet/local-type-kit#scripting\">README</a> shows how.",
+    "de": "Dieselben Funktionen laufen auch aus einem Skript über Figmas Plugin-API. Einen Schalter setzen, <code>code.js</code> laden und <code>scan</code>, <code>replaceFonts</code>, <code>stylesFromVariables</code> oder <code>assignStyles</code> aufrufen. Das hilft, wenn ein Skript oder ein Assistent eine Datei vorbereitet statt ein Mensch. Wie das geht, steht im <a href=\"https://github.com/elatezet/local-type-kit#scripting\">README</a>."
+  },
+  "faq7_q": {
+    "en": "Does it help with exports that Figma renders on its servers?",
+    "de": "Hilft es bei Exporten, die Figma auf seinen Servern rendert?"
+  },
+  "faq7_a": {
+    "en": "No. Figma's servers only know fonts that an admin uploaded to the organization, which needs the Organization or Enterprise plan. Video exports and other renders on Figma's side fall back to another font. Export from the desktop app instead, or upload the font as a shared font if its license allows that.",
+    "de": "Nein. Figmas Server kennen nur Schriften, die ein Admin für die Organisation hochgeladen hat, und das setzt den Organization- oder Enterprise-Tarif voraus. Video-Exporte und andere Renderings auf Figmas Seite weichen auf eine andere Schrift aus. Exportiere dann aus der Desktop-App oder lade die Schrift als geteilte Schrift hoch, wenn ihre Lizenz das erlaubt."
   }
 }

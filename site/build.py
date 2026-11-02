@@ -68,7 +68,18 @@ ICONS = {
 }
 
 
+def plugin_kopieren() -> None:
+    """Die Seite zeigt die echte Oberflaeche. Sie wird bei jedem Lauf aus dem Plugin kopiert,
+    damit die Seite nie einen aelteren Stand zeigt als das Plugin."""
+    quelle = HIER.parent / "ui.html"
+    ziel = HIER / "plugin" / "ui.html"
+    ziel.parent.mkdir(exist_ok=True)
+    ziel.write_text(quelle.read_text(encoding="utf-8"), encoding="utf-8")
+    print(f"kopiert: ../ui.html -> {ziel.relative_to(HIER)}")
+
+
 def main() -> int:
+    plugin_kopieren()
     vorlage = (HIER / "template.html").read_text(encoding="utf-8")
     texte = json.loads((HIER / "strings.json").read_text(encoding="utf-8"))
     fehler = []

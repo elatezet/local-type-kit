@@ -135,32 +135,25 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 /* Fliesstext im zentrierten Hero linksbuendig (David, 01.11.2026). */
 .lede { font-size: 1.2rem; margin: 0 auto 2.25rem; max-width: var(--measure); text-align: left; }
 
-/* Das Plugin-Fenster als Zeichnung, solange es kein Bildschirmfoto aus einer
-   neutralen Demo-Datei gibt. Die Unterzeile sagt das offen. */
-.keyvisual { margin: 0 auto 2rem; max-width: 30rem; text-align: left; }
+/* Das Fenster zeigt die echte Plugin-Oberflaeche aus plugin/ui.html, bedienbar,
+   mit einer erfundenen Datei aus plugin/demo.js. Der Text darunter folgt dem
+   offenen Reiter (David, 02.11.2026: zeigen statt beschreiben). */
+.keyvisual { margin: 0 auto 2.5rem; max-width: 27.5rem; text-align: left; }
 .win {
   background: var(--win); border: 1px solid var(--border); border-radius: 14px;
   box-shadow: 0 1px 2px rgba(28,26,23,.04), 0 18px 40px rgba(28,26,23,.08);
-  overflow: hidden; font-size: 13px;
+  overflow: hidden;
 }
-.win-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
-.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
-.win-title { margin-left: 8px; font-weight: 600; color: var(--fg); }
-.tabs { display: flex; gap: 2px; padding: 8px 10px 0; border-bottom: 1px solid var(--border); }
-.tab { padding: 6px 10px 8px; color: var(--fg-3); border-bottom: 2px solid transparent; }
-.tab.on { color: var(--fg); border-bottom-color: var(--fg); font-weight: 600; }
-.win-body { padding: 14px; }
-.win-body .hint { color: var(--fg-3); font-size: 12px; margin-bottom: 10px; }
-.wrow { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
-.wrow:last-child { border-bottom: 0; }
-.fam { color: var(--fg); }
-.fam span { color: var(--fg-3); }
-.num { font-family: var(--font-mono); font-size: 12px; color: var(--fg-3); }
-.badge { font-family: var(--font-mono); font-size: 11px; border-radius: 4px; padding: 2px 6px; }
-.badge.ok { color: var(--pos); background: var(--pos-soft); }
-.badge.miss { color: var(--neg); background: var(--neg-soft); }
-@media (max-width: 30rem) { .num { display: none; } }
-
+.win-bar { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.plug { font-family: var(--font-mono); font-size: 10px; line-height: 18px; padding: 0 3px; border-radius: 4px; background: var(--fg); color: var(--win); }
+.win-title { font-weight: 600; color: var(--fg); }
+.close { margin-left: auto; color: var(--fg-3); font-size: 18px; line-height: 1; }
+#plugin { display: block; width: 100%; height: 600px; border: 0; background: var(--win); }
+.try { margin: .9rem 0 0; color: var(--fg-3); font-size: .9rem; text-align: center; }
+.panels { margin-top: 1.75rem; }
+.panels h3 { font-size: 1.05rem; margin: 0 0 .35rem; }
+.panels p { font-size: 1rem; margin: 0 0 1.25rem; }
+.panels p:last-child { margin-bottom: 0; }
 .actions { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; margin: 0 0 .9rem; }
 .button {
   display: inline-flex; align-items: center; gap: .55rem;
@@ -173,20 +166,13 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 code, pre { font-family: var(--font-mono); font-size: .875rem; }
 code { background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; padding: 0 .3rem; }
 
-/* Vier Reiter, vier Spalten, in der Reihenfolge, in der man sie braucht. */
-.grid { display: grid; gap: calc(var(--gl-gap) * 1.6); }
-@media (min-width: 40rem) { .grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 62rem) { .grid { grid-template-columns: repeat(4, 1fr); } }
-.grid .n { display: block; font-size: .8rem; letter-spacing: .04em; color: var(--fg-3); margin-bottom: .5rem; }
-.grid h3 { font-size: 1.05rem; margin: 0 0 .4rem; }
-.grid p { font-size: .96rem; margin: 0; }
-
 section > h2 { margin: 0 0 1.5rem; font-size: 1.6rem; }
 /* Abschnittstitel in der Schrift der Headline, mittig (David, 01.11.2026). */
-#how > h2 {
+#script > h2 {
   font-family: var(--font-display); font-weight: 400; text-align: center;
-  font-size: clamp(2.2rem, 4.6vw, 3.2rem); letter-spacing: -.01em; margin-bottom: 2.5rem;
+  font-size: clamp(2.2rem, 4.6vw, 3.2rem); letter-spacing: -.01em; margin-bottom: 1.5rem;
 }
+#script > p { margin: 0 auto; }
 section > p { max-width: var(--measure); }
 
 ol.install { margin: 0; padding-left: 1.3rem; max-width: var(--measure); color: var(--fg-2); }
@@ -269,7 +255,7 @@ body { overflow-x: clip; }
 <div class="bar">
   <a class="brand" href="./"><span class="mark">Local Type Kit</span></a>
   <nav>
-    <a href="#how">What it does</a>
+    <a href="#how">Try it</a>
     <a href="#install">Install</a>
     <a href="#questions">Questions</a>
     <span class="sep"></span>
@@ -288,20 +274,17 @@ body { overflow-x: clip; }
     <h1>Your typeface<br>stays on your machine</h1>
     <p class="lede">Many brand fonts may not be uploaded to a shared font service. Local Type Kit works with them across the whole file, including text styles and instance overrides, and sends nothing over the network.</p>
 
-    <div class="keyvisual">
-      <div class="win" role="img" aria-label="The plugin window: the Fonts tab lists Brand Sans as missing and Inter as installed, with the number of layers and styles for each.">
-        <div class="win-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="win-title">Local Type Kit</span></div>
-        <div class="tabs"><span class="tab on">Fonts</span><span class="tab">Replace</span><span class="tab">Styles</span><span class="tab">Assign</span></div>
-        <div class="win-body">
-          <div class="hint">Fonts used in this file, in text and in local styles.</div>
-          <div class="wrow"><span class="fam">Brand Sans <span>Bold</span></span><span class="num">212 layers · 6 styles</span><span class="badge miss">missing</span></div>
-          <div class="wrow"><span class="fam">Brand Sans <span>Regular</span></span><span class="num">488 layers · 9 styles</span><span class="badge miss">missing</span></div>
-          <div class="wrow"><span class="fam">Inter <span>Medium</span></span><span class="num">74 layers · 2 styles</span><span class="badge ok">installed</span></div>
-          <div class="wrow"><span class="fam">Inter <span>Regular</span></span><span class="num">131 layers · 3 styles</span><span class="badge ok">installed</span></div>
-        </div>
+    <div class="keyvisual" id="how">
+      <div class="win">
+        <div class="win-bar"><span class="plug" aria-hidden="true">&lt;/&gt;</span><span class="win-title">Local Type Kit</span><span class="close" aria-hidden="true">×</span></div>
+        <iframe id="plugin" data-src="plugin/ui.html?lang=en" title="The Local Type Kit plugin window, working on a sample file. You can use it right here."></iframe>
+      </div>
+      <p class="try">This is the real plugin window, running on a sample file. Try it.</p>
+      <div class="panels" aria-live="polite">
+        <div data-panel="fonts"><h3>See what the file uses</h3><p>Lists every font in text layers and in local text styles, and marks the ones that are not installed on this machine.</p><h3>Swap a font everywhere</h3><p>Loose text, components, instance overrides, local styles and mixed text runs. Components change first, so instances keep only the overrides they really have. A preview shows the counts first.</p></div>
+        <div data-panel="styles" hidden><h3>Build text styles from variables</h3><p>Creates or updates text styles from a variable collection and binds family, size and line height to the variables.</p><h3>Attach loose text to styles</h3><p>Gives loose text the one local style that matches it exactly. If more than one fits, the text stays as it is and goes on a list.</p></div>
       </div>
     </div>
-
     <div class="actions">
       <a class="button" href="https://www.figma.com/community/plugin/1698988995876300994">Install</a>
       <a class="button secondary" href="#questions">Questions</a>
@@ -309,16 +292,10 @@ body { overflow-x: clip; }
     <p class="fineprint">Free and open source under the MIT license.</p>
   </div>
 
-  <section id="how">
-    <h2>Features</h2>
-    <div class="grid">
-      <div><span class="n">01 · Fonts</span><h3>See what the file uses</h3><p>Lists every font in text layers and in local text styles, and marks the ones that are not installed on this machine.</p></div>
-      <div><span class="n">02 · Replace</span><h3>Swap a font everywhere</h3><p>Loose text, components, instance overrides, local styles and mixed text runs. Components change first, so instances keep only the overrides they really have. A preview shows the counts first.</p></div>
-      <div><span class="n">03 · Styles</span><h3>Build text styles from variables</h3><p>Creates or updates text styles from a variable collection and binds family, size and line height to the variables.</p></div>
-      <div><span class="n">04 · Assign</span><h3>Attach loose text to styles</h3><p>Gives loose text the one local style that matches it exactly. If more than one fits, the text stays as it is and goes on a list.</p></div>
-    </div>
+  <section id="script">
+    <h2>Also runs without the window</h2>
+    <p>The same functions work from a script through Figma's Plugin API. Set one flag, load <code>code.js</code> and call <code>scan</code>, <code>replaceFonts</code>, <code>stylesFromVariables</code> or <code>assignStyles</code>. That helps when a script or an assistant prepares a file instead of a person. The <a href="https://github.com/elatezet/local-type-kit#scripting">README</a> shows how.</p>
   </section>
-
   <section id="install">
     <h2>Two files, no build step</h2>
     <ol class="install">
@@ -335,6 +312,7 @@ body { overflow-x: clip; }
     <details><summary>What happens to text whose font is bound to a variable?</summary><p>It is skipped and listed. The plugin never removes a variable binding.</p></details>
     <details><summary>Where is the setup stored?</summary><p>In the Figma file itself. The next person who opens the plugin there runs the same configuration.</p></details>
     <details><summary>Why does a colleague still see the font as missing?</summary><p>That limit belongs to Figma: the font has to be installed on every machine that edits the file, and no plugin changes that. Local Type Kit shows you where it is missing. In the browser, Figma's font installer is needed as well.</p></details>
+    <details><summary>Does it help with exports that Figma renders on its servers?</summary><p>No. Figma's servers only know fonts that an admin uploaded to the organization, which needs the Organization or Enterprise plan. Video exports and other renders on Figma's side fall back to another font. Export from the desktop app instead, or upload the font as a shared font if its license allows that.</p></details>
     <details><summary>What does it cost?</summary><p>Nothing. It is open source under the MIT license: two files, no build step, no dependencies.</p></details>
   </section>
 
@@ -350,6 +328,7 @@ body { overflow-x: clip; }
   </div>
   </div>
 </footer>
+<script src="plugin/demo.js"></script>
 
 <script>
 /* Nur die Abweichung wird gespeichert. Ohne Wahl folgt die Seite weiter dem
