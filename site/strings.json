@@ -69,36 +69,36 @@
     "de": "Kostenlos und quelloffen unter MIT-Lizenz."
   },
   "g1_h": {
-    "en": "See which fonts a file uses",
-    "de": "Sehen, welche Schriften die Datei nutzt"
+    "en": "Every font in use at a glance",
+    "de": "Alle verwendeten Schriften auf einen Blick"
   },
   "g1_p": {
-    "en": "Every font in text and styles. Missing ones are marked.",
-    "de": "Jede Schrift in Text und Stilen. Fehlende sind markiert."
+    "en": "Local Type Kit finds every font used in text and styles. Missing fonts are detected and marked automatically.",
+    "de": "Local Type Kit erfasst alle verwendeten Schriften in Text und Stilen. Fehlende Schriften werden automatisch erkannt und markiert."
   },
   "g2_h": {
-    "en": "Replace a font everywhere",
-    "de": "Eine Schrift überall tauschen"
+    "en": "Swap fonts everywhere",
+    "de": "Schriften einfach überall tauschen"
   },
   "g2_p": {
-    "en": "In text, components, instances and styles. The preview shows what changes.",
-    "de": "In Text, Komponenten, Instanzen und Stilen. Die Vorschau zeigt vorher, was sich ändert."
+    "en": "Local Type Kit swaps a font across the whole file, in components, instances and styles. The preview shows what changes before anything does.",
+    "de": "Local Type Kit tauscht eine Schrift in der ganzen Datei, auch in Komponenten, Instanzen und Stilen. Die Vorschau zeigt vorher, was sich ändert."
   },
   "g3_h": {
-    "en": "Build styles from variables",
-    "de": "Stile aus Variablen bauen"
+    "en": "Text styles straight from variables",
+    "de": "Textstile direkt aus Variablen"
   },
   "g3_p": {
-    "en": "One text style per variable group, bound to size, line height and family.",
-    "de": "Ein Textstil pro Variablengruppe, gebunden an Größe, Zeilenhöhe und Familie."
+    "en": "Local Type Kit turns your typography variables into text styles. Size, line height and family stay bound to the variables.",
+    "de": "Local Type Kit macht aus deinen Typografie-Variablen fertige Textstile. Größe, Zeilenhöhe und Familie bleiben an die Variablen gebunden."
   },
   "g4_h": {
-    "en": "Attach loose text to styles",
-    "de": "Losen Text an Stile hängen"
+    "en": "Give loose text its style",
+    "de": "Losem Text den passenden Stil geben"
   },
   "g4_p": {
-    "en": "Text without a style gets the one style that matches exactly.",
-    "de": "Text ohne Stil bekommt den einen Stil, der genau passt."
+    "en": "Text without a style gets the matching style automatically. If more than one fits, the text stays as it is and goes on a list.",
+    "de": "Text ohne Stil bekommt automatisch den passenden Stil. Passen mehrere, bleibt der Text, wie er ist, und landet auf einer Liste."
   },
   "faq_h": {
     "en": "Questions",
@@ -193,12 +193,12 @@
     "de": "Läuft mit deinem KI-Assistenten"
   },
   "ai_p": {
-    "en": "Claude, ChatGPT, Cursor, Gemini or Grok can run Local Type Kit in your file through Figma's MCP server: check fonts, build styles from variables, attach loose text. Swapping in a font that only lives on your computer still needs the plugin in the desktop app.",
-    "de": "Claude, ChatGPT, Cursor, Gemini oder Grok führen Local Type Kit über Figmas MCP-Server in deiner Datei aus: Schriften prüfen, Stile aus Variablen bauen, losen Text an Stile hängen. Für eine Schrift, die nur auf deinem Rechner liegt, braucht es weiter das Plugin in der Desktop-App."
+    "en": "Claude, ChatGPT, Cursor, Gemini or Grok use Local Type Kit right in your file through Figma's MCP server. Checking fonts, building styles and attaching loose text works straight from the chat. Only fonts that live on your computer alone need the plugin in the desktop app.",
+    "de": "Claude, ChatGPT, Cursor, Gemini oder Grok nutzen Local Type Kit über Figmas MCP-Server direkt in deiner Datei. Schriften prüfen, Stile bauen und losen Text zuordnen geht damit direkt aus dem Chat. Nur Schriften, die allein auf deinem Rechner liegen, brauchen das Plugin in der Desktop-App."
   },
   "ai_prompt": {
-    "en": "Use the Figma MCP server on my file: PASTE FIGMA LINK HERE\nLoad https://raw.githubusercontent.com/elatezet/local-type-kit/main/code.js, put globalThis.LOCAL_TYPE_KIT_NO_UI = true; in front of it, and run it through use_figma together with a call to scan().\nShow me which fonts the file uses and which are missing. Before you change anything, show me a preview: replaceFonts(mapping, false) or assignStyles(false).",
-    "de": "Nutze den Figma-MCP-Server für meine Datei: FIGMA-LINK HIER EINFÜGEN\nLade https://raw.githubusercontent.com/elatezet/local-type-kit/main/code.js, stelle globalThis.LOCAL_TYPE_KIT_NO_UI = true; davor und führe es über use_figma zusammen mit scan() aus.\nZeig mir, welche Schriften die Datei nutzt und welche fehlen. Bevor du etwas änderst, zeig mir eine Vorschau: replaceFonts(mapping, false) oder assignStyles(false)."
+    "en": "Use the Figma MCP server on my file: PASTE FIGMA LINK HERE.\nLoad https://raw.githubusercontent.com/elatezet/local-type-kit/main/code.js. Put globalThis.LOCAL_TYPE_KIT_NO_UI = true; in front of it. Run it through use_figma together with a call to scan().\nShow me which fonts the file uses and which are missing. Before you change anything, show me a preview with replaceFonts(mapping, false) or assignStyles(false).",
+    "de": "Nutze den Figma-MCP-Server für meine Datei: FIGMA-LINK HIER EINFÜGEN.\nLade https://raw.githubusercontent.com/elatezet/local-type-kit/main/code.js. Stelle globalThis.LOCAL_TYPE_KIT_NO_UI = true; davor. Führe es über use_figma zusammen mit scan() aus.\nZeig mir, welche Schriften die Datei nutzt und welche fehlen. Bevor du etwas änderst, zeig mir eine Vorschau mit replaceFonts(mapping, false) oder assignStyles(false)."
   },
   "ai_copy": {
     "en": "Copy prompt",
