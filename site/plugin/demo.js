@@ -130,25 +130,31 @@
     });
     sync("fonts");
   });
-  // Das Fenster laesst sich an der Titelleiste verschieben wie in Figma; ein Doppelklick bringt es zurueck.
+  // Das Fenster laesst sich an der Titelleiste ein Stueck ziehen. Je weiter, desto mehr Widerstand,
+  // und beim Loslassen federt es zurueck (David, 03.11.2026).
   var win = frame.closest(".win"), bar = win && win.querySelector(".win-bar");
   if (bar) {
-    var dx = 0, dy = 0, start = null;
-    var place = function () { win.style.transform = dx || dy ? "translate(" + dx + "px," + dy + "px)" : ""; };
+    var LIMIT = 90, start = null;
+    var rubber = function (d) { return (1 - 1 / (Math.abs(d) * 0.55 / LIMIT + 1)) * LIMIT * Math.sign(d); };
     bar.addEventListener("pointerdown", function (e) {
       if (e.button !== 0) return;
-      start = { x: e.clientX - dx, y: e.clientY - dy };
+      start = { x: e.clientX, y: e.clientY };
       bar.setPointerCapture(e.pointerId);
-      win.classList.add("dragging");
+      win.classList.remove("settle"); win.classList.add("dragging");
     });
     bar.addEventListener("pointermove", function (e) {
       if (!start) return;
-      dx = e.clientX - start.x; dy = e.clientY - start.y; place();
+      win.style.transform = "translate(" + rubber(e.clientX - start.x) + "px," + rubber(e.clientY - start.y) + "px)";
     });
-    var stop = function () { start = null; win.classList.remove("dragging"); };
-    bar.addEventListener("pointerup", stop);
-    bar.addEventListener("pointercancel", stop);
-    bar.addEventListener("dblclick", function () { dx = dy = 0; win.classList.add("settle"); place(); setTimeout(function () { win.classList.remove("settle"); }, 300); });
+    var release = function () {
+      if (!start) return;
+      start = null;
+      win.classList.remove("dragging"); win.classList.add("settle");
+      void win.offsetWidth; // die Uebergangsregel muss stehen, bevor das Ziel wechselt
+      win.style.transform = "";
+    };
+    bar.addEventListener("pointerup", release);
+    bar.addEventListener("pointercancel", release);
   }
 
   // Erst jetzt laden, damit die ersten Nachrichten des Plugins schon eine Antwort finden.

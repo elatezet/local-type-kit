@@ -33,6 +33,12 @@ try {
   src: url("../assets/fonts/InstrumentSerif-Regular.ttf") format("truetype");
   font-weight: 400; font-display: swap;
 }
+/* Neue Heimat ist Davids eigene Schrift und steht hier auch als Schaufenster fuer sie (David, 03.11.2026). Variabel, wght 300 bis 700. */
+@font-face {
+  font-family: "Neue Heimat";
+  src: url("../assets/fonts/NeueHeimat.woff2") format("woff2-variations"), url("../assets/fonts/NeueHeimat.woff2") format("woff2");
+  font-weight: 300 700; font-display: swap;
+}
 @font-face {
   font-family: "Inter";
   src: url("../assets/fonts/inter-regular.ttf") format("truetype");
@@ -51,7 +57,7 @@ try {
 
 :root {
   --font-display: "Instrument Serif", Georgia, serif;
-  --font-sans: "Inter", system-ui, sans-serif;
+  --font-sans: "Neue Heimat", "Inter", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
   --gl-gap: clamp(12px, 1.4vw, 28px);
@@ -129,7 +135,19 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
   :root:not([data-theme="light"]) .when-dark { display: none; }
 }
 
-.hero { padding: 3rem 0 4rem; text-align: center; }
+/* Unter 60rem steht alles untereinander und mittig, darueber steht der Text links und das Plugin rechts,
+   damit Aussage und Fenster in einen Bildschirm passen (David, 03.11.2026). */
+.hero { padding: 3rem 0 4rem; text-align: center; display: grid; grid-template-areas: "intro" "plugin" "panels" "cta"; }
+.intro { grid-area: intro; } .keyvisual { grid-area: plugin; } .panels { grid-area: panels; } .cta { grid-area: cta; }
+@media (min-width: 60rem) {
+  .hero { text-align: left; grid-template-columns: minmax(0, 1fr) 27.5rem; grid-template-areas: "intro plugin" "panels plugin" "cta plugin"; grid-template-rows: auto auto 1fr; column-gap: clamp(2rem, 5vw, 5rem); align-items: start; padding-top: 2.5rem; }
+  .hero h1 { font-size: clamp(3rem, 5.4vw, 4.6rem); margin-left: 0; }
+  .hero .lede { margin-left: 0; }
+  .hero .panels { margin: 0 0 2rem; max-width: var(--measure); }
+  .hero .keyvisual { margin: 0; }
+  .hero .actions { justify-content: flex-start; }
+  .hero .fineprint { margin: 0; }
+}
 .eyebrow svg { width: 14px; height: 14px; }
 .eyebrow { display: inline-flex; align-items: center; gap: .45rem; margin: 0 0 1.4rem; padding: .35rem .8rem; border: 1px solid var(--border); border-radius: 999px; font-size: .9rem; color: var(--fg-2); }
 .hero h1 {
@@ -151,16 +169,19 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 }
 .win-bar { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-bottom: 1px solid var(--border); font-size: 13px; cursor: grab; touch-action: none; user-select: none; }
 .win { position: relative; z-index: 5; }
-.win.dragging { box-shadow: 0 2px 4px rgba(28,26,23,.06), 0 28px 60px rgba(28,26,23,.18); }
+.win { transition: box-shadow .2s ease; }
+.win.dragging { box-shadow: 0 4px 8px rgba(28,26,23,.08), 0 36px 80px rgba(28,26,23,.22); }
 .win.dragging .win-bar { cursor: grabbing; }
 .win.dragging iframe { pointer-events: none; }
-.win.settle { transition: transform .25s ease; }
+/* Beim Loslassen federt das Fenster an seinen Platz zurueck, mit kleinem Ueberschwingen. */
+.win.settle { transition: transform .55s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s ease; }
+@media (prefers-reduced-motion: reduce) { .win.settle { transition: transform .15s ease, box-shadow .15s ease; } }
 .plug { font-family: var(--font-mono); font-size: 10px; line-height: 18px; padding: 0 3px; border-radius: 4px; background: var(--fg); color: var(--win); }
 .win-title { font-weight: 600; color: var(--fg); }
 .close { margin-left: auto; color: var(--fg-3); font-size: 18px; line-height: 1; }
 #plugin { display: block; width: 100%; height: 600px; border: 0; background: var(--win); }
 .try { margin: .9rem 0 0; color: var(--fg-3); font-size: .9rem; text-align: center; }
-.panels { margin-top: 1.75rem; }
+.panels { margin: 1.75rem auto 2.5rem; max-width: 27.5rem; text-align: left; }
 .panels h3 { font-size: 1.05rem; margin: 0 0 .35rem; }
 .panels p { font-size: 1rem; margin: 0 0 1.25rem; }
 .panels p:last-child { margin-bottom: 0; }
@@ -282,26 +303,29 @@ body { overflow-x: clip; }
 <main>
 
   <div class="hero">
-    <p class="eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M5 6C5 3.79086 6.79086 2 9 2H15C17.2091 2 19 3.79086 19 6C19 7.19469 18.4762 8.26706 17.6458 9C18.4762 9.73295 19 10.8053 19 12C19 14.2091 17.2091 16 15 16C14.2714 16 13.5883 15.8052 13 15.4649V18C13 20.2091 11.2091 22 9 22C6.79086 22 5 20.2091 5 18C5 16.8053 5.52376 15.7329 6.35418 15C5.52376 14.2671 5 13.1947 5 12C5 10.8053 5.52376 9.73295 6.35418 9C5.52376 8.26706 5 7.19469 5 6ZM11 10H9C7.89543 10 7 10.8954 7 12C7 13.1046 7.89543 14 9 14H11V10ZM13 12C13 13.1046 13.8954 14 15 14C16.1046 14 17 13.1046 17 12C17 10.8954 16.1046 10 15 10C13.8954 10 13 10.8954 13 12ZM15 8C16.1046 8 17 7.10457 17 6C17 4.89543 16.1046 4 15 4H13V8H15ZM9 4C7.89543 4 7 4.89543 7 6C7 7.10457 7.89543 8 9 8H11V4H9ZM11 16H9C7.89543 16 7 16.8954 7 18C7 19.1046 7.89543 20 9 20C10.1046 20 11 19.1046 11 18V16Z"/></svg><span>Figma-Plugin · kostenlos und quelloffen</span></p>
-    <h1>Deine Hausschrift<br>bleibt auf dem Rechner</h1>
-    <p class="lede">Schriften in einer Figma-Datei prüfen, tauschen und als Stile anlegen, mit den Schriften auf deinem Rechner. Nichts wird hochgeladen.</p>
-
+    <div class="intro">
+      <p class="eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M5 6C5 3.79086 6.79086 2 9 2H15C17.2091 2 19 3.79086 19 6C19 7.19469 18.4762 8.26706 17.6458 9C18.4762 9.73295 19 10.8053 19 12C19 14.2091 17.2091 16 15 16C14.2714 16 13.5883 15.8052 13 15.4649V18C13 20.2091 11.2091 22 9 22C6.79086 22 5 20.2091 5 18C5 16.8053 5.52376 15.7329 6.35418 15C5.52376 14.2671 5 13.1947 5 12C5 10.8053 5.52376 9.73295 6.35418 9C5.52376 8.26706 5 7.19469 5 6ZM11 10H9C7.89543 10 7 10.8954 7 12C7 13.1046 7.89543 14 9 14H11V10ZM13 12C13 13.1046 13.8954 14 15 14C16.1046 14 17 13.1046 17 12C17 10.8954 16.1046 10 15 10C13.8954 10 13 10.8954 13 12ZM15 8C16.1046 8 17 7.10457 17 6C17 4.89543 16.1046 4 15 4H13V8H15ZM9 4C7.89543 4 7 4.89543 7 6C7 7.10457 7.89543 8 9 8H11V4H9ZM11 16H9C7.89543 16 7 16.8954 7 18C7 19.1046 7.89543 20 9 20C10.1046 20 11 19.1046 11 18V16Z"/></svg><span>Figma-Plugin · kostenlos und quelloffen</span></p>
+      <h1>Deine Hausschrift<br>bleibt auf dem Rechner</h1>
+      <p class="lede">Schriften in einer Figma-Datei prüfen, tauschen und als Stile anlegen, mit den Schriften auf deinem Rechner. Nichts wird hochgeladen.</p>
+    </div>
     <div class="keyvisual" id="how">
       <div class="win">
         <div class="win-bar"><span class="plug" aria-hidden="true">&lt;/&gt;</span><span class="win-title">Local Type Kit</span><span class="close" aria-hidden="true">×</span></div>
         <iframe id="plugin" data-src="../plugin/ui.html?lang=de" title="Das Plugin-Fenster von Local Type Kit mit einer Beispieldatei. Du kannst es hier direkt bedienen."></iframe>
       </div>
       <p class="try">Das echte Plugin mit einer Beispieldatei. Probier es aus.</p>
-      <div class="panels" aria-live="polite">
-        <div data-panel="fonts"><h3>Sehen, welche Schriften die Datei nutzt</h3><p>Jede Schrift in Text und Stilen. Fehlende sind markiert.</p><h3>Eine Schrift überall tauschen</h3><p>In Text, Komponenten, Instanzen und Stilen. Die Vorschau zeigt vorher, was sich ändert.</p></div>
-        <div data-panel="styles" hidden><h3>Stile aus Variablen bauen</h3><p>Ein Textstil pro Variablengruppe, gebunden an Größe, Zeilenhöhe und Familie.</p><h3>Losen Text an Stile hängen</h3><p>Text ohne Stil bekommt den einen Stil, der genau passt.</p></div>
+    </div>
+    <div class="panels" aria-live="polite">
+      <div data-panel="fonts"><h3>Sehen, welche Schriften die Datei nutzt</h3><p>Jede Schrift in Text und Stilen. Fehlende sind markiert.</p><h3>Eine Schrift überall tauschen</h3><p>In Text, Komponenten, Instanzen und Stilen. Die Vorschau zeigt vorher, was sich ändert.</p></div>
+      <div data-panel="styles" hidden><h3>Stile aus Variablen bauen</h3><p>Ein Textstil pro Variablengruppe, gebunden an Größe, Zeilenhöhe und Familie.</p><h3>Losen Text an Stile hängen</h3><p>Text ohne Stil bekommt den einen Stil, der genau passt.</p></div>
+    </div>
+    <div class="cta">
+      <div class="actions">
+        <a class="button" href="https://www.figma.com/community/plugin/1698988995876300994">Installieren</a>
+        <a class="button secondary" href="#questions">Fragen</a>
       </div>
+      <p class="fineprint">Kostenlos und quelloffen unter MIT-Lizenz.</p>
     </div>
-    <div class="actions">
-      <a class="button" href="https://www.figma.com/community/plugin/1698988995876300994">Installieren</a>
-      <a class="button secondary" href="#questions">Fragen</a>
-    </div>
-    <p class="fineprint">Kostenlos und quelloffen unter MIT-Lizenz.</p>
   </div>
 
   <section id="script">
