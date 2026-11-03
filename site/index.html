@@ -218,7 +218,7 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 .haze.frosting { --hr: 16vw; }
 @property --hr { syntax: "<length>"; inherits: true; initial-value: 0px; }
 .haze-base {
-  filter: blur(.6vw);
+  filter: blur(.3vw);
   -webkit-mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 0%, #000 70%), linear-gradient(to bottom, #000 30%, #0008 47%, transparent 64%);
           mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 0%, #000 70%), linear-gradient(to bottom, #000 30%, #0008 47%, transparent 64%);
   -webkit-mask-composite: source-in; mask-composite: intersect;
