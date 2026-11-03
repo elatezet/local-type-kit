@@ -227,9 +227,5 @@
   "haze_label": {
     "en": "Type something into the large letters",
     "de": "Tipp etwas in die großen Buchstaben"
-  },
-  "haze_hint": {
-    "en": "Click and type something",
-    "de": "Klick und tipp etwas"
   }
 }
