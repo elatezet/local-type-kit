@@ -218,14 +218,14 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 .haze.frosting { --hr: 16vw; }
 @property --hr { syntax: "<length>"; inherits: true; initial-value: 0px; }
 .haze-base {
-  filter: blur(5px);
+  filter: blur(.6vw);
   -webkit-mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 0%, #000 70%), linear-gradient(to bottom, #000 30%, #0008 47%, transparent 64%);
           mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 0%, #000 70%), linear-gradient(to bottom, #000 30%, #0008 47%, transparent 64%);
   -webkit-mask-composite: source-in; mask-composite: intersect;
 }
 /* Nach unten wird das Schriftbild deutlich weicher, wie die Wortmarke im Fuss. */
 .haze-glass {
-  filter: blur(24px);
+  filter: blur(1.8vw);
   -webkit-mask-image: linear-gradient(to bottom, transparent 18%, #000 36%, #000a 52%, transparent 68%); mask-image: linear-gradient(to bottom, transparent 18%, #000 36%, #000a 52%, transparent 68%);
 }
 .haze-hot {
@@ -315,7 +315,8 @@ body { overflow-x: clip; }
   color: color-mix(in srgb, var(--fg) 13%, var(--bg));
 }
 .footer-display > span {
-  filter: blur(3px);
+  /* Unschaerfe waechst mit der Schrift, sonst wirkt sie bei dieser Groesse scharf. */
+  filter: blur(.6vw);
   -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 0%, #000 70%),
                       linear-gradient(to bottom, #000 16%, #0008 48%, transparent 82%);
           mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 0%, #000 70%),
@@ -326,8 +327,8 @@ body { overflow-x: clip; }
 /* Feines Rauschen ueber der Unschaerfe bricht die Farbstufen im Verlauf auf (David, 01.11.2026). */
 .footer-display::after {
   content: ""; position: absolute; inset: 0 0 -4rem; z-index: 3; pointer-events: none;
-  opacity: .08;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   -webkit-mask-image: linear-gradient(to bottom, transparent 10%, #000 35%, #000 75%, transparent 100%);
           mask-image: linear-gradient(to bottom, transparent 10%, #000 35%, #000 75%, transparent 100%);
 }
@@ -343,7 +344,7 @@ body { overflow-x: clip; }
 .footer-glass {
   /* Die Lage reicht unter die Zeile hinaus und laeuft dort bis transparent aus,
      statt an der Kante der Zeile abzureissen (David, 01.11.2026). */
-  position: absolute; inset: 0 0 -4rem; filter: blur(24px);
+  position: absolute; inset: 0 0 -4rem; filter: blur(1.8vw);
   -webkit-mask-image: linear-gradient(to bottom, transparent 15%, #000b 45%, #0008 65%, transparent 100%);
           mask-image: linear-gradient(to bottom, transparent 15%, #000b 45%, #0008 65%, transparent 100%);
 }
@@ -550,7 +551,7 @@ window.LTKDust = (function () {
       pts = loose; N = pts.length / 2;
       // je Punkt: x, y, Heimat x, Heimat y, vx, vy, Groesse
       P = new Float32Array(N * 7);
-      for (var i = 0; i < N; i++) { var k = i * 7; P[k] = P[k + 2] = pts[i * 2]; P[k + 1] = P[k + 3] = pts[i * 2 + 1]; P[k + 6] = 1 + Math.random() * 1.6; }
+      for (var i = 0; i < N; i++) { var k = i * 7; P[k] = P[k + 2] = pts[i * 2]; P[k + 1] = P[k + 3] = pts[i * 2 + 1]; P[k + 6] = .8 + Math.random() * 1; }
       g0 = g.top - cr.top + padT; g1 = g.bottom - cr.top - padB;
       ctx.clearRect(0, 0, W, H);
     }
