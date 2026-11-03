@@ -224,10 +224,8 @@ section > h2 { margin: 0 0 1.5rem; font-size: 1.6rem; }
 .ai { display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1rem; border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--fg); font-weight: 500; transition: border-color .15s; }
 .ai:hover { border-color: var(--fg-3); }
 .ai svg { width: 18px; height: 18px; }
-.prompt { position: relative; max-width: 40rem; margin: 0 auto; text-align: left; }
-.prompt pre { margin: 0; padding: 1rem 1.1rem 3.2rem; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-2); color: var(--fg-2); white-space: pre-wrap; line-height: 1.55; }
-.prompt .chip { position: absolute; right: .6rem; bottom: .6rem; background: var(--bg); }
-#ai .note { margin: 1rem auto 0; max-width: 40rem; font-size: .9rem; color: var(--fg-3); }
+button.ai { font: inherit; font-weight: 500; background: none; cursor: pointer; }
+#ai .note { margin: 0 auto; max-width: 40rem; font-size: .9rem; color: var(--fg-3); }
 section > p { max-width: var(--measure); }
 
 ol.install { margin: 0; padding-left: 1.3rem; max-width: var(--measure); color: var(--fg-2); }
@@ -364,13 +362,11 @@ body { overflow-x: clip; }
       <a class="ai" data-ai="cursor" href="https://cursor.com/link/prompt" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.5498 1.35371C11.8283 1.19393 12.1718 1.19388 12.4502 1.35371L21.1211 6.33028C21.3551 6.46462 21.5 6.71356 21.5 6.98263V17.0188L21.4941 17.1184C21.4632 17.3478 21.3266 17.5526 21.1221 17.6701L12.4502 22.6477L12.3428 22.6995C12.0868 22.8042 11.7933 22.7874 11.5498 22.6477L2.87891 17.6701C2.67422 17.5527 2.53781 17.3479 2.50684 17.1184L2.5 17.0188V6.98263C2.5 6.71356 2.64488 6.46462 2.87891 6.33028L11.5498 1.35371ZM4.5 7.70528V16.2942L12 20.5989V12.3049C12 12.1165 11.8987 11.9416 11.7344 11.8469L4.50879 7.69943L4.5 7.70528ZM13.3535 19.8215L19.5 16.2942V9.23849L13.3535 19.8215ZM5.86133 6.92403H18.1387L11.999 3.40059L5.86133 6.92403Z"/></svg><span>Cursor</span></a>
       <a class="ai" data-ai="gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.1244 1.09094H12.8753L12.9269 1.9453C13.2227 6.85075 17.1493 10.7773 22.0546 11.0732L22.909 11.1247V12.8757L22.0546 12.9272C17.1493 13.2231 13.2227 17.1498 12.9269 22.0551L12.8753 22.9095H11.1244L11.0728 22.0551C10.777 17.1498 6.85036 13.2231 1.94518 12.9272L1.09082 12.8757V11.1247L1.94518 11.0732C6.85036 10.7773 10.777 6.85075 11.0728 1.9453L11.1244 1.09094ZM11.9999 5.85023C10.83 8.61547 8.61512 10.8304 5.84996 12.0002C8.61512 13.1701 10.83 15.385 11.9999 18.1502C13.1697 15.385 15.3846 13.1701 18.1498 12.0002C15.3846 10.8304 13.1697 8.61547 11.9999 5.85023Z"/></svg><span>Gemini</span></a>
       <a class="ai" data-ai="grok" href="https://grok.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M15.7754 2.77832C12.1756 1.29525 7.86569 2.03348 4.93945 4.96094 3.05829 6.84454 2.03903 9.40497 2.02376 12 2.01618 13.2875 2.25573 14.5835 2.75977 15.8096 3.89507 18.5729 1.99897 21.0271.124023 23L6.2285 17.5399C4.8483 16.1023 4 14.1502 4 12 4 7.58172 7.58172 4 12 4 13.3173 4 14.5602 4.31838 15.656 4.8824L17.8076 3.8877C17.2661 3.49585 16.5718 3.07449 15.7754 2.77832ZM21.6963 9.7334C20.7087 5.48171 21.6357 3.27424 23.9004.0996094L8.58984 15.4717 18.1992 8.80597C18.6339 8.48506 19.2549 8.61084 19.4619 9.10968 19.8094 10.0061 20 10.9808 20 12 20 16.4183 16.4183 20 12 20 10.6968 20 9.46638 19.6884 8.37918 19.1356L5.19629 20.1445C6.83273 21.3127 9.8361 22 12 22 17.5228 22 22 17.5228 22 12 21.9959 11.2365 21.8709 10.4756 21.6963 9.7334Z"/></svg><span>Grok</span></a>
+      <button class="ai" type="button" id="copyPrompt" data-done="Kopiert"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor"><rect x="8" y="8" width="12" height="12" rx="2" stroke-width="2"/><path stroke-width="2" d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span>Prompt kopieren</span></button>
     </div>
-    <div class="prompt">
-      <pre id="prompt">Nutze den Figma-MCP-Server für meine Datei: FIGMA-LINK HIER EINFÜGEN
+    <template id="prompt">Nutze den Figma-MCP-Server für meine Datei: FIGMA-LINK HIER EINFÜGEN
 Lade https://raw.githubusercontent.com/elatezet/local-type-kit/main/code.js, stelle globalThis.LOCAL_TYPE_KIT_NO_UI = true; davor und führe es über use_figma zusammen mit scan() aus.
-Zeig mir, welche Schriften die Datei nutzt und welche fehlen. Bevor du etwas änderst, zeig mir eine Vorschau: replaceFonts(mapping, false) oder assignStyles(false).</pre>
-      <button class="chip" type="button" id="copyPrompt" data-done="Kopiert"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor"><rect x="8" y="8" width="12" height="12" rx="2" stroke-width="2"/><path stroke-width="2" d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span>Prompt kopieren</span></button>
-    </div>
+Zeig mir, welche Schriften die Datei nutzt und welche fehlen. Bevor du etwas änderst, zeig mir eine Vorschau: replaceFonts(mapping, false) oder assignStyles(false).</template>
     <p class="note">Jeder Knopf kopiert den Prompt. Claude, ChatGPT und Cursor öffnen mit ausgefülltem Prompt, bei Gemini und Grok fügst du ihn ein. Der Assistent braucht eine Verbindung zu Figmas MCP-Server.</p>
   </section>
   <section id="install">
@@ -437,7 +433,7 @@ Zeig mir, welche Schriften die Datei nutzt und welche fehlen. Bevor du etwas än
 
   var prompt = document.getElementById("prompt");
   if (!prompt) return;
-  var text = prompt.textContent.trim();
+  var text = prompt.content.textContent.trim();
   var q = encodeURIComponent(text);
   var LINK = { claude: "https://claude.ai/new?q=" + q, chatgpt: "https://chatgpt.com/?q=" + q, cursor: "https://cursor.com/link/prompt?text=" + q };
   var copy = function () { try { navigator.clipboard.writeText(text); } catch (e) {} };

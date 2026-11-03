@@ -224,10 +224,8 @@ section > h2 { margin: 0 0 1.5rem; font-size: 1.6rem; }
 .ai { display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1rem; border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--fg); font-weight: 500; transition: border-color .15s; }
 .ai:hover { border-color: var(--fg-3); }
 .ai svg { width: 18px; height: 18px; }
-.prompt { position: relative; max-width: 40rem; margin: 0 auto; text-align: left; }
-.prompt pre { margin: 0; padding: 1rem 1.1rem 3.2rem; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-2); color: var(--fg-2); white-space: pre-wrap; line-height: 1.55; }
-.prompt .chip { position: absolute; right: .6rem; bottom: .6rem; background: var(--bg); }
-#ai .note { margin: 1rem auto 0; max-width: 40rem; font-size: .9rem; color: var(--fg-3); }
+button.ai { font: inherit; font-weight: 500; background: none; cursor: pointer; }
+#ai .note { margin: 0 auto; max-width: 40rem; font-size: .9rem; color: var(--fg-3); }
 section > p { max-width: var(--measure); }
 
 ol.install { margin: 0; padding-left: 1.3rem; max-width: var(--measure); color: var(--fg-2); }
@@ -364,11 +362,9 @@ body { overflow-x: clip; }
       <a class="ai" data-ai="cursor" href="https://cursor.com/link/prompt" target="_blank" rel="noopener">{{logo_cursor}}<span>Cursor</span></a>
       <a class="ai" data-ai="gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener">{{logo_gemini}}<span>Gemini</span></a>
       <a class="ai" data-ai="grok" href="https://grok.com/" target="_blank" rel="noopener">{{logo_grok}}<span>Grok</span></a>
+      <button class="ai" type="button" id="copyPrompt" data-done="{{ai_copied}}">{{icon_copy}}<span>{{ai_copy}}</span></button>
     </div>
-    <div class="prompt">
-      <pre id="prompt">{{ai_prompt}}</pre>
-      <button class="chip" type="button" id="copyPrompt" data-done="{{ai_copied}}">{{icon_copy}}<span>{{ai_copy}}</span></button>
-    </div>
+    <template id="prompt">{{ai_prompt}}</template>
     <p class="note">{{ai_note}}</p>
   </section>
   <section id="install">
@@ -435,7 +431,7 @@ body { overflow-x: clip; }
 
   var prompt = document.getElementById("prompt");
   if (!prompt) return;
-  var text = prompt.textContent.trim();
+  var text = prompt.content.textContent.trim();
   var q = encodeURIComponent(text);
   var LINK = { claude: "https://claude.ai/new?q=" + q, chatgpt: "https://chatgpt.com/?q=" + q, cursor: "https://cursor.com/link/prompt?text=" + q };
   var copy = function () { try { navigator.clipboard.writeText(text); } catch (e) {} };
