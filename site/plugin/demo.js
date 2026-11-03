@@ -33,9 +33,8 @@
       document.documentElement.style.setProperty(role, '"' + r.to.family + '", ' + FALLBACK[role]);
       delete ROLE[r.from.family]; ROLE[r.to.family] = role;
     });
-    // Gambarino verlangt eine Nennung der Foundry, aber nur, solange die Seite sie zeigt.
-    var credit = document.getElementById("fontCredit");
-    if (credit) credit.hidden = !ROLE["Gambarino"];
+    // Nennungen stehen nur da, solange die Seite die Schrift zeigt: Gambarino verlangt sie, Neue Heimat ist Davids eigene.
+    document.querySelectorAll("[data-credit]").forEach(function (el) { el.hidden = !ROLE[el.getAttribute("data-credit")]; });
     // Die Koernchen tasten die Schrift neu ab.
     setTimeout(function () { window.dispatchEvent(new Event("resize")); }, 60);
   }

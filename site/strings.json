@@ -235,5 +235,9 @@
   "gambarino_credit": {
     "en": "Gambarino by Indian Type Foundry.",
     "de": "Gambarino von Indian Type Foundry."
+  },
+  "neueheimat_credit": {
+    "en": "Text set in <a href=\"https://heimatdesign.nrw/design-system/schrift\">Neue Heimat</a> by David Latz.",
+    "de": "Text in <a href=\"https://heimatdesign.nrw/design-system/schrift\">Neue Heimat</a> von David Latz."
   }
 }

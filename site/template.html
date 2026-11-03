@@ -255,6 +255,8 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 @keyframes blink { 50% { opacity: 0; } }
 .haze-dust { position: absolute; left: 0; top: 0; width: 100%; height: 100%; filter: blur(3px); opacity: .9; pointer-events: none; }
 .intro { isolation: isolate; }
+.try.font-credit { margin-top: .25rem; }
+.font-credit span + span:not([hidden])::before { content: " · "; }
 .try { margin: .9rem 0 0; color: var(--fg-3); font-size: .9rem; text-align: center; }
 .panels { margin: 1.75rem auto 2.5rem; max-width: 27.5rem; text-align: left; }
 .panels h3 { font-size: 1.05rem; margin: 0 0 .35rem; }
@@ -361,8 +363,8 @@ body { overflow-x: clip; }
           mask-image: linear-gradient(to bottom, transparent 15%, #000b 45%, #0008 65%, transparent 100%);
 }
 
-.feet { position: relative; margin-top: 4rem; padding: 2rem 0 100px; }
-.feet-over { position: absolute; left: 0; right: 0; bottom: 1.25rem; z-index: 2; }
+.feet { position: relative; margin-top: 4rem; padding: 2rem 0 150px; }
+.feet-over { position: absolute; left: 0; right: 0; bottom: 3rem; z-index: 2; }
 .feet-row {
   display: flex; align-items: baseline; justify-content: space-between;
   gap: var(--gl-gap) 1.5rem; flex-wrap: wrap;
@@ -428,7 +430,10 @@ body { overflow-x: clip; }
         <iframe id="plugin" data-src="{{root}}plugin/ui.html?lang={{lang}}&amp;v={{v_ui}}" title="{{hero_shot_alt}}"></iframe>
       </div>
       <p class="try">{{try_hint}}</p>
-      <p class="try font-credit" id="fontCredit" hidden>{{gambarino_credit}}</p>
+      <p class="try font-credit" id="fontCredit">
+        <span data-credit="Neue Heimat">{{neueheimat_credit}}</span>
+        <span data-credit="Gambarino" hidden>{{gambarino_credit}}</span>
+      </p>
     </div>
     <div class="panels" aria-live="polite">
       <div data-panel="fonts"><h3>{{g1_h}}</h3><p>{{g1_p}}</p><h3>{{g2_h}}</h3><p>{{g2_p}}</p></div>
