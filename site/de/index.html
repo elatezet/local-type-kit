@@ -155,7 +155,7 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 .hero { padding: 3rem 0 4rem; text-align: center; display: grid; grid-template-areas: "intro" "plugin" "panels" "cta"; }
 .intro { grid-area: intro; } .keyvisual { grid-area: plugin; } .panels { grid-area: panels; } .cta { grid-area: cta; }
 @media (min-width: 60rem) {
-  .hero { grid-template-columns: 27.5rem minmax(0, 1fr); grid-template-areas: "intro intro" "plugin panels" "plugin cta"; grid-template-rows: auto auto 1fr; column-gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .hero { grid-template-columns: 27.5rem minmax(0, 22rem); justify-content: center; grid-template-areas: "intro intro" "plugin panels" "plugin cta"; grid-template-rows: auto auto 1fr; column-gap: clamp(2.5rem, 5vw, 4.5rem); align-items: start; }
   .hero .intro { margin-bottom: 1rem; }
   .hero .panels, .hero .cta { text-align: left; }
   .hero .panels { margin: 1.5rem 0 2rem; max-width: var(--measure); }
