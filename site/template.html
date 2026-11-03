@@ -33,12 +33,6 @@ try {
   src: url("{{root}}assets/fonts/InstrumentSerif-Regular.ttf") format("truetype");
   font-weight: 400; font-display: swap;
 }
-/* Gambarino von Indian Type Foundry, ueber Fontshare unter der ITF Free Font License (fontshare.com/terms), im Test fuer die Display-Zeilen (David, 03.11.2026). */
-@font-face {
-  font-family: "Gambarino";
-  src: url("{{root}}assets/fonts/Gambarino-Regular.woff2") format("woff2");
-  font-weight: 400; font-display: swap;
-}
 /* Neue Heimat ist Davids eigene Schrift und steht hier auch als Schaufenster fuer sie (David, 03.11.2026). Variabel, wght 300 bis 700. */
 @font-face {
   font-family: "Neue Heimat";
@@ -62,7 +56,7 @@ try {
 }
 
 :root {
-  --font-display: "Gambarino", "Instrument Serif", Georgia, serif;
+  --font-display: "Instrument Serif", Georgia, serif;
   --font-sans: "Neue Heimat", "Inter", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
@@ -208,26 +202,21 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 /* Hinter dem Claim liegt ein unscharfes „Aa“ in der Farbe der Wortmarke im Fuss,
    mit demselben Rauschen. So greift der Kopf den Fuss auf (David, 03.11.2026). */
 .intro { position: relative; padding: clamp(2rem, 6vw, 5rem) 0 clamp(2.5rem, 6vw, 5.5rem); }
-.haze { position: absolute; inset: -10% 0; z-index: -1; pointer-events: none; display: grid; place-items: center; }
-.haze { --hx: 50%; --hy: 50%; --hr: 0px; transition: --hr .5s ease; }
-.haze.frosting { --hr: 20vw; }
-@property --hr { syntax: "<length>"; inherits: true; initial-value: 0px; }
+.haze { position: absolute; inset: -10% 0 -45%; z-index: -1; pointer-events: none; display: grid; place-items: center; }
 .haze span {
   grid-area: 1 / 1; font-family: var(--font-display); font-size: clamp(26rem, 64vw, 58rem); line-height: .8; letter-spacing: -.02em;
   color: color-mix(in srgb, var(--fg) 14%, var(--bg));
 }
-/* Unter der Maus vernebelt das „Aa“ staerker als die Wortmarke im Fuss. */
+/* Ruhige Fassung, solange kein Partikelfeld laeuft (Telefon, reduzierte Bewegung). */
 .haze-base {
   filter: blur(9px);
-  -webkit-mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 0%, #000 75%), linear-gradient(to bottom, #000 25%, #0008 60%, transparent 92%);
-          mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 0%, #000 75%), linear-gradient(to bottom, #000 25%, #0008 60%, transparent 92%);
-  -webkit-mask-composite: source-in; mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(to bottom, #000 25%, #0008 60%, transparent 92%); mask-image: linear-gradient(to bottom, #000 25%, #0008 60%, transparent 92%);
 }
-.haze-hot {
-  filter: blur(34px); transform: scale(1.04);
-  -webkit-mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), #000 0%, transparent 75%);
-          mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), #000 0%, transparent 75%);
-}
+/* Das Partikelfeld reicht unter den Kopf hinaus und laeuft dort aus, statt an der naechsten Zeile abzureissen. */
+.haze-dust { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: none; }
+.haze.dust .haze-dust { display: block; }
+.haze.dust .haze-base { visibility: hidden; }
+.haze.dust::after { display: none; }
 .haze::after {
   content: ""; position: absolute; inset: 0; opacity: .05;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -379,7 +368,7 @@ body { overflow-x: clip; }
 
   <div class="hero">
     <div class="intro">
-      <div class="haze" aria-hidden="true"><span class="haze-base">Aa</span><span class="haze-hot">Aa</span></div>
+      <div class="haze" aria-hidden="true"><span class="haze-base">Aa</span><canvas class="haze-dust"></canvas></div>
       <p class="eyebrow">{{icon_figma}}<span>{{eyebrow}}</span></p>
       <h1>{{hero_h1}}</h1>
       <p class="lede">{{hero_lede}}</p>
@@ -484,19 +473,123 @@ body { overflow-x: clip; }
 </script>
 
 <script>
-/* Das „Aa“ hinter dem Claim folgt der Maus wie die Wortmarke im Fuss. */
+/* Das „Aa“ hinter dem Claim als Feld feiner Punkte. Unter der Maus stieben sie in
+   Wirbeln auseinander und finden ohne Maus langsam an ihren Platz zurueck. Laeuft nur
+   mit Maus und ohne reduzierte Bewegung, und nur solange der Kopf zu sehen ist. */
 (function () {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  if (!matchMedia("(hover: hover)").matches) return;
-  var intro = document.querySelector(".intro"), haze = document.querySelector(".haze");
-  if (!intro || !haze) return;
+  if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  var haze = document.querySelector(".haze"), canvas = haze && haze.querySelector(".haze-dust"), glyph = haze && haze.querySelector(".haze-base");
+  var intro = document.querySelector(".intro");
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext("2d"), dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var W = 0, H = 0, P = null, N = 0, color = "#000", running = false, visible = true, raf = 0, t = 0;
+  var mouse = { x: -1e4, y: -1e4, on: false };
+
+  // Punkte decken weniger Flaeche als eine volle Schrift, darum einen Ton kraeftiger.
+  function dustColor() { var s = getComputedStyle(document.documentElement); var p = document.createElement("i"); p.style.color = "color-mix(in srgb, " + s.getPropertyValue("--fg") + " 30%, " + s.getPropertyValue("--bg") + ")"; haze.append(p); var c = getComputedStyle(p).color; p.remove(); return c; }
+  function build() {
+    var r = haze.getBoundingClientRect();
+    W = Math.round(r.width); H = Math.round(r.height);
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var cs = getComputedStyle(glyph);
+    color = dustColor();
+    // Die Buchstaben genau dort abtasten, wo die ruhige Fassung sie zeigt.
+    var g = glyph.getBoundingClientRect();
+    var off = document.createElement("canvas"); off.width = W; off.height = H;
+    var o = off.getContext("2d");
+    o.font = cs.fontSize + " " + cs.fontFamily; o.textBaseline = "alphabetic"; o.textAlign = "center";
+    var m = o.measureText("Aa");
+    var cx = g.left - r.left + g.width / 2;
+    var base = g.top - r.top + (g.height + m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2;
+    o.fillStyle = "#000"; o.fillText("Aa", cx, base);
+    var data = o.getImageData(0, 0, W, H).data;
+    var step = W > 900 ? 3 : 2;
+    var pts = [];
+    for (var y = 0; y < H; y += step) for (var x = 0; x < W; x += step) {
+      if (data[(y * W + x) * 4 + 3] > 120) pts.push(x + (Math.random() - .5) * step, y + (Math.random() - .5) * step);
+    }
+    N = pts.length / 2;
+    // je Punkt: x, y, Heimat x, Heimat y, vx, vy, Groesse, Phase
+    P = new Float32Array(N * 8);
+    for (var i = 0; i < N; i++) {
+      var k = i * 8;
+      P[k] = P[k + 2] = pts[i * 2]; P[k + 1] = P[k + 3] = pts[i * 2 + 1];
+      P[k + 6] = 1 + Math.random() * 1.3; P[k + 7] = Math.random() * 6.283;
+    }
+    g0 = g.top - r.top; g1 = g.bottom - r.top;
+  }
+  var g0 = 0, g1 = 1;
+
+  // Ausblenden nach unten wie die ruhige Fassung: voll bis ein Viertel, weg bei gut neun Zehnteln.
+  function fade(y) {
+    var u = (y - g0) / (g1 - g0);
+    if (u < .25) return 1;
+    if (u > .95) return 0;
+    return Math.max(0, 1 - (u - .25) / .7);
+  }
+
+  function frame() {
+    raf = 0;
+    if (!running) return;
+    t += .006;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = color;
+    var R = Math.max(150, W * .14), R2 = R * R, active = 0;
+    for (var i = 0; i < N; i++) {
+      var k = i * 8, x = P[k], y = P[k + 1], hx = P[k + 2], hy = P[k + 3], vx = P[k + 4], vy = P[k + 5];
+      var dx = x - mouse.x, dy = y - mouse.y, d2 = dx * dx + dy * dy;
+      if (mouse.on && d2 < R2) {
+        var d = Math.sqrt(d2) || 1, f = (1 - d / R); f = f * f * 4.2;
+        // wegdruecken und seitlich verwirbeln
+        vx += (dx / d) * f - (dy / d) * f * .9;
+        vy += (dy / d) * f + (dx / d) * f * .9;
+      }
+      var ox = x - hx, oy = y - hy, off = Math.abs(ox) + Math.abs(oy);
+      if (off > .5) {
+        // treibt wie Staub, solange er nicht zuhause ist
+        var a = Math.sin(x * .006 + t * 3) * Math.cos(y * .007 - t * 2) * 6.283;
+        var drift = Math.min(1, off / 60) * .18;
+        vx += Math.cos(a) * drift; vy += Math.sin(a) * drift - drift * .3;
+        active++;
+      }
+      vx += -ox * .0024; vy += -oy * .0024;
+      vx *= .94; vy *= .94;
+      x += vx; y += vy;
+      P[k] = x; P[k + 1] = y; P[k + 4] = vx; P[k + 5] = vy;
+      var al = fade(hy) * (off > 2 ? Math.max(.35, 1 - off / 260) : 1);
+      if (al <= 0) continue;
+      ctx.globalAlpha = al * .9;
+      var s = P[k + 6] * (1 + Math.min(1.2, off / 120));
+      ctx.fillRect(x - s / 2, y - s / 2, s, s);
+    }
+    ctx.globalAlpha = 1;
+    // In Ruhe und ohne Maus steht das Bild, dann wird nicht weiter gerechnet.
+    if (active || mouse.on) raf = requestAnimationFrame(frame); else idle = true;
+  }
+  var idle = false;
+  function kick() { if (running && !raf) { idle = false; raf = requestAnimationFrame(frame); } }
+
+  function start() {
+    build();
+    haze.classList.add("dust");
+    running = visible; kick();
+  }
   intro.addEventListener("mousemove", function (e) {
     var r = haze.getBoundingClientRect();
-    haze.style.setProperty("--hx", (e.clientX - r.left) + "px");
-    haze.style.setProperty("--hy", (e.clientY - r.top) + "px");
-    haze.classList.add("frosting");
+    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.on = true; kick();
   });
-  intro.addEventListener("mouseleave", function () { haze.classList.remove("frosting"); });
+  intro.addEventListener("mouseleave", function () { mouse.on = false; kick(); });
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; running = visible && !!P; if (running) kick(); }).observe(haze);
+  document.addEventListener("visibilitychange", function () { running = !document.hidden && visible && !!P; if (running) kick(); });
+  var resizeT = 0;
+  addEventListener("resize", function () { clearTimeout(resizeT); resizeT = setTimeout(function () { build(); kick(); }, 200); });
+  // Farbe folgt der Darstellung der Seite.
+  var recolor = function () { color = dustColor(); kick(); };
+  new MutationObserver(recolor).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", recolor);
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(start);
 })();
 </script>
 
