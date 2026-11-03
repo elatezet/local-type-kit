@@ -227,5 +227,9 @@
   "haze_label": {
     "en": "Type something into the large letters",
     "de": "Tipp etwas in die großen Buchstaben"
+  },
+  "cta_note": {
+    "en": "Opens the plugin in Figma Community.",
+    "de": "Führt zum Plugin in der Figma Community."
   }
 }

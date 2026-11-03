@@ -248,7 +248,8 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
   padding: .75rem 1.35rem; border-radius: 10px;
   background: var(--fg); color: var(--bg); text-decoration: none; font-weight: 600;
 }
-.button svg { width: 16px; height: 16px; margin-right: -.2rem; }
+.button svg { width: 16px; height: 16px; margin-left: -.2rem; }
+.cta-note { margin: .6rem 0 0; font-size: .75rem; color: var(--fg-3); }
 .button.secondary { background: transparent; color: var(--fg); border: 1px solid var(--border); font-weight: 400; }
 .fineprint { color: var(--fg-3); font-size: .9rem; margin: 0 auto; max-width: var(--measure); }
 .maker { margin: 1.5rem auto 0; max-width: var(--measure); font-size: .9rem; color: var(--fg-2); }
@@ -392,7 +393,8 @@ body { overflow-x: clip; }
       <h1>{{hero_h1}}</h1>
       <p class="lede">{{hero_lede}}</p>
       <div class="cta">
-        <div class="actions"><a class="button" href="https://www.figma.com/community/plugin/1698988995876300994"><span>{{cta_install}}</span>{{icon_external}}</a></div>
+        <div class="actions"><a class="button" href="https://www.figma.com/community/plugin/1698988995876300994">{{icon_figma}}<span>{{cta_install}}</span></a></div>
+        <p class="cta-note">{{cta_note}}</p>
       </div>
     </div>
     <div class="keyvisual" id="how">
