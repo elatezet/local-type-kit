@@ -234,6 +234,10 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 /* Ruhiger Strich an der Cursorstelle, nur waehrend der Eingabe, weich wie die Schrift. */
 .haze-caret { position: absolute; width: 3px; display: none; background: color-mix(in srgb, var(--fg) 22%, var(--bg)); filter: blur(1.5px); pointer-events: none; }
 .haze.editing .haze-caret { display: block; animation: blink 1.06s steps(1) infinite; }
+/* Markierung wie in einem Textfeld, leise und weich. */
+.haze-sel { position: absolute; display: none; border-radius: .04em; background: color-mix(in srgb, var(--fg) 9%, transparent); filter: blur(2px); pointer-events: none; }
+.haze.editing.selecting .haze-sel { display: block; }
+.haze.editing.selecting .haze-caret { display: none; }
 @keyframes blink { 50% { opacity: 0; } }
 .haze-dust { position: absolute; left: 0; top: 0; width: 100%; height: 100%; filter: blur(2.5px); opacity: .9; pointer-events: none; }
 .intro { isolation: isolate; }
@@ -387,7 +391,7 @@ body { overflow-x: clip; }
 
   <div class="hero">
     <div class="intro">
-      <div class="haze" aria-hidden="true"><span class="haze-base">Aa</span><span class="haze-hot">Aa</span><canvas class="haze-dust"></canvas><i class="haze-caret"></i></div>
+      <div class="haze" aria-hidden="true"><span class="haze-base">Aa</span><span class="haze-hot">Aa</span><canvas class="haze-dust"></canvas><i class="haze-sel"></i><i class="haze-caret"></i></div>
       <input id="hazeInput" class="haze-input" maxlength="12" autocomplete="off" spellcheck="false" aria-label="{{haze_label}}">
       <p class="eyebrow">{{icon_figma}}<span>{{eyebrow}}</span></p>
       <h1>{{hero_h1}}</h1>
@@ -657,6 +661,14 @@ window.LTKDust = (function () {
       return;
     }
     var text = node.textContent, pos = Math.min(input.selectionEnd == null ? text.length : input.selectionEnd, text.length);
+    var s0 = Math.min(input.selectionStart || 0, text.length), sel = s0 < pos;
+    haze.classList.toggle("selecting", sel);
+    if (sel) {
+      var rs = document.createRange(); rs.setStart(node, s0); rs.setEnd(node, pos);
+      var sr = rs.getBoundingClientRect(), selEl = haze.querySelector(".haze-sel");
+      selEl.style.left = (sr.left - hr0.left) + "px"; selEl.style.width = sr.width + "px";
+      selEl.style.top = (sr.top - hr0.top + sr.height * .12) + "px"; selEl.style.height = (sr.height * .72) + "px";
+    }
     var r = document.createRange(), hr = haze.getBoundingClientRect(), box;
     if (pos > 0) { r.setStart(node, pos - 1); r.setEnd(node, pos); var b = r.getBoundingClientRect(); box = { x: b.right, top: b.top, h: b.height }; }
     else { r.setStart(node, 0); r.setEnd(node, Math.min(1, text.length)); var b2 = r.getBoundingClientRect(); box = { x: b2.left, top: b2.top, h: b2.height }; }
