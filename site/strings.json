@@ -223,5 +223,13 @@
   "footer_maker": {
     "en": "David Latz is a design engineer and helps teams with brand and product design systems.",
     "de": "David Latz ist Design Engineer und begleitet Teams bei Brand &amp; Product Design Systems."
+  },
+  "haze_label": {
+    "en": "Type something into the large letters",
+    "de": "Tipp etwas in die großen Buchstaben"
+  },
+  "haze_hint": {
+    "en": "Click and type something",
+    "de": "Klick und tipp etwas"
   }
 }
