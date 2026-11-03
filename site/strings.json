@@ -161,8 +161,8 @@
     "de": "Kein Produkt von <a href=\"https://www.figma.com\">Figma</a>. Gambarino von Indian Type Foundry."
   },
   "try_hint": {
-    "en": "Try the plugin right here, with a sample file.",
-    "de": "Probier das Plugin direkt hier aus, mit einer Beispieldatei."
+    "en": "Try the plugin right here.",
+    "de": "Probier das Plugin direkt hier aus."
   },
   "faq7_q": {
     "en": "Does the plugin help with exports that Figma renders on its servers?",
