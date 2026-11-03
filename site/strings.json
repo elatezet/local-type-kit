@@ -189,8 +189,8 @@
     "de": "MCP"
   },
   "ai_h": {
-    "en": "Also works with your AI assistant",
-    "de": "Funktioniert auch mit deinem KI-Assistenten"
+    "en": "MCP ready",
+    "de": "MCP Ready"
   },
   "ai_p": {
     "en": "Claude, ChatGPT, Cursor, Gemini or Grok use Local Type Kit right in your file through Figma's MCP server. Checking fonts, building styles and attaching loose text works straight from the chat. Only fonts that live on your computer alone need the plugin in the desktop app.",
