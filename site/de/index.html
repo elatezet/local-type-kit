@@ -106,7 +106,9 @@ a:hover { text-decoration-color: currentColor; }
 svg { display: block; }
 section { padding: 4rem 0; border-top: 1px solid var(--border); scroll-margin-top: 4rem; }
 
+/* Die Kopfzeile liegt ueber dem grossen Schriftbild. */
 .bar {
+  position: relative; z-index: 20;
   display: flex; align-items: center; justify-content: space-between;
   gap: var(--gl-gap); padding: 1.25rem 0; flex-wrap: wrap;
 }
@@ -205,7 +207,7 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
    mit demselben Rauschen. So greift der Kopf den Fuss auf (David, 03.11.2026). */
 .intro { position: relative; padding: clamp(4rem, 14vw, 13rem) 0 clamp(2.5rem, 6vw, 5.5rem); }
 /* Volle Fensterbreite wie die Wortmarke im Fuss, damit laengere Woerter erst am Fensterrand enden. */
-.haze { position: absolute; inset: -48% auto 30%; left: 50%; width: 100vw; transform: translateX(-50%); overflow-x: clip; z-index: -1; pointer-events: none; display: grid; place-items: center; }
+.haze { position: absolute; inset: -48% auto 30%; left: 50%; width: 100vw; transform: translateX(-50%); overflow-x: clip; z-index: -1; pointer-events: none; display: grid; place-items: center; grid-template-columns: max-content; justify-content: center; }
 .haze span {
   grid-area: 1 / 1; padding: 8rem 6rem; white-space: nowrap; font-family: var(--font-display); font-size: clamp(26rem, 64vw, 58rem); line-height: .8; letter-spacing: -.02em;
   color: color-mix(in srgb, var(--fg) 14%, var(--bg));
