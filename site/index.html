@@ -320,9 +320,9 @@ body { overflow-x: clip; }
 .footer-display > span {
   /* Oben nur ein Hauch Unschaerfe, sie waechst mit der Schrift. */
   filter: blur(.15vw);
-  -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 0%, #000 70%),
+  -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 15%, #000 80%),
                       linear-gradient(to bottom, #000 16%, #0008 48%, transparent 82%);
-          mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 0%, #000 70%),
+          mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 15%, #000 80%),
                       linear-gradient(to bottom, #000 16%, #0008 48%, transparent 82%);
   -webkit-mask-composite: source-in; mask-composite: intersect;
 }
@@ -337,10 +337,10 @@ body { overflow-x: clip; }
 }
 .foot-dust { position: absolute; left: 0; top: -6rem; width: 100%; height: calc(100% + 10rem); z-index: 2; filter: blur(3px); opacity: .9; pointer-events: none; }
 .footer-display { --frost-x: 50%; --frost-y: 50%; transition: --frost-r .45s ease; }
-.footer-display.frosting { --frost-r: 22vw; }
+.footer-display.frosting { --frost-r: 26vw; }
 .footer-hot {
   /* Reicht nach oben ueber die Zeile hinaus, damit die Unschaerfe dort nicht an einer Kante endet. */
-  position: absolute; inset: -6rem 0 -4rem; padding-top: 6rem; filter: blur(2vw);
+  position: absolute; inset: -6rem 0 -4rem; padding-top: 6rem; filter: blur(2.8vw);
   -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) calc(var(--frost-y) + 6rem), #000 0%, transparent 70%);
           mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) calc(var(--frost-y) + 6rem), #000 0%, transparent 70%);
 }
@@ -576,7 +576,7 @@ window.LTKDust = (function () {
         var dx = x - mouse.x, dy = y - mouse.y, d2 = dx * dx + dy * dy;
         if (mouse.on && d2 < R2) {
           // Jedes Koernchen loest sich in seine eigene Richtung, damit die Schrift zerfaellt statt als Ganzes zu verrutschen.
-          var d = Math.sqrt(d2) || 1, f = (1 - d / R); f = f * f * .6;
+          var d = Math.sqrt(d2) || 1, f = (1 - d / R); f = f * f * (o.force || .6);
           var ang = P[k + 7] + t * 2;
           vx += (Math.cos(ang) + (dx / d) * .25) * f;
           vy += (Math.sin(ang) + (dy / d) * .25) * f - f * .12;
@@ -742,7 +742,7 @@ window.LTKDust = (function () {
     mark.classList.add("frosting");
   });
   feet.addEventListener("mouseleave", function () { mark.classList.remove("frosting"); });
-  LTKDust.add({ box: mark, canvas: mark.querySelector(".foot-dust"), glyph: mark.querySelector("span"), trigger: feet, full: .16, end: .82, radius: function (W) { return Math.max(140, W * .12); } });
+  LTKDust.add({ box: mark, canvas: mark.querySelector(".foot-dust"), glyph: mark.querySelector("span"), trigger: feet, full: .16, end: .82, force: 1.1, radius: function (W) { return Math.max(180, W * .16); } });
 })();
 </script>
 
