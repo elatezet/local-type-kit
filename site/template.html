@@ -150,19 +150,20 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
   :root:not([data-theme="light"]) .when-dark { display: none; }
 }
 
-/* Unter 60rem steht alles untereinander und mittig, darueber steht das Plugin links und der Text rechts,
+/* Unter 60rem steht alles untereinander und mittig, darueber steht der Claim mittig oben, darunter das Plugin links und der Text zum Reiter rechts,
    damit Aussage und Fenster in einen Bildschirm passen (David, 03.11.2026). */
 .hero { padding: 3rem 0 4rem; text-align: center; display: grid; grid-template-areas: "intro" "plugin" "panels" "cta"; }
 .intro { grid-area: intro; } .keyvisual { grid-area: plugin; } .panels { grid-area: panels; } .cta { grid-area: cta; }
 @media (min-width: 60rem) {
-  .hero { text-align: left; grid-template-columns: 27.5rem minmax(0, 1fr); grid-template-areas: "plugin intro" "plugin panels" "plugin cta"; grid-template-rows: auto auto 1fr; column-gap: clamp(2rem, 5vw, 5rem); align-items: start; padding-top: 2.5rem; }
-  .hero h1 { font-size: clamp(3rem, 5.4vw, 4.6rem); margin-left: 0; }
-  .hero .lede { margin-left: 0; }
-  .hero .panels { margin: 0 0 2rem; max-width: var(--measure); }
+  .hero { grid-template-columns: 27.5rem minmax(0, 1fr); grid-template-areas: "intro intro" "plugin panels" "plugin cta"; grid-template-rows: auto auto 1fr; column-gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .hero .intro { margin-bottom: 1rem; }
+  .hero .panels, .hero .cta { text-align: left; }
+  .hero .panels { margin: 1.5rem 0 2rem; max-width: var(--measure); }
   .hero .keyvisual { margin: 0; }
   .hero .actions { justify-content: flex-start; }
   .hero .fineprint { margin: 0; }
 }
+
 .eyebrow svg { width: 14px; height: 14px; }
 .eyebrow { display: inline-flex; align-items: center; gap: .45rem; margin: 0 0 1.4rem; padding: .35rem .8rem; border: 1px solid var(--border); border-radius: 999px; font-size: .9rem; color: var(--fg-2); }
 .hero h1 {
@@ -184,7 +185,7 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 }
 .win-bar { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-bottom: 1px solid var(--border); font-size: 13px; cursor: grab; touch-action: none; user-select: none; }
 .win { position: relative; z-index: 5; }
-.win { transition: box-shadow .2s ease; }
+.win { transition: box-shadow .2s ease; will-change: transform; }
 .win.dragging { box-shadow: 0 4px 8px rgba(28,26,23,.08), 0 36px 80px rgba(28,26,23,.22); }
 .win.dragging .win-bar { cursor: grabbing; }
 .win.dragging iframe { pointer-events: none; }
@@ -225,11 +226,9 @@ section > h2 { margin: 0 0 1.5rem; font-size: 1.6rem; }
 .ai:hover { border-color: var(--fg-3); }
 .ai svg { width: 18px; height: 18px; }
 button.ai { font: inherit; font-weight: 500; background: none; cursor: pointer; }
-#ai .note { margin: 0 auto; max-width: 40rem; font-size: .9rem; color: var(--fg-3); }
+#ai .note { margin: 0 auto; max-width: 36rem; font-size: .8rem; line-height: 1.5; color: var(--fg-3); }
 section > p { max-width: var(--measure); }
 
-ol.install { margin: 0; padding-left: 1.3rem; max-width: var(--measure); color: var(--fg-2); }
-ol.install li { padding: .35rem 0; }
 
 details { border-top: 1px solid var(--border); padding: 1.1rem 0; }
 details > summary {
@@ -298,6 +297,10 @@ body { overflow-x: clip; }
 /* Name und Absender im Fuss in Inter, die grosse Wortmarke darueber bleibt Serif (David, 01.11.2026). */
 .feet-mark { font-family: var(--font-sans); font-size: .95rem; font-weight: 500; color: var(--fg); }
 .feet-links { display: flex; gap: .55rem; flex-wrap: wrap; color: var(--fg-3); font-size: .95rem; }
+.gh { display: inline-flex; align-items: center; gap: .35rem; color: var(--fg); text-decoration: none; }
+.gh:hover { text-decoration: underline; }
+.gh svg { width: 16px; height: 16px; }
+.feet-links { align-items: center; gap: .9rem; }
 .feet-house { font-family: var(--font-sans); font-size: .95rem; font-weight: 500; color: var(--fg); text-decoration: none; }
 .feet-house:hover { text-decoration: underline; }
 </style>
@@ -312,7 +315,7 @@ body { overflow-x: clip; }
     <button class="chip menu-close" type="button" id="menuClose" aria-label="{{menu_close}}">{{icon_close}}</button>
     <a href="#how">{{nav_how}}</a>
     <a href="#ai">{{nav_ai}}</a>
-    <a href="#install">{{nav_install}}</a>
+    <a href="https://www.figma.com/community/plugin/1698988995876300994">{{nav_install}}</a>
     <a href="#questions">{{nav_questions}}</a>
     <span class="tools">
     <a class="chip" href="{{lang_other_href}}" title="{{lang_switch_label}}">
@@ -336,7 +339,7 @@ body { overflow-x: clip; }
     <div class="keyvisual" id="how">
       <div class="win">
         <div class="win-bar"><span class="plug" aria-hidden="true">&lt;/&gt;</span><span class="win-title">Local Type Kit</span><span class="close" aria-hidden="true">×</span></div>
-        <iframe id="plugin" data-src="{{root}}plugin/ui.html?lang={{lang}}" title="{{hero_shot_alt}}"></iframe>
+        <iframe id="plugin" data-src="{{root}}plugin/ui.html?lang={{lang}}&amp;v={{v_ui}}" title="{{hero_shot_alt}}"></iframe>
       </div>
       <p class="try">{{try_hint}}</p>
     </div>
@@ -367,15 +370,6 @@ body { overflow-x: clip; }
     <template id="prompt">{{ai_prompt}}</template>
     <p class="note">{{ai_note}}</p>
   </section>
-  <section id="install">
-    <h2>{{install_h}}</h2>
-    <ol class="install">
-      <li>{{install_1}}</li>
-      <li>{{install_2}}</li>
-      <li>{{install_3}}</li>
-    </ol>
-  </section>
-
   <section id="questions">
     <h2>{{faq_h}}</h2>
     <details><summary>{{faq1_q}}</summary><p>{{faq1_a}}</p></details>
@@ -384,6 +378,7 @@ body { overflow-x: clip; }
     <details><summary>{{faq4_q}}</summary><p>{{faq4_a}}</p></details>
     <details><summary>{{faq5_q}}</summary><p>{{faq5_a}}</p></details>
     <details><summary>{{faq7_q}}</summary><p>{{faq7_a}}</p></details>
+    <details><summary>{{faq8_q}}</summary><p>{{faq8_a}}</p></details>
     <details><summary>{{faq6_q}}</summary><p>{{faq6_a}}</p></details>
   </section>
 
@@ -394,12 +389,12 @@ body { overflow-x: clip; }
   <div class="feet-over">
   <div class="feet-row">
     <span class="feet-mark">Local Type Kit</span>
-    <span class="feet-links"><span><a href="https://github.com/elatezet/local-type-kit">GitHub</a> · {{footer_licence}} · {{footer_note}}</span></span>
+    <span class="feet-links"><a class="gh" href="https://github.com/elatezet/local-type-kit">{{logo_github}}<span>GitHub</span></a><span>{{footer_licence}} · {{footer_note}}</span></span>
     <a class="feet-house" href="https://davidlatz.de">David Latz</a>
   </div>
   </div>
 </footer>
-<script src="{{root}}plugin/demo.js"></script>
+<script src="{{root}}plugin/demo.js?v={{v_demo}}"></script>
 
 <script>
 /* Nur die Abweichung wird gespeichert. Ohne Wahl folgt die Seite weiter dem

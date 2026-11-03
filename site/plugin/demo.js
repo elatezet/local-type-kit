@@ -134,27 +134,36 @@
   // und beim Loslassen federt es zurueck (David, 03.11.2026).
   var win = frame.closest(".win"), bar = win && win.querySelector(".win-bar");
   if (bar) {
-    var LIMIT = 90, start = null;
-    var rubber = function (d) { return (1 - 1 / (Math.abs(d) * 0.55 / LIMIT + 1)) * LIMIT * Math.sign(d); };
+    // tanh folgt der Hand anfangs eins zu eins und bremst dann weich bis LIMIT Pixel.
+    var LIMIT = 120, start = null, next = null, frameReq = 0;
+    var rubber = function (d) { return LIMIT * Math.tanh(d / LIMIT); };
+    var paintMove = function () {
+      frameReq = 0;
+      if (next) win.style.transform = "translate3d(" + rubber(next.x) + "px," + rubber(next.y) + "px,0)";
+    };
     bar.addEventListener("pointerdown", function (e) {
       if (e.button !== 0) return;
+      e.preventDefault();
       start = { x: e.clientX, y: e.clientY };
       bar.setPointerCapture(e.pointerId);
       win.classList.remove("settle"); win.classList.add("dragging");
     });
     bar.addEventListener("pointermove", function (e) {
       if (!start) return;
-      win.style.transform = "translate(" + rubber(e.clientX - start.x) + "px," + rubber(e.clientY - start.y) + "px)";
+      next = { x: e.clientX - start.x, y: e.clientY - start.y };
+      if (!frameReq) frameReq = requestAnimationFrame(paintMove);
     });
     var release = function () {
       if (!start) return;
-      start = null;
+      start = null; next = null;
+      if (frameReq) { cancelAnimationFrame(frameReq); frameReq = 0; }
       win.classList.remove("dragging"); win.classList.add("settle");
       void win.offsetWidth; // die Uebergangsregel muss stehen, bevor das Ziel wechselt
       win.style.transform = "";
     };
     bar.addEventListener("pointerup", release);
     bar.addEventListener("pointercancel", release);
+    bar.addEventListener("lostpointercapture", release);
   }
 
   // Erst jetzt laden, damit die ersten Nachrichten des Plugins schon eine Antwort finden.

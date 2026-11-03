@@ -100,22 +100,6 @@
     "en": "Text without a style gets the one style that matches exactly.",
     "de": "Text ohne Stil bekommt den einen Stil, der genau passt."
   },
-  "install_h": {
-    "en": "Two files, no build step",
-    "de": "Zwei Dateien, kein Build"
-  },
-  "install_1": {
-    "en": "Download or clone the <a href=\"https://github.com/elatezet/local-type-kit\">repository on GitHub</a>.",
-    "de": "Das <a href=\"https://github.com/elatezet/local-type-kit\">Repository auf GitHub</a> herunterladen oder klonen."
-  },
-  "install_2": {
-    "en": "In the Figma desktop app, choose Plugins → Development → Import plugin from manifest and pick <code>manifest.json</code>.",
-    "de": "In der Figma-Desktop-App Plugins → Development → Import plugin from manifest wählen und <code>manifest.json</code> auswählen."
-  },
-  "install_3": {
-    "en": "Open a design file and run Plugins → Development → Local Type Kit.",
-    "de": "Eine Designdatei öffnen und Plugins → Development → Local Type Kit starten."
-  },
   "faq_h": {
     "en": "Questions",
     "de": "Fragen"
@@ -227,5 +211,13 @@
   "ai_note": {
     "en": "Each button copies the prompt. Claude, ChatGPT and Cursor open with it filled in; in Gemini and Grok, paste it. The assistant needs Figma's MCP server connected.",
     "de": "Jeder Knopf kopiert den Prompt. Claude, ChatGPT und Cursor öffnen mit ausgefülltem Prompt, bei Gemini und Grok fügst du ihn ein. Der Assistent braucht eine Verbindung zu Figmas MCP-Server."
+  },
+  "faq8_q": {
+    "en": "Can I install it without Figma Community?",
+    "de": "Geht es auch ohne Figma Community?"
+  },
+  "faq8_a": {
+    "en": "Yes. Download the <a href=\"https://github.com/elatezet/local-type-kit\">repository on GitHub</a>. In the Figma desktop app, choose Plugins → Development → Import plugin from manifest and pick <code>manifest.json</code>.",
+    "de": "Ja. Lade das <a href=\"https://github.com/elatezet/local-type-kit\">Repository von GitHub</a> herunter. In der Figma-Desktop-App wählst du Plugins → Entwicklung → Plugin aus Manifest importieren und dann <code>manifest.json</code>."
   }
 }
