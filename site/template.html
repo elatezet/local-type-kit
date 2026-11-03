@@ -311,12 +311,13 @@ body { overflow-x: clip; }
 .gh:hover { text-decoration: underline; }
 .gh svg { width: 16px; height: 16px; }
 .feet-links { align-items: center; gap: .9rem; }
-/* Drei Spalten: Name links, Absender mittig, Repository und Lizenz rechts. */
-.feet-row > * { flex: 1 1 0; }
-.feet-maker { text-align: center; color: var(--fg-2); font-size: .95rem; }
-.feet-maker a { color: var(--fg); }
-.feet-links { justify-content: flex-end; }
-@media (max-width: 48rem) { .feet-row > * { flex: 1 1 100%; } .feet-maker { text-align: left; } .feet-links { justify-content: flex-start; } }
+/* Name links, Hinweise mittig und bei Bedarf zweizeilig, Absender rechts. */
+@media (min-width: 48rem) {
+  .feet-row { flex-wrap: nowrap; align-items: center; }
+  .feet-mark, .feet-house { flex: none; }
+  .feet-links { display: block; flex: 1; text-align: center; max-width: 40rem; margin: 0 auto; }
+  .feet-links .gh { vertical-align: -3px; margin-right: .6rem; }
+}
 .feet-house { font-family: var(--font-sans); font-size: .95rem; font-weight: 500; color: var(--fg); text-decoration: none; }
 .feet-house:hover { text-decoration: underline; }
 </style>
@@ -405,8 +406,8 @@ body { overflow-x: clip; }
   <div class="feet-over">
   <div class="feet-row">
     <span class="feet-mark">Local Type Kit</span>
-    <span class="feet-maker">{{maker}}</span>
-    <span class="feet-links"><a class="gh" href="https://github.com/elatezet/local-type-kit">{{logo_github}}<span>GitHub</span></a><span>{{footer_licence}} · {{footer_note}}</span></span>
+    <span class="feet-links"><a class="gh" href="https://github.com/elatezet/local-type-kit">{{logo_github}}<span>GitHub</span></a><span>{{footer_licence}} · {{footer_note}} {{footer_maker}}</span></span>
+    <a class="feet-house" href="https://davidlatz.de">David Latz</a>
   </div>
   </div>
 </footer>
