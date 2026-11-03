@@ -100,7 +100,9 @@ main, .bar, .feet { max-width: var(--gl-cap); margin: 0 auto; }
 p { color: var(--fg-2); }
 h1, h2, h3 { color: var(--fg); line-height: 1.2; }
 h2, h3 { font-weight: 600; }
-a { color: inherit; text-underline-offset: 3px; }
+/* Unterstreichungen hell und fein, beim Darueberfahren kraeftiger. */
+a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); transition: text-decoration-color .15s; }
+a:hover { text-decoration-color: currentColor; }
 svg { display: block; }
 section { padding: 4rem 0; border-top: 1px solid var(--border); scroll-margin-top: 4rem; }
 
