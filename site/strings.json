@@ -209,8 +209,8 @@
     "de": "Kopiert"
   },
   "ai_note": {
-    "en": "Every button copies the prompt. Claude, ChatGPT and Cursor open with the prompt filled in; in Gemini and Grok you paste it yourself. Your assistant needs to be connected to Figma's MCP server.",
-    "de": "Jeder Knopf kopiert den Prompt. Claude, ChatGPT und Cursor öffnen sich direkt mit dem Prompt, bei Gemini und Grok fügst du ihn selbst ein. Dein Assistent muss dafür mit Figmas MCP-Server verbunden sein."
+    "en": "The buttons copy the matching prompt. Claude, ChatGPT and Cursor open with the prompt filled in; in Gemini and Grok you paste it yourself. Your assistant needs to be connected to Figma's MCP server.",
+    "de": "Die Buttons kopieren den passenden Prompt. Claude, ChatGPT und Cursor öffnen sich direkt mit dem Prompt, bei Gemini und Grok fügst du ihn selbst ein. Dein Assistent muss dafür mit Figmas MCP-Server verbunden sein."
   },
   "faq8_q": {
     "en": "Can I install the plugin without Figma Community?",
