@@ -229,7 +229,7 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
   -webkit-mask-image: linear-gradient(to bottom, transparent 18%, #000 36%, #000a 52%, transparent 68%); mask-image: linear-gradient(to bottom, transparent 18%, #000 36%, #000a 52%, transparent 68%);
 }
 .haze-hot {
-  filter: blur(24px);
+  filter: blur(2vw);
   -webkit-mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), #000 0%, transparent 70%);
           mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), #000 0%, transparent 70%);
 }
@@ -340,7 +340,7 @@ body { overflow-x: clip; }
 .footer-display.frosting { --frost-r: 22vw; }
 .footer-hot {
   /* Reicht nach oben ueber die Zeile hinaus, damit die Unschaerfe dort nicht an einer Kante endet. */
-  position: absolute; inset: -6rem 0 -4rem; padding-top: 6rem; filter: blur(22px);
+  position: absolute; inset: -6rem 0 -4rem; padding-top: 6rem; filter: blur(2vw);
   -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) calc(var(--frost-y) + 6rem), #000 0%, transparent 70%);
           mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) calc(var(--frost-y) + 6rem), #000 0%, transparent 70%);
 }
@@ -552,9 +552,9 @@ window.LTKDust = (function () {
       var loose = [];
       for (var j = 0; j < pts.length; j += 2) if (Math.random() < .7) loose.push(pts[j], pts[j + 1]);
       pts = loose; N = pts.length / 2;
-      // je Punkt: x, y, Heimat x, Heimat y, vx, vy, Groesse
-      P = new Float32Array(N * 7);
-      for (var i = 0; i < N; i++) { var k = i * 7; P[k] = P[k + 2] = pts[i * 2]; P[k + 1] = P[k + 3] = pts[i * 2 + 1]; P[k + 6] = .6 + Math.random() * .7; }
+      // je Punkt: x, y, Heimat x, Heimat y, vx, vy, Groesse, eigene Richtung
+      P = new Float32Array(N * 8);
+      for (var i = 0; i < N; i++) { var k = i * 8; P[k] = P[k + 2] = pts[i * 2]; P[k + 1] = P[k + 3] = pts[i * 2 + 1]; P[k + 6] = .6 + Math.random() * .7; P[k + 7] = Math.random() * 6.283; }
       g0 = g.top - cr.top + padT; g1 = g.bottom - cr.top - padB;
       ctx.clearRect(0, 0, W, H);
     }
@@ -572,13 +572,14 @@ window.LTKDust = (function () {
       ctx.fillStyle = color;
       var R = o.radius(W), R2 = R * R, active = 0;
       for (var i = 0; i < N; i++) {
-        var k = i * 7, x = P[k], y = P[k + 1], hx = P[k + 2], hy = P[k + 3], vx = P[k + 4], vy = P[k + 5];
+        var k = i * 8, x = P[k], y = P[k + 1], hx = P[k + 2], hy = P[k + 3], vx = P[k + 4], vy = P[k + 5];
         var dx = x - mouse.x, dy = y - mouse.y, d2 = dx * dx + dy * dy;
         if (mouse.on && d2 < R2) {
-          var d = Math.sqrt(d2) || 1, f = (1 - d / R); f = f * f * .55;
-          // leise wegdruecken, kaum Wirbel
-          vx += (dx / d) * f - (dy / d) * f * .25;
-          vy += (dy / d) * f + (dx / d) * f * .25 - f * .2;
+          // Jedes Koernchen loest sich in seine eigene Richtung, damit die Schrift zerfaellt statt als Ganzes zu verrutschen.
+          var d = Math.sqrt(d2) || 1, f = (1 - d / R); f = f * f * .6;
+          var ang = P[k + 7] + t * 2;
+          vx += (Math.cos(ang) + (dx / d) * .25) * f;
+          vy += (Math.sin(ang) + (dy / d) * .25) * f - f * .12;
         }
         var ex = x - hx, ey = y - hy, away = Math.abs(ex) + Math.abs(ey);
         if (away > .5) {
@@ -590,7 +591,7 @@ window.LTKDust = (function () {
         x += vx; y += vy;
         P[k] = x; P[k + 1] = y; P[k + 4] = vx; P[k + 5] = vy;
         // Zuhause zeigt die unscharfe Schrift das Bild; sichtbar sind nur Koernchen, die sich geloest haben.
-        var al = fade(hy) * Math.min(1, away / 10) * Math.max(0, 1 - away / 90);
+        var al = fade(hy) * Math.min(1, away / 6) * Math.max(0, 1 - away / 60);
         if (al <= .02) continue;
         ctx.globalAlpha = al * .4;
         var s = P[k + 6];
