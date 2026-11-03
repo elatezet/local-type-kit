@@ -8,13 +8,12 @@
   var DE = document.documentElement.lang === "de";
 
   // Die Beispieldatei ist die Seite selbst: Instrument Serif fuer Claim und Titel, Neue Heimat fuer den Text.
-  // Wer sie tauscht, sieht die Seite in der neuen Schrift. Angeboten werden nur Schriften, die der Browser zeigen kann.
+  // Wer sie tauscht, sieht die Seite in der neuen Schrift. Angeboten werden nur Schriften, die die Seite selbst mitbringt.
   var FAMILIES = {
     "Inter": ["Regular", "Medium", "Semi Bold"],
     "Neue Heimat": ["Regular", "Medium", "SemiBold"],
     "Instrument Serif": ["Regular"],
-    "Gambarino": ["Regular"],
-    "Helvetica Neue": ["Regular", "Medium", "Bold"]
+    "Gambarino": ["Regular"]
   };
   var used = [
     { family: "Brand Sans", style: "Regular", nodes: 488, styles: 9, available: false },
