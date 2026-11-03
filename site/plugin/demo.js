@@ -7,23 +7,39 @@
   if (!frame) return;
   var DE = document.documentElement.lang === "de";
 
+  // Die Beispieldatei ist die Seite selbst: Instrument Serif fuer Claim und Titel, Neue Heimat fuer den Text.
+  // Wer sie tauscht, sieht die Seite in der neuen Schrift. Angeboten werden nur Schriften, die der Browser zeigen kann.
   var FAMILIES = {
-    "Inter": ["Light", "Regular", "Medium", "Semi Bold", "Bold"],
-    "IBM Plex Sans": ["Light", "Regular", "Medium", "SemiBold", "Bold"],
-    "Source Serif 4": ["Regular", "Semibold", "Bold"],
-    "Helvetica Neue": ["Light", "Regular", "Medium", "Bold"],
-    "Open Sans": ["Light", "Regular", "SemiBold", "Bold"],
-    "Roboto": ["Light", "Regular", "Medium", "Bold"],
+    "Inter": ["Regular", "Medium", "Semi Bold"],
+    "Neue Heimat": ["Regular", "Medium", "SemiBold"],
+    "Instrument Serif": ["Regular"],
     "Georgia": ["Regular", "Bold"],
-    "Arial": ["Regular", "Bold"]
+    "Times New Roman": ["Regular", "Bold"],
+    "Helvetica Neue": ["Regular", "Medium", "Bold"],
+    "Arial": ["Regular", "Bold"],
+    "Courier New": ["Regular", "Bold"]
   };
   var used = [
     { family: "Brand Sans", style: "Regular", nodes: 488, styles: 9, available: false },
     { family: "Brand Sans", style: "SemiBold", nodes: 131, styles: 4, available: false },
-    { family: "Brand Sans", style: "Bold", nodes: 212, styles: 6, available: false },
-    { family: "Inter", style: "Regular", nodes: 74, styles: 2, available: true },
-    { family: "Inter", style: "Medium", nodes: 31, styles: 1, available: true }
+    { family: "Instrument Serif", style: "Regular", nodes: 24, styles: 3, available: true },
+    { family: "Neue Heimat", style: "Regular", nodes: 96, styles: 4, available: true },
+    { family: "Neue Heimat", style: "Medium", nodes: 18, styles: 1, available: true },
+    { family: "Neue Heimat", style: "SemiBold", nodes: 12, styles: 1, available: true }
   ];
+  var ROLE = { "Instrument Serif": "--font-display", "Neue Heimat": "--font-sans" };
+  var FALLBACK = { "--font-display": "Georgia, serif", "--font-sans": "system-ui, sans-serif" };
+  // Wer eine Seitenschrift tauscht, tauscht sie auf dieser Seite: die Rolle wandert mit zur neuen Familie.
+  function restyle(mapping) {
+    mapping.forEach(function (r) {
+      var role = ROLE[r.from.family];
+      if (!role || r.to.family === r.from.family) return;
+      document.documentElement.style.setProperty(role, '"' + r.to.family + '", ' + FALLBACK[role]);
+      delete ROLE[r.from.family]; ROLE[r.to.family] = role;
+    });
+    // Die Koernchen tasten die Schrift neu ab.
+    setTimeout(function () { window.dispatchEvent(new Event("resize")); }, 60);
+  }
   var VARS = [{ name: "Typography", vars: [
     { name: "font/heading", type: "STRING", value: "Inter" }, { name: "font/body", type: "STRING", value: "Inter" },
     { name: "display/font-size", type: "FLOAT", value: 56 }, { name: "display/line-height", type: "FLOAT", value: 64 },
@@ -50,7 +66,8 @@
       res.segments += n; res.nodes += Math.round(n * 0.85); res.inInstances += Math.round(n * 0.3);
       if (m.scope === "document") res.styles += u.styles; else res.viaStyle += Math.round(n * 0.4);
     });
-    if (!apply || m.scope !== "document") return res;
+    if (!apply || m.scope === "selection") return res;
+    restyle(m.mapping);
     var next = {};
     used.forEach(function (u) {
       var to = map[key(u)] || u;
