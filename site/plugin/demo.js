@@ -13,7 +13,7 @@
     "Inter": ["Regular", "Medium", "Semi Bold"],
     "Neue Heimat": ["Regular", "Medium", "SemiBold"],
     "Instrument Serif": ["Regular"],
-    "Georgia": ["Regular", "Bold"],
+    "Gambarino": ["Regular"],
     "Helvetica Neue": ["Regular", "Medium", "Bold"]
   };
   var used = [
