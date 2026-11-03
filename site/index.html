@@ -649,10 +649,10 @@ window.LTKDust = (function () {
   intro.addEventListener("click", function (e) {
     if (wasEditing) { input.blur(); return; }
     if (e.target.closest("a, button, input, .lede, h1, .eyebrow, .keyvisual, .panels")) return;
-    // Das stehende Wort ist der Startwert: ganz markiert, der erste Tastendruck ersetzt es.
+    // Das stehende Wort ist der Startwert, der Strich steht dahinter.
     if (!input.value) input.value = base.textContent;
     input.focus({ preventScroll: true });
-    input.setSelectionRange(0, input.value.length); caret();
+    var n = input.value.length; input.setSelectionRange(n, n); caret();
   });
   // Der Strich sitzt an der Stelle, an der getippt wird, auch nach den Pfeiltasten.
   var caretEl = haze.querySelector(".haze-caret");
@@ -671,7 +671,7 @@ window.LTKDust = (function () {
       var rs = document.createRange(); rs.setStart(node, s0); rs.setEnd(node, pos);
       var sr = rs.getBoundingClientRect(), selEl = haze.querySelector(".haze-sel");
       selEl.style.left = (sr.left - hr0.left) + "px"; selEl.style.width = sr.width + "px";
-      selEl.style.top = (sr.top - hr0.top + sr.height * .12) + "px"; selEl.style.height = (sr.height * .72) + "px";
+      selEl.style.top = (sr.top - hr0.top + sr.height * .16) + "px"; selEl.style.height = (sr.height * .64) + "px";
     }
     var r = document.createRange(), hr = haze.getBoundingClientRect(), box;
     if (pos > 0) { r.setStart(node, pos - 1); r.setEnd(node, pos); var b = r.getBoundingClientRect(); box = { x: b.right, top: b.top, h: b.height }; }
