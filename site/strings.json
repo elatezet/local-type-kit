@@ -49,8 +49,8 @@
     "de": "Deine Hausschrift<br>bleibt auf dem Rechner"
   },
   "hero_lede": {
-    "en": "Check, replace and style the fonts in a Figma file with the fonts on your computer. Nothing is uploaded.",
-    "de": "Schriften in einer Figma-Datei prüfen, tauschen und als Stile anlegen, mit den Schriften auf deinem Rechner. Nichts wird hochgeladen."
+    "en": "With Local Type Kit you can check, swap and turn missing or wrong fonts in a Figma file into styles – with the fonts on your computer.",
+    "de": "Mit Local Type Kit kannst du einfach fehlende oder falsche Schriften in einer Figma File prüfen, tauschen und als Stile anlegen – mit den Schriften auf deinem Rechner."
   },
   "hero_shot_alt": {
     "en": "The Local Type Kit plugin window, working on a sample file. You can use it right here.",
