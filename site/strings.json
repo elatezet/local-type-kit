@@ -221,7 +221,7 @@
     "de": "Ja. Lade das <a href=\"https://github.com/elatezet/local-type-kit\">Repository von GitHub</a> herunter. In der Figma-Desktop-App wählst du dann Plugins → Entwicklung → Plugin aus Manifest importieren und anschließend <code>manifest.json</code>."
   },
   "footer_maker": {
-    "en": "I help teams with design systems and typography.",
-    "de": "Ich begleite Teams bei Design-Systemen und Typografie."
+    "en": "David Latz is a design engineer and helps teams with brand and product design systems.",
+    "de": "David Latz ist Design Engineer und begleitet Teams bei Brand &amp; Product Design Systems."
   }
 }

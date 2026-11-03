@@ -204,6 +204,21 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 .win-title { font-weight: 600; color: var(--fg); }
 .close { margin-left: auto; color: var(--fg-3); font-size: 18px; line-height: 1; }
 #plugin { display: block; width: 100%; height: 600px; border: 0; background: var(--win); }
+/* Hinter dem Fenster liegt ein unscharfes „Aa“ in der Farbe der Wortmarke im Fuss,
+   mit demselben Rauschen. So greift der Kopf den Fuss auf (David, 03.11.2026). */
+.keyvisual { position: relative; }
+.haze { position: absolute; inset: -14% -30% -10%; z-index: 0; pointer-events: none; display: grid; place-items: center; overflow: visible; }
+.haze span {
+  font-family: var(--font-display); font-size: clamp(22rem, 52vw, 46rem); line-height: .8; letter-spacing: -.02em;
+  color: color-mix(in srgb, var(--fg) 14%, var(--bg)); filter: blur(14px); transform: translate(-14%, 4%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 20%, #0008 55%, transparent 90%); mask-image: linear-gradient(to bottom, #000 20%, #0008 55%, transparent 90%);
+}
+.haze::after {
+  content: ""; position: absolute; inset: 0; opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  -webkit-mask-image: radial-gradient(closest-side, #000 40%, transparent 100%); mask-image: radial-gradient(closest-side, #000 40%, transparent 100%);
+}
+.keyvisual > .win, .keyvisual > .try { position: relative; z-index: 1; }
 .try { margin: .9rem 0 0; color: var(--fg-3); font-size: .9rem; text-align: center; }
 .panels { margin: 1.75rem auto 2.5rem; max-width: 27.5rem; text-align: left; }
 .panels h3 { font-size: 1.05rem; margin: 0 0 .35rem; }
@@ -354,6 +369,7 @@ body { overflow-x: clip; }
       <p class="lede">{{hero_lede}}</p>
     </div>
     <div class="keyvisual" id="how">
+      <div class="haze" aria-hidden="true"><span>Aa</span></div>
       <div class="win">
         <div class="win-bar"><img class="plug" src="{{root}}assets/icon-128.png" alt="" width="20" height="20"><span class="win-title">Local Type Kit</span><span class="close" aria-hidden="true">×</span></div>
         <iframe id="plugin" data-src="{{root}}plugin/ui.html?lang={{lang}}&amp;v={{v_ui}}" title="{{hero_shot_alt}}"></iframe>
