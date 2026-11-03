@@ -158,20 +158,21 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 
 /* Unter 60rem steht alles untereinander und mittig, darueber steht der Claim mittig oben, darunter das Plugin links und der Text zum Reiter rechts,
    damit Aussage und Fenster in einen Bildschirm passen (David, 03.11.2026). */
-.hero { padding: 1rem 0 4rem; text-align: center; display: grid; grid-template-areas: "intro" "plugin" "panels" "cta"; }
-.intro { grid-area: intro; } .keyvisual { grid-area: plugin; } .panels { grid-area: panels; } .cta { grid-area: cta; }
+.hero { padding: 1rem 0 4rem; text-align: center; display: grid; grid-template-areas: "intro" "plugin" "panels"; }
+.intro { grid-area: intro; } .keyvisual { grid-area: plugin; } .panels { grid-area: panels; }
+.cta .fineprint { text-align: center; }
 @media (min-width: 60rem) {
-  .hero { grid-template-columns: 27.5rem minmax(0, 22rem); justify-content: center; grid-template-areas: "intro intro" "plugin panels" "plugin cta"; grid-template-rows: auto auto 1fr; column-gap: clamp(2.5rem, 5vw, 4.5rem); align-items: start; }
+  .hero { grid-template-columns: 27.5rem minmax(0, 22rem); justify-content: center; grid-template-areas: "intro intro" "plugin panels"; grid-template-rows: auto 1fr; column-gap: clamp(2.5rem, 5vw, 4.5rem); align-items: start; }
   /* Der Claim darf breiter sein als die zwei Spalten darunter. */
   .hero .intro { margin-bottom: 1rem; width: min(calc(100vw - 2 * var(--gl-pad)), var(--gl-cap)); justify-self: center; }
-  .hero .panels, .hero .cta { text-align: left; }
+  .hero .panels { text-align: left; }
   .hero .panels { margin: 1.5rem 0 2rem; max-width: var(--measure); }
   .hero .keyvisual { margin: 0; }
-  .hero .actions { justify-content: flex-start; }
-  .hero .fineprint { margin: 0; }
 }
 
 .eyebrow svg { width: 14px; height: 14px; }
+/* Die Zeile liegt glasig ueber dem unscharfen „Aa“. */
+.eyebrow { position: relative; z-index: 1; background: color-mix(in srgb, var(--bg) 55%, transparent); -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2); box-shadow: 0 1px 2px rgba(28,26,23,.04), inset 0 1px 0 color-mix(in srgb, #fff 40%, transparent); }
 .eyebrow { display: inline-flex; align-items: center; gap: .45rem; margin: 0 0 1.4rem; padding: .35rem .8rem; border: 1px solid var(--border); border-radius: 999px; font-size: .9rem; color: var(--fg-2); }
 .hero h1 {
   font-family: var(--font-display); font-weight: 400;
@@ -382,6 +383,10 @@ body { overflow-x: clip; }
       <p class="eyebrow">{{icon_figma}}<span>{{eyebrow}}</span></p>
       <h1>{{hero_h1}}</h1>
       <p class="lede">{{hero_lede}}</p>
+      <div class="cta">
+        <div class="actions"><a class="button" href="https://www.figma.com/community/plugin/1698988995876300994">{{cta_install}}</a></div>
+        <p class="fineprint">{{fineprint}}</p>
+      </div>
     </div>
     <div class="keyvisual" id="how">
       <div class="win">
@@ -393,13 +398,6 @@ body { overflow-x: clip; }
     <div class="panels" aria-live="polite">
       <div data-panel="fonts"><h3>{{g1_h}}</h3><p>{{g1_p}}</p><h3>{{g2_h}}</h3><p>{{g2_p}}</p></div>
       <div data-panel="styles" hidden><h3>{{g3_h}}</h3><p>{{g3_p}}</p><h3>{{g4_h}}</h3><p>{{g4_p}}</p></div>
-    </div>
-    <div class="cta">
-      <div class="actions">
-        <a class="button" href="https://www.figma.com/community/plugin/1698988995876300994">{{cta_install}}</a>
-        <a class="button secondary" href="#questions">{{cta_questions}}</a>
-      </div>
-      <p class="fineprint">{{fineprint}}</p>
     </div>
   </div>
 

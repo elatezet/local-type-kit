@@ -158,20 +158,21 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 
 /* Unter 60rem steht alles untereinander und mittig, darueber steht der Claim mittig oben, darunter das Plugin links und der Text zum Reiter rechts,
    damit Aussage und Fenster in einen Bildschirm passen (David, 03.11.2026). */
-.hero { padding: 1rem 0 4rem; text-align: center; display: grid; grid-template-areas: "intro" "plugin" "panels" "cta"; }
-.intro { grid-area: intro; } .keyvisual { grid-area: plugin; } .panels { grid-area: panels; } .cta { grid-area: cta; }
+.hero { padding: 1rem 0 4rem; text-align: center; display: grid; grid-template-areas: "intro" "plugin" "panels"; }
+.intro { grid-area: intro; } .keyvisual { grid-area: plugin; } .panels { grid-area: panels; }
+.cta .fineprint { text-align: center; }
 @media (min-width: 60rem) {
-  .hero { grid-template-columns: 27.5rem minmax(0, 22rem); justify-content: center; grid-template-areas: "intro intro" "plugin panels" "plugin cta"; grid-template-rows: auto auto 1fr; column-gap: clamp(2.5rem, 5vw, 4.5rem); align-items: start; }
+  .hero { grid-template-columns: 27.5rem minmax(0, 22rem); justify-content: center; grid-template-areas: "intro intro" "plugin panels"; grid-template-rows: auto 1fr; column-gap: clamp(2.5rem, 5vw, 4.5rem); align-items: start; }
   /* Der Claim darf breiter sein als die zwei Spalten darunter. */
   .hero .intro { margin-bottom: 1rem; width: min(calc(100vw - 2 * var(--gl-pad)), var(--gl-cap)); justify-self: center; }
-  .hero .panels, .hero .cta { text-align: left; }
+  .hero .panels { text-align: left; }
   .hero .panels { margin: 1.5rem 0 2rem; max-width: var(--measure); }
   .hero .keyvisual { margin: 0; }
-  .hero .actions { justify-content: flex-start; }
-  .hero .fineprint { margin: 0; }
 }
 
 .eyebrow svg { width: 14px; height: 14px; }
+/* Die Zeile liegt glasig ueber dem unscharfen „Aa“. */
+.eyebrow { position: relative; z-index: 1; background: color-mix(in srgb, var(--bg) 55%, transparent); -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2); box-shadow: 0 1px 2px rgba(28,26,23,.04), inset 0 1px 0 color-mix(in srgb, #fff 40%, transparent); }
 .eyebrow { display: inline-flex; align-items: center; gap: .45rem; margin: 0 0 1.4rem; padding: .35rem .8rem; border: 1px solid var(--border); border-radius: 999px; font-size: .9rem; color: var(--fg-2); }
 .hero h1 {
   font-family: var(--font-display); font-weight: 400;
@@ -382,6 +383,10 @@ body { overflow-x: clip; }
       <p class="eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M5 6C5 3.79086 6.79086 2 9 2H15C17.2091 2 19 3.79086 19 6C19 7.19469 18.4762 8.26706 17.6458 9C18.4762 9.73295 19 10.8053 19 12C19 14.2091 17.2091 16 15 16C14.2714 16 13.5883 15.8052 13 15.4649V18C13 20.2091 11.2091 22 9 22C6.79086 22 5 20.2091 5 18C5 16.8053 5.52376 15.7329 6.35418 15C5.52376 14.2671 5 13.1947 5 12C5 10.8053 5.52376 9.73295 6.35418 9C5.52376 8.26706 5 7.19469 5 6ZM11 10H9C7.89543 10 7 10.8954 7 12C7 13.1046 7.89543 14 9 14H11V10ZM13 12C13 13.1046 13.8954 14 15 14C16.1046 14 17 13.1046 17 12C17 10.8954 16.1046 10 15 10C13.8954 10 13 10.8954 13 12ZM15 8C16.1046 8 17 7.10457 17 6C17 4.89543 16.1046 4 15 4H13V8H15ZM9 4C7.89543 4 7 4.89543 7 6C7 7.10457 7.89543 8 9 8H11V4H9ZM11 16H9C7.89543 16 7 16.8954 7 18C7 19.1046 7.89543 20 9 20C10.1046 20 11 19.1046 11 18V16Z"/></svg><span>Figma plugin · free and open source</span></p>
       <h1>Your typeface<br>stays on your machine</h1>
       <p class="lede">With Local Type Kit you can check, swap and turn missing or wrong fonts in a Figma file into styles – with the fonts on your computer.</p>
+      <div class="cta">
+        <div class="actions"><a class="button" href="https://www.figma.com/community/plugin/1698988995876300994">Install</a></div>
+        <p class="fineprint">Free and open source under the MIT license.</p>
+      </div>
     </div>
     <div class="keyvisual" id="how">
       <div class="win">
@@ -393,13 +398,6 @@ body { overflow-x: clip; }
     <div class="panels" aria-live="polite">
       <div data-panel="fonts"><h3>Every font in use at a glance</h3><p>Local Type Kit finds every font used in text and styles. Missing fonts are detected and marked automatically.</p><h3>Swap fonts everywhere</h3><p>Local Type Kit swaps a font across the whole file, in components, instances and styles. The preview shows what changes before anything does.</p></div>
       <div data-panel="styles" hidden><h3>Text styles straight from variables</h3><p>Local Type Kit turns your typography variables into text styles. Size, line height and family stay bound to the variables.</p><h3>Give loose text its style</h3><p>Text without a style gets the matching style automatically. If more than one fits, the text stays as it is and goes on a list.</p></div>
-    </div>
-    <div class="cta">
-      <div class="actions">
-        <a class="button" href="https://www.figma.com/community/plugin/1698988995876300994">Install</a>
-        <a class="button secondary" href="#questions">Questions</a>
-      </div>
-      <p class="fineprint">Free and open source under the MIT license.</p>
     </div>
   </div>
 
