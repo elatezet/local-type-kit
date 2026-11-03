@@ -108,8 +108,8 @@ p { color: var(--fg-2); }
 h1, h2, h3 { color: var(--fg); line-height: 1.2; }
 h2, h3 { font-weight: 600; }
 /* Unterstreichungen hell und fein, beim Darueberfahren kraeftiger. */
-a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); transition: text-decoration-color .15s; }
-a:hover { text-decoration-color: currentColor; }
+a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, var(--fg) 25%, transparent); transition: text-decoration-color .15s; }
+a:hover { text-decoration-color: color-mix(in srgb, var(--fg) 70%, transparent); }
 svg { display: block; }
 section { padding: 4rem 0; border-top: 1px solid var(--border); scroll-margin-top: 4rem; }
 
@@ -373,7 +373,8 @@ body { overflow-x: clip; }
 .feet-mark { font-family: var(--font-sans); font-size: .95rem; font-weight: 500; color: var(--fg); }
 .feet-links { display: flex; gap: .55rem; flex-wrap: wrap; color: var(--fg-3); font-size: .95rem; }
 .gh { display: inline-flex; align-items: center; gap: .35rem; color: var(--fg); text-decoration: none; }
-.gh:hover { text-decoration: underline; }
+.gh span { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--fg) 25%, transparent); }
+.gh:hover span { text-decoration-color: color-mix(in srgb, var(--fg) 70%, transparent); }
 .gh svg { width: 16px; height: 16px; }
 .feet-links { align-items: center; gap: .9rem; }
 /* Name links, Hinweise mittig und bei Bedarf zweizeilig, Absender rechts. */
@@ -431,7 +432,7 @@ body { overflow-x: clip; }
       </div>
       <p class="try">Probier das Plugin direkt hier aus.</p>
       <p class="try font-credit" id="fontCredit">
-        <span data-credit="Neue Heimat"><a href="https://heimatdesign.nrw/design-system/schrift">Neue Heimat</a> von David Latz.</span>
+        <span data-credit="Neue Heimat"><a href="https://heimatdesign.nrw/design-system/schrift">Neue Heimat</a> von <a href="https://davidlatz.de">David Latz</a>.</span>
         <span data-credit="Gambarino" hidden>Gambarino von Indian Type Foundry.</span>
       </p>
     </div>
