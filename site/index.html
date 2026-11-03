@@ -111,12 +111,27 @@ section { padding: 4rem 0; border-top: 1px solid var(--border); scroll-margin-to
 .brand { display: inline-flex; align-items: center; gap: .65rem; text-decoration: none; }
 .app { width: 32px; height: 32px; border-radius: 8px; }
 /* Ohne Symbol daneben, deshalb groesser als auf fieldpack.dev (David, 01.11.2026). */
-.mark { font-family: var(--font-display); font-size: 1.85rem; line-height: 1; }
+/* Wortmarke in Neue Heimat im Schnitt des „Aa“ im App-Icon (David, 03.11.2026). */
+.mark { font-family: var(--font-sans); font-weight: 500; font-size: 1.3rem; letter-spacing: -.01em; line-height: 1; color: var(--fg); }
 nav { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
 nav a { color: var(--fg-2); text-decoration: none; font-size: .95rem; }
 nav a:hover { color: var(--fg); text-decoration: underline; }
 .tools { display: flex; gap: .4rem; }
-@media (max-width: 34rem) { nav { gap: .9rem 1rem; } }
+.chip.menu-open, .chip.menu-close { display: none; }
+/* Am Telefon liegt das Menue als Ebene ueber der Seite (David, 03.11.2026). */
+@media (max-width: 40rem) {
+  .chip.menu-open { display: inline-flex; }
+  nav {
+    position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+    gap: 1.25rem; padding: 2rem var(--gl-pad); background: var(--bg);
+    opacity: 0; visibility: hidden; transform: translateY(-8px); transition: opacity .2s ease, transform .2s ease, visibility 0s .2s;
+  }
+  nav.open { opacity: 1; visibility: visible; transform: none; transition: opacity .2s ease, transform .2s ease; }
+  nav > a { font-family: var(--font-display); font-size: 2.6rem; line-height: 1.1; color: var(--fg); }
+  nav .tools { margin-top: 1rem; }
+  .chip.menu-close { display: inline-flex; position: absolute; top: 1.25rem; right: var(--gl-pad); }
+  body.menu-on { overflow: hidden; }
+}
 
 .chip {
   display: inline-flex; align-items: center; gap: .35rem;
@@ -135,12 +150,12 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
   :root:not([data-theme="light"]) .when-dark { display: none; }
 }
 
-/* Unter 60rem steht alles untereinander und mittig, darueber steht der Text links und das Plugin rechts,
+/* Unter 60rem steht alles untereinander und mittig, darueber steht das Plugin links und der Text rechts,
    damit Aussage und Fenster in einen Bildschirm passen (David, 03.11.2026). */
 .hero { padding: 3rem 0 4rem; text-align: center; display: grid; grid-template-areas: "intro" "plugin" "panels" "cta"; }
 .intro { grid-area: intro; } .keyvisual { grid-area: plugin; } .panels { grid-area: panels; } .cta { grid-area: cta; }
 @media (min-width: 60rem) {
-  .hero { text-align: left; grid-template-columns: minmax(0, 1fr) 27.5rem; grid-template-areas: "intro plugin" "panels plugin" "cta plugin"; grid-template-rows: auto auto 1fr; column-gap: clamp(2rem, 5vw, 5rem); align-items: start; padding-top: 2.5rem; }
+  .hero { text-align: left; grid-template-columns: 27.5rem minmax(0, 1fr); grid-template-areas: "plugin intro" "plugin panels" "plugin cta"; grid-template-rows: auto auto 1fr; column-gap: clamp(2rem, 5vw, 5rem); align-items: start; padding-top: 2.5rem; }
   .hero h1 { font-size: clamp(3rem, 5.4vw, 4.6rem); margin-left: 0; }
   .hero .lede { margin-left: 0; }
   .hero .panels { margin: 0 0 2rem; max-width: var(--measure); }
@@ -199,11 +214,20 @@ code { background: var(--bg-2); border: 1px solid var(--border); border-radius: 
 
 section > h2 { margin: 0 0 1.5rem; font-size: 1.6rem; }
 /* Abschnittstitel in der Schrift der Headline, mittig (David, 01.11.2026). */
-#script > h2 {
+#ai > h2 {
   font-family: var(--font-display); font-weight: 400; text-align: center;
   font-size: clamp(2.2rem, 4.6vw, 3.2rem); letter-spacing: -.01em; margin-bottom: 1.5rem;
 }
-#script > p { margin: 0 auto; }
+#ai > p { margin: 0 auto; }
+#ai { text-align: center; }
+.ai-apps { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin: 2rem auto 1.5rem; }
+.ai { display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1rem; border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--fg); font-weight: 500; transition: border-color .15s; }
+.ai:hover { border-color: var(--fg-3); }
+.ai svg { width: 18px; height: 18px; }
+.prompt { position: relative; max-width: 40rem; margin: 0 auto; text-align: left; }
+.prompt pre { margin: 0; padding: 1rem 1.1rem 3.2rem; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-2); color: var(--fg-2); white-space: pre-wrap; line-height: 1.55; }
+.prompt .chip { position: absolute; right: .6rem; bottom: .6rem; background: var(--bg); }
+#ai .note { margin: 1rem auto 0; max-width: 40rem; font-size: .9rem; color: var(--fg-3); }
 section > p { max-width: var(--measure); }
 
 ol.install { margin: 0; padding-left: 1.3rem; max-width: var(--measure); color: var(--fg-2); }
@@ -285,8 +309,11 @@ body { overflow-x: clip; }
 
 <div class="bar">
   <a class="brand" href="./"><img class="app" src="assets/icon-128.png" alt="" width="32" height="32"><span class="mark">Local Type Kit</span></a>
-  <nav>
+  <button class="chip menu-open" type="button" id="menuOpen" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor"><path stroke-width="2" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <nav id="menu">
+    <button class="chip menu-close" type="button" id="menuClose" aria-label="Close menu"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor"><path stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg></button>
     <a href="#how">Try it</a>
+    <a href="#ai">With AI</a>
     <a href="#install">Install</a>
     <a href="#questions">Questions</a>
     <span class="tools">
@@ -328,9 +355,23 @@ body { overflow-x: clip; }
     </div>
   </div>
 
-  <section id="script">
-    <h2>Also runs without the window</h2>
-    <p>Every function also runs from a script through Figma's Plugin API. Handy when a script or an assistant prepares the file. See the <a href="https://github.com/elatezet/local-type-kit#scripting">README</a>.</p>
+  <section id="ai">
+    <h2>Works with your AI assistant</h2>
+    <p>Claude, ChatGPT, Cursor, Gemini or Grok can run Local Type Kit in your file through Figma's MCP server: check fonts, build styles from variables, attach loose text. Swapping in a font that only lives on your computer still needs the plugin in the desktop app.</p>
+    <div class="ai-apps">
+      <a class="ai" data-ai="claude" href="https://claude.ai/new" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8.64445 2.55279C8.39746 2.05881 7.79679 1.85859 7.30281 2.10558C6.80883 2.35257 6.60861 2.95324 6.8556 3.44722L9.68128 9.09859L5.06655 5.92596C4.61145 5.61308 3.98887 5.72837 3.67598 6.18348C3.3631 6.63858 3.47839 7.26116 3.9335 7.57405L9.40503 11.3357L3.05258 11.0014C2.50106 10.9724 2.03043 11.3959 2.00141 11.9474C1.97238 12.499 2.39594 12.9696 2.94747 12.9986L8.74187 13.3036L4.44532 16.168C3.9858 16.4743 3.86162 17.0952 4.16797 17.5547C4.47433 18.0142 5.0952 18.1384 5.55473 17.8321L9.19687 15.404L6.68629 18.9188C6.36528 19.3682 6.46937 19.9927 6.91879 20.3137C7.3682 20.6347 7.99275 20.5307 8.31376 20.0812L11.3471 15.8345L10.5136 20.8356C10.4228 21.3804 10.7909 21.8956 11.3356 21.9864C11.8804 22.0772 12.3956 21.7092 12.4864 21.1644L13.2883 16.3532L15.6588 20.0408C15.9575 20.5053 16.5762 20.6398 17.0408 20.3412C17.5054 20.0425 17.6399 19.4238 17.3412 18.9592L15.5553 16.1812L18.3217 18.7348C18.7276 19.1094 19.3602 19.0841 19.7348 18.6783C20.1094 18.2725 20.0841 17.6398 19.6783 17.2652L16.6427 14.4631L20.876 14.9923C21.424 15.0608 21.9238 14.6721 21.9923 14.124C22.0608 13.576 21.6721 13.0762 21.1241 13.0077L16.9342 12.484L21.2291 11.4734C21.7667 11.3469 22.0999 10.8086 21.9734 10.271C21.8469 9.73336 21.3086 9.40009 20.771 9.52659L15.1819 10.8417L19.2863 5.61783C19.6276 5.18356 19.5521 4.5549 19.1178 4.21369C18.6836 3.87247 18.0549 3.94791 17.7137 4.38218L13.8574 9.29015L14.738 3.65438C14.8233 3.10872 14.4501 2.59725 13.9044 2.51199C13.3587 2.42673 12.8473 2.79996 12.762 3.34563L11.876 9.01594L8.64445 2.55279Z"/></svg><span>Claude</span></a>
+      <a class="ai" data-ai="chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11 4C11.6487 4 12.2498 4.20569 12.7411 4.55646C11.4486 5.22914 10.2602 6.07623 8.99996 6.80385L9.99996 8.5359C11.575 7.62654 13.0517 6.48541 14.7608 5.83037C16.1134 5.31198 17.681 5.83976 18.4282 7.13398C18.7526 7.69582 18.8749 8.31917 18.8168 8.92006C17.588 8.13708 16.2602 7.53146 15 6.80385L14 8.5359C15.575 9.44525 17.3016 10.1536 18.7234 11.3061C19.8487 12.2183 20.1754 13.8398 19.4282 15.134C19.1037 15.696 18.6249 16.1137 18.0752 16.3638C18.1385 14.9081 18 13.4553 18 12H16C16 13.8184 16.2498 15.6685 15.9626 17.4758C15.7353 18.9063 14.4944 20 13 20C12.351 20 11.7498 19.7942 11.2584 19.4432C12.5508 18.7701 13.7396 17.9238 15 17.1962L14 15.4641C12.4252 16.3733 10.9478 17.5147 9.23912 18.1696C7.88657 18.688 6.31898 18.1602 5.57176 16.866C5.24729 16.304 5.12493 15.6805 5.18316 15.0794C6.41224 15.8621 7.73964 16.4685 8.99997 17.1962L9.99997 15.4641C8.42517 14.5549 6.69801 13.8462 5.27649 12.6939C4.15128 11.7817 3.82455 10.1602 4.57176 8.86602C4.89624 8.30402 5.37506 7.88628 5.9247 7.63618C5.86145 9.09192 5.99997 10.5447 5.99997 12H7.99997C7.99997 10.1816 7.75013 8.33148 8.03733 6.52422C8.26467 5.09369 9.50554 4 11 4ZM14.7925 3.74171C13.8765 2.67659 12.5176 2 11 2C8.7782 2 6.89621 3.44833 6.24435 5.45243C4.86393 5.71314 3.59851 6.55175 2.83971 7.86602C1.72883 9.79013 2.04213 12.1442 3.4518 13.7107C2.98737 15.0366 3.08092 16.5518 3.83971 17.866C4.95059 19.7901 7.14589 20.6958 9.20742 20.2583C10.1234 21.3234 11.4824 22 13 22C15.2217 22 17.1037 20.5517 17.7556 18.5476C19.136 18.2869 20.4014 17.4482 21.1602 16.134C22.2711 14.2099 21.9578 11.8559 20.5481 10.2893C21.0126 8.96345 20.919 7.44825 20.1602 6.13398C19.0493 4.20987 16.854 3.30419 14.7925 3.74171Z"/></svg><span>ChatGPT</span></a>
+      <a class="ai" data-ai="cursor" href="https://cursor.com/link/prompt" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.5498 1.35371C11.8283 1.19393 12.1718 1.19388 12.4502 1.35371L21.1211 6.33028C21.3551 6.46462 21.5 6.71356 21.5 6.98263V17.0188L21.4941 17.1184C21.4632 17.3478 21.3266 17.5526 21.1221 17.6701L12.4502 22.6477L12.3428 22.6995C12.0868 22.8042 11.7933 22.7874 11.5498 22.6477L2.87891 17.6701C2.67422 17.5527 2.53781 17.3479 2.50684 17.1184L2.5 17.0188V6.98263C2.5 6.71356 2.64488 6.46462 2.87891 6.33028L11.5498 1.35371ZM4.5 7.70528V16.2942L12 20.5989V12.3049C12 12.1165 11.8987 11.9416 11.7344 11.8469L4.50879 7.69943L4.5 7.70528ZM13.3535 19.8215L19.5 16.2942V9.23849L13.3535 19.8215ZM5.86133 6.92403H18.1387L11.999 3.40059L5.86133 6.92403Z"/></svg><span>Cursor</span></a>
+      <a class="ai" data-ai="gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M11.1244 1.09094H12.8753L12.9269 1.9453C13.2227 6.85075 17.1493 10.7773 22.0546 11.0732L22.909 11.1247V12.8757L22.0546 12.9272C17.1493 13.2231 13.2227 17.1498 12.9269 22.0551L12.8753 22.9095H11.1244L11.0728 22.0551C10.777 17.1498 6.85036 13.2231 1.94518 12.9272L1.09082 12.8757V11.1247L1.94518 11.0732C6.85036 10.7773 10.777 6.85075 11.0728 1.9453L11.1244 1.09094ZM11.9999 5.85023C10.83 8.61547 8.61512 10.8304 5.84996 12.0002C8.61512 13.1701 10.83 15.385 11.9999 18.1502C13.1697 15.385 15.3846 13.1701 18.1498 12.0002C15.3846 10.8304 13.1697 8.61547 11.9999 5.85023Z"/></svg><span>Gemini</span></a>
+      <a class="ai" data-ai="grok" href="https://grok.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M15.7754 2.77832C12.1756 1.29525 7.86569 2.03348 4.93945 4.96094 3.05829 6.84454 2.03903 9.40497 2.02376 12 2.01618 13.2875 2.25573 14.5835 2.75977 15.8096 3.89507 18.5729 1.99897 21.0271.124023 23L6.2285 17.5399C4.8483 16.1023 4 14.1502 4 12 4 7.58172 7.58172 4 12 4 13.3173 4 14.5602 4.31838 15.656 4.8824L17.8076 3.8877C17.2661 3.49585 16.5718 3.07449 15.7754 2.77832ZM21.6963 9.7334C20.7087 5.48171 21.6357 3.27424 23.9004.0996094L8.58984 15.4717 18.1992 8.80597C18.6339 8.48506 19.2549 8.61084 19.4619 9.10968 19.8094 10.0061 20 10.9808 20 12 20 16.4183 16.4183 20 12 20 10.6968 20 9.46638 19.6884 8.37918 19.1356L5.19629 20.1445C6.83273 21.3127 9.8361 22 12 22 17.5228 22 22 17.5228 22 12 21.9959 11.2365 21.8709 10.4756 21.6963 9.7334Z"/></svg><span>Grok</span></a>
+    </div>
+    <div class="prompt">
+      <pre id="prompt">Use the Figma MCP server on my file: PASTE FIGMA LINK HERE
+Load https://raw.githubusercontent.com/elatezet/local-type-kit/main/code.js, put globalThis.LOCAL_TYPE_KIT_NO_UI = true; in front of it, and run it through use_figma together with a call to scan().
+Show me which fonts the file uses and which are missing. Before you change anything, show me a preview: replaceFonts(mapping, false) or assignStyles(false).</pre>
+      <button class="chip" type="button" id="copyPrompt" data-done="Copied"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor"><rect x="8" y="8" width="12" height="12" rx="2" stroke-width="2"/><path stroke-width="2" d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span>Copy prompt</span></button>
+    </div>
+    <p class="note">Each button copies the prompt. Claude, ChatGPT and Cursor open with it filled in; in Gemini and Grok, paste it. The assistant needs Figma's MCP server connected.</p>
   </section>
   <section id="install">
     <h2>Two files, no build step</h2>
@@ -380,6 +421,32 @@ body { overflow-x: clip; }
     root.setAttribute("data-theme", next);
     try { localStorage.setItem("local-type-kit-theme", next); } catch (e) {}
   });
+})();
+</script>
+
+<script>
+/* Mobiles Menue und die Knoepfe fuer die KI-Assistenten. Jeder Knopf kopiert den Prompt
+   und oeffnet die App; wo die App einen Prompt im Link annimmt, steht er schon im Eingabefeld. */
+(function () {
+  var nav = document.getElementById("menu"), open = document.getElementById("menuOpen"), close = document.getElementById("menuClose");
+  var set = function (on) { nav.classList.toggle("open", on); document.body.classList.toggle("menu-on", on); open.setAttribute("aria-expanded", on); };
+  if (open) open.addEventListener("click", function () { set(true); });
+  if (close) close.addEventListener("click", function () { set(false); });
+  nav.querySelectorAll("a[href^='#']").forEach(function (a) { a.addEventListener("click", function () { set(false); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") set(false); });
+
+  var prompt = document.getElementById("prompt");
+  if (!prompt) return;
+  var text = prompt.textContent.trim();
+  var q = encodeURIComponent(text);
+  var LINK = { claude: "https://claude.ai/new?q=" + q, chatgpt: "https://chatgpt.com/?q=" + q, cursor: "https://cursor.com/link/prompt?text=" + q };
+  var copy = function () { try { navigator.clipboard.writeText(text); } catch (e) {} };
+  document.querySelectorAll("[data-ai]").forEach(function (a) {
+    if (LINK[a.dataset.ai]) a.href = LINK[a.dataset.ai];
+    a.addEventListener("click", copy);
+  });
+  var btn = document.getElementById("copyPrompt"), label = btn.querySelector("span"), idle = label.textContent;
+  btn.addEventListener("click", function () { copy(); label.textContent = btn.dataset.done; setTimeout(function () { label.textContent = idle; }, 1600); });
 })();
 </script>
 

@@ -180,14 +180,6 @@
     "en": "The real plugin with a sample file. Try it.",
     "de": "Das echte Plugin mit einer Beispieldatei. Probier es aus."
   },
-  "script_h": {
-    "en": "Also runs without the window",
-    "de": "Läuft auch ohne Fenster"
-  },
-  "script_p": {
-    "en": "Every function also runs from a script through Figma's Plugin API. Handy when a script or an assistant prepares the file. See the <a href=\"https://github.com/elatezet/local-type-kit#scripting\">README</a>.",
-    "de": "Alle Funktionen laufen auch aus einem Skript über Figmas Plugin-API. Praktisch, wenn ein Skript oder ein Assistent die Datei vorbereitet. Mehr im <a href=\"https://github.com/elatezet/local-type-kit#scripting\">README</a>."
-  },
   "faq7_q": {
     "en": "Does it help with exports rendered on Figma's servers?",
     "de": "Hilft es bei Exporten, die Figma auf seinen Servern rendert?"
@@ -199,5 +191,41 @@
   "eyebrow": {
     "en": "Figma plugin · free and open source",
     "de": "Figma-Plugin · kostenlos und quelloffen"
+  },
+  "menu_label": {
+    "en": "Open menu",
+    "de": "Menü öffnen"
+  },
+  "menu_close": {
+    "en": "Close menu",
+    "de": "Menü schließen"
+  },
+  "nav_ai": {
+    "en": "With AI",
+    "de": "Mit KI"
+  },
+  "ai_h": {
+    "en": "Works with your AI assistant",
+    "de": "Läuft mit deinem KI-Assistenten"
+  },
+  "ai_p": {
+    "en": "Claude, ChatGPT, Cursor, Gemini or Grok can run Local Type Kit in your file through Figma's MCP server: check fonts, build styles from variables, attach loose text. Swapping in a font that only lives on your computer still needs the plugin in the desktop app.",
+    "de": "Claude, ChatGPT, Cursor, Gemini oder Grok führen Local Type Kit über Figmas MCP-Server in deiner Datei aus: Schriften prüfen, Stile aus Variablen bauen, losen Text an Stile hängen. Für eine Schrift, die nur auf deinem Rechner liegt, braucht es weiter das Plugin in der Desktop-App."
+  },
+  "ai_prompt": {
+    "en": "Use the Figma MCP server on my file: PASTE FIGMA LINK HERE\nLoad https://raw.githubusercontent.com/elatezet/local-type-kit/main/code.js, put globalThis.LOCAL_TYPE_KIT_NO_UI = true; in front of it, and run it through use_figma together with a call to scan().\nShow me which fonts the file uses and which are missing. Before you change anything, show me a preview: replaceFonts(mapping, false) or assignStyles(false).",
+    "de": "Nutze den Figma-MCP-Server für meine Datei: FIGMA-LINK HIER EINFÜGEN\nLade https://raw.githubusercontent.com/elatezet/local-type-kit/main/code.js, stelle globalThis.LOCAL_TYPE_KIT_NO_UI = true; davor und führe es über use_figma zusammen mit scan() aus.\nZeig mir, welche Schriften die Datei nutzt und welche fehlen. Bevor du etwas änderst, zeig mir eine Vorschau: replaceFonts(mapping, false) oder assignStyles(false)."
+  },
+  "ai_copy": {
+    "en": "Copy prompt",
+    "de": "Prompt kopieren"
+  },
+  "ai_copied": {
+    "en": "Copied",
+    "de": "Kopiert"
+  },
+  "ai_note": {
+    "en": "Each button copies the prompt. Claude, ChatGPT and Cursor open with it filled in; in Gemini and Grok, paste it. The assistant needs Figma's MCP server connected.",
+    "de": "Jeder Knopf kopiert den Prompt. Claude, ChatGPT und Cursor öffnen mit ausgefülltem Prompt, bei Gemini und Grok fügst du ihn ein. Der Assistent braucht eine Verbindung zu Figmas MCP-Server."
   }
 }
