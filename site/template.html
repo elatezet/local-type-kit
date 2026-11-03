@@ -162,6 +162,7 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
   .hero .keyvisual { margin: 0; }
   .hero .actions { justify-content: flex-start; }
   .hero .fineprint { margin: 0; }
+  .hero .maker { margin: 1.5rem 0 0; }
 }
 
 .eyebrow svg { width: 14px; height: 14px; }
@@ -209,6 +210,8 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 }
 .button.secondary { background: transparent; color: var(--fg); border: 1px solid var(--border); font-weight: 400; }
 .fineprint { color: var(--fg-3); font-size: .9rem; margin: 0 auto; max-width: var(--measure); }
+.maker { margin: 1.5rem auto 0; max-width: var(--measure); font-size: .9rem; color: var(--fg-2); }
+.maker a { color: var(--fg); }
 
 code, pre { font-family: var(--font-mono); font-size: .875rem; }
 code { background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; padding: 0 .3rem; }
@@ -353,6 +356,7 @@ body { overflow-x: clip; }
         <a class="button secondary" href="#questions">{{cta_questions}}</a>
       </div>
       <p class="fineprint">{{fineprint}}</p>
+      <p class="maker">{{maker}}</p>
     </div>
   </div>
 
