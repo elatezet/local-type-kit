@@ -341,7 +341,7 @@ body { overflow-x: clip; }
         <div class="win-bar"><span class="plug" aria-hidden="true">&lt;/&gt;</span><span class="win-title">Local Type Kit</span><span class="close" aria-hidden="true">×</span></div>
         <iframe id="plugin" data-src="plugin/ui.html?lang=en&amp;v=92c5cfcf" title="The Local Type Kit plugin window, working on a sample file. You can use it right here."></iframe>
       </div>
-      <p class="try">The real plugin with a sample file. Try it.</p>
+      <p class="try">This is the real plugin with a sample file. Just try it.</p>
     </div>
     <div class="panels" aria-live="polite">
       <div data-panel="fonts"><h3>Every font in use at a glance</h3><p>Local Type Kit finds every font used in text and styles. Missing fonts are detected and marked automatically.</p><h3>Swap fonts everywhere</h3><p>Local Type Kit swaps a font across the whole file, in components, instances and styles. The preview shows what changes before anything does.</p></div>
@@ -357,7 +357,7 @@ body { overflow-x: clip; }
   </div>
 
   <section id="ai">
-    <h2>Works with your AI assistant</h2>
+    <h2>Also works with your AI assistant</h2>
     <p>Claude, ChatGPT, Cursor, Gemini or Grok use Local Type Kit right in your file through Figma's MCP server. Checking fonts, building styles and attaching loose text works straight from the chat. Only fonts that live on your computer alone need the plugin in the desktop app.</p>
     <div class="ai-apps">
       <a class="ai" data-ai="claude" href="https://claude.ai/new" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M8.64445 2.55279C8.39746 2.05881 7.79679 1.85859 7.30281 2.10558C6.80883 2.35257 6.60861 2.95324 6.8556 3.44722L9.68128 9.09859L5.06655 5.92596C4.61145 5.61308 3.98887 5.72837 3.67598 6.18348C3.3631 6.63858 3.47839 7.26116 3.9335 7.57405L9.40503 11.3357L3.05258 11.0014C2.50106 10.9724 2.03043 11.3959 2.00141 11.9474C1.97238 12.499 2.39594 12.9696 2.94747 12.9986L8.74187 13.3036L4.44532 16.168C3.9858 16.4743 3.86162 17.0952 4.16797 17.5547C4.47433 18.0142 5.0952 18.1384 5.55473 17.8321L9.19687 15.404L6.68629 18.9188C6.36528 19.3682 6.46937 19.9927 6.91879 20.3137C7.3682 20.6347 7.99275 20.5307 8.31376 20.0812L11.3471 15.8345L10.5136 20.8356C10.4228 21.3804 10.7909 21.8956 11.3356 21.9864C11.8804 22.0772 12.3956 21.7092 12.4864 21.1644L13.2883 16.3532L15.6588 20.0408C15.9575 20.5053 16.5762 20.6398 17.0408 20.3412C17.5054 20.0425 17.6399 19.4238 17.3412 18.9592L15.5553 16.1812L18.3217 18.7348C18.7276 19.1094 19.3602 19.0841 19.7348 18.6783C20.1094 18.2725 20.0841 17.6398 19.6783 17.2652L16.6427 14.4631L20.876 14.9923C21.424 15.0608 21.9238 14.6721 21.9923 14.124C22.0608 13.576 21.6721 13.0762 21.1241 13.0077L16.9342 12.484L21.2291 11.4734C21.7667 11.3469 22.0999 10.8086 21.9734 10.271C21.8469 9.73336 21.3086 9.40009 20.771 9.52659L15.1819 10.8417L19.2863 5.61783C19.6276 5.18356 19.5521 4.5549 19.1178 4.21369C18.6836 3.87247 18.0549 3.94791 17.7137 4.38218L13.8574 9.29015L14.738 3.65438C14.8233 3.10872 14.4501 2.59725 13.9044 2.51199C13.3587 2.42673 12.8473 2.79996 12.762 3.34563L11.876 9.01594L8.64445 2.55279Z"/></svg><span>Claude</span></a>
@@ -370,18 +370,18 @@ body { overflow-x: clip; }
     <template id="prompt">Use the Figma MCP server on my file: PASTE FIGMA LINK HERE.
 Load https://raw.githubusercontent.com/elatezet/local-type-kit/main/code.js. Put globalThis.LOCAL_TYPE_KIT_NO_UI = true; in front of it. Run it through use_figma together with a call to scan().
 Show me which fonts the file uses and which are missing. Before you change anything, show me a preview with replaceFonts(mapping, false) or assignStyles(false).</template>
-    <p class="note">Each button copies the prompt. Claude, ChatGPT and Cursor open with it filled in; in Gemini and Grok, paste it. The assistant needs Figma's MCP server connected.</p>
+    <p class="note">Every button copies the prompt. Claude, ChatGPT and Cursor open with the prompt filled in; in Gemini and Grok you paste it yourself. Your assistant needs to be connected to Figma's MCP server.</p>
   </section>
   <section id="questions">
     <h2>Questions</h2>
-    <details><summary>Does the plugin send anything over the network?</summary><p>No. The plugin has no network access and uploads nothing.</p></details>
-    <details><summary>Can I undo a run?</summary><p>Yes. Each run is one undo step.</p></details>
-    <details><summary>What happens to text whose font is bound to a variable?</summary><p>It is skipped and listed. The binding stays.</p></details>
-    <details><summary>Where is the setup stored?</summary><p>In the Figma file. Whoever opens the plugin there next gets the same setup.</p></details>
-    <details><summary>Why does a colleague still see the font as missing?</summary><p>Every computer that edits the file needs the font installed. No plugin can change that. Local Type Kit shows where it is missing.</p></details>
-    <details><summary>Does it help with exports rendered on Figma's servers?</summary><p>No. Figma's servers only have fonts an admin uploaded to the organization, on the Organization or Enterprise plan. Export from the desktop app instead.</p></details>
-    <details><summary>Can I install it without Figma Community?</summary><p>Yes. Download the <a href="https://github.com/elatezet/local-type-kit">repository on GitHub</a>. In the Figma desktop app, choose Plugins → Development → Import plugin from manifest and pick <code>manifest.json</code>.</p></details>
-    <details><summary>What does it cost?</summary><p>Nothing. Open source under the MIT license.</p></details>
+    <details><summary>Does the plugin send data over the network?</summary><p>No. Local Type Kit has no network access and uploads nothing. Your fonts stay on your computer.</p></details>
+    <details><summary>Can I undo changes?</summary><p>Yes. A single undo takes back a whole run.</p></details>
+    <details><summary>What happens to text whose font is bound to a variable?</summary><p>Local Type Kit leaves that text as it is and shows it to you in a list. The binding to the variable stays.</p></details>
+    <details><summary>Where is the setup saved?</summary><p>Right in the Figma file. Whoever opens the plugin there next works with the same setup.</p></details>
+    <details><summary>Why does a colleague still see the font as missing?</summary><p>Every computer that edits the file needs the font. No plugin can change that. Local Type Kit does show you where it is missing.</p></details>
+    <details><summary>Does the plugin help with exports that Figma renders on its servers?</summary><p>No. Figma's servers only know fonts an admin uploaded for the organization. That needs the Organization or Enterprise plan. In that case, simply export from the desktop app.</p></details>
+    <details><summary>Can I install the plugin without Figma Community?</summary><p>Yes. Download the <a href="https://github.com/elatezet/local-type-kit">repository from GitHub</a>. In the Figma desktop app, choose Plugins → Development → Import plugin from manifest and then <code>manifest.json</code>.</p></details>
+    <details><summary>What does Local Type Kit cost?</summary><p>Nothing. The plugin is free and open source under the MIT license.</p></details>
   </section>
 
 </main>

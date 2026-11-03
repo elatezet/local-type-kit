@@ -105,52 +105,52 @@
     "de": "Fragen"
   },
   "faq1_q": {
-    "en": "Does the plugin send anything over the network?",
-    "de": "Schickt das Plugin etwas übers Netz?"
+    "en": "Does the plugin send data over the network?",
+    "de": "Schickt das Plugin Daten übers Netz?"
   },
   "faq1_a": {
-    "en": "No. The plugin has no network access and uploads nothing.",
-    "de": "Nein. Das Plugin hat keinen Netzzugang und lädt nichts hoch."
+    "en": "No. Local Type Kit has no network access and uploads nothing. Your fonts stay on your computer.",
+    "de": "Nein. Local Type Kit hat keinen Netzzugang und lädt nichts hoch. Deine Schriften bleiben auf deinem Rechner."
   },
   "faq2_q": {
-    "en": "Can I undo a run?",
-    "de": "Kann ich einen Lauf rückgängig machen?"
+    "en": "Can I undo changes?",
+    "de": "Kann ich Änderungen rückgängig machen?"
   },
   "faq2_a": {
-    "en": "Yes. Each run is one undo step.",
-    "de": "Ja. Jeder Lauf ist ein Rückgängig-Schritt."
+    "en": "Yes. A single undo takes back a whole run.",
+    "de": "Ja. Jeder Durchlauf lässt sich mit einem einzigen Rückgängig zurücknehmen."
   },
   "faq3_q": {
     "en": "What happens to text whose font is bound to a variable?",
     "de": "Was passiert mit Text, dessen Schrift an eine Variable gebunden ist?"
   },
   "faq3_a": {
-    "en": "It is skipped and listed. The binding stays.",
-    "de": "Er wird übersprungen und aufgelistet. Die Bindung bleibt."
+    "en": "Local Type Kit leaves that text as it is and shows it to you in a list. The binding to the variable stays.",
+    "de": "Local Type Kit lässt solchen Text unverändert und zeigt ihn dir in einer Liste. Die Bindung an die Variable bleibt erhalten."
   },
   "faq4_q": {
-    "en": "Where is the setup stored?",
-    "de": "Wo liegt die Einrichtung?"
+    "en": "Where is the setup saved?",
+    "de": "Wo wird die Einrichtung gespeichert?"
   },
   "faq4_a": {
-    "en": "In the Figma file. Whoever opens the plugin there next gets the same setup.",
-    "de": "In der Figma-Datei. Wer das Plugin dort als Nächstes öffnet, bekommt dieselbe Einrichtung."
+    "en": "Right in the Figma file. Whoever opens the plugin there next works with the same setup.",
+    "de": "Direkt in der Figma File. Wer das Plugin dort als Nächstes öffnet, arbeitet mit derselben Einrichtung."
   },
   "faq5_q": {
     "en": "Why does a colleague still see the font as missing?",
     "de": "Warum sieht eine Kollegin die Schrift trotzdem als fehlend?"
   },
   "faq5_a": {
-    "en": "Every computer that edits the file needs the font installed. No plugin can change that. Local Type Kit shows where it is missing.",
-    "de": "Jeder Rechner, der die Datei bearbeitet, braucht die Schrift. Das kann kein Plugin ändern. Local Type Kit zeigt, wo sie fehlt."
+    "en": "Every computer that edits the file needs the font. No plugin can change that. Local Type Kit does show you where it is missing.",
+    "de": "Jeder Rechner, auf dem die Datei bearbeitet wird, braucht die Schrift. Das kann kein Plugin ändern. Local Type Kit zeigt dir aber, wo sie fehlt."
   },
   "faq6_q": {
-    "en": "What does it cost?",
-    "de": "Was kostet es?"
+    "en": "What does Local Type Kit cost?",
+    "de": "Was kostet Local Type Kit?"
   },
   "faq6_a": {
-    "en": "Nothing. Open source under the MIT license.",
-    "de": "Nichts. Quelloffen unter MIT-Lizenz."
+    "en": "Nothing. The plugin is free and open source under the MIT license.",
+    "de": "Nichts. Das Plugin ist kostenlos und quelloffen unter MIT-Lizenz."
   },
   "footer_licence": {
     "en": "MIT license",
@@ -161,16 +161,16 @@
     "de": "Kein Produkt von Figma."
   },
   "try_hint": {
-    "en": "The real plugin with a sample file. Try it.",
-    "de": "Das echte Plugin mit einer Beispieldatei. Probier es aus."
+    "en": "This is the real plugin with a sample file. Just try it.",
+    "de": "Das ist das echte Plugin mit einer Beispieldatei. Probier es einfach aus."
   },
   "faq7_q": {
-    "en": "Does it help with exports rendered on Figma's servers?",
-    "de": "Hilft es bei Exporten, die Figma auf seinen Servern rendert?"
+    "en": "Does the plugin help with exports that Figma renders on its servers?",
+    "de": "Hilft das Plugin bei Exporten, die Figma auf seinen Servern rendert?"
   },
   "faq7_a": {
-    "en": "No. Figma's servers only have fonts an admin uploaded to the organization, on the Organization or Enterprise plan. Export from the desktop app instead.",
-    "de": "Nein. Figmas Server kennen nur Schriften, die ein Admin für die Organisation hochgeladen hat, im Organization- oder Enterprise-Tarif. Exportiere dann aus der Desktop-App."
+    "en": "No. Figma's servers only know fonts an admin uploaded for the organization. That needs the Organization or Enterprise plan. In that case, simply export from the desktop app.",
+    "de": "Nein. Figmas Server kennen nur Schriften, die ein Admin für die Organisation hochgeladen hat. Das geht nur im Organization- oder Enterprise-Tarif. Exportiere in dem Fall einfach aus der Desktop-App."
   },
   "eyebrow": {
     "en": "Figma plugin · free and open source",
@@ -189,8 +189,8 @@
     "de": "Mit KI"
   },
   "ai_h": {
-    "en": "Works with your AI assistant",
-    "de": "Läuft mit deinem KI-Assistenten"
+    "en": "Also works with your AI assistant",
+    "de": "Funktioniert auch mit deinem KI-Assistenten"
   },
   "ai_p": {
     "en": "Claude, ChatGPT, Cursor, Gemini or Grok use Local Type Kit right in your file through Figma's MCP server. Checking fonts, building styles and attaching loose text works straight from the chat. Only fonts that live on your computer alone need the plugin in the desktop app.",
@@ -209,15 +209,15 @@
     "de": "Kopiert"
   },
   "ai_note": {
-    "en": "Each button copies the prompt. Claude, ChatGPT and Cursor open with it filled in; in Gemini and Grok, paste it. The assistant needs Figma's MCP server connected.",
-    "de": "Jeder Knopf kopiert den Prompt. Claude, ChatGPT und Cursor öffnen mit ausgefülltem Prompt, bei Gemini und Grok fügst du ihn ein. Der Assistent braucht eine Verbindung zu Figmas MCP-Server."
+    "en": "Every button copies the prompt. Claude, ChatGPT and Cursor open with the prompt filled in; in Gemini and Grok you paste it yourself. Your assistant needs to be connected to Figma's MCP server.",
+    "de": "Jeder Knopf kopiert den Prompt. Claude, ChatGPT und Cursor öffnen sich direkt mit dem Prompt, bei Gemini und Grok fügst du ihn selbst ein. Dein Assistent muss dafür mit Figmas MCP-Server verbunden sein."
   },
   "faq8_q": {
-    "en": "Can I install it without Figma Community?",
-    "de": "Geht es auch ohne Figma Community?"
+    "en": "Can I install the plugin without Figma Community?",
+    "de": "Kann ich das Plugin auch ohne Figma Community installieren?"
   },
   "faq8_a": {
-    "en": "Yes. Download the <a href=\"https://github.com/elatezet/local-type-kit\">repository on GitHub</a>. In the Figma desktop app, choose Plugins → Development → Import plugin from manifest and pick <code>manifest.json</code>.",
-    "de": "Ja. Lade das <a href=\"https://github.com/elatezet/local-type-kit\">Repository von GitHub</a> herunter. In der Figma-Desktop-App wählst du Plugins → Entwicklung → Plugin aus Manifest importieren und dann <code>manifest.json</code>."
+    "en": "Yes. Download the <a href=\"https://github.com/elatezet/local-type-kit\">repository from GitHub</a>. In the Figma desktop app, choose Plugins → Development → Import plugin from manifest and then <code>manifest.json</code>.",
+    "de": "Ja. Lade das <a href=\"https://github.com/elatezet/local-type-kit\">Repository von GitHub</a> herunter. In der Figma-Desktop-App wählst du dann Plugins → Entwicklung → Plugin aus Manifest importieren und anschließend <code>manifest.json</code>."
   }
 }
