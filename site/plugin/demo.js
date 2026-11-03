@@ -13,7 +13,7 @@
     "Inter": ["Regular", "Medium", "Semi Bold"],
     "Neue Heimat": ["Regular", "Medium", "SemiBold"],
     "Instrument Serif": ["Regular"],
-    "Gambarino": ["Regular"]
+    "Newsreader": ["Regular"]
   };
   var used = [
     { family: "Brand Sans", style: "Regular", nodes: 488, styles: 9, available: false },
