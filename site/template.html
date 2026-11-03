@@ -33,10 +33,11 @@ try {
   src: url("{{root}}assets/fonts/InstrumentSerif-Regular.ttf") format("truetype");
   font-weight: 400; font-display: swap;
 }
-/* Newsreader von Production Type, SIL Open Font License, steht im Plugin auf der Seite zur Wahl. */
+/* Gambarino von Indian Type Foundry (Fontshare, ITF Free Font License) steht im Plugin auf der Seite zur Wahl.
+   Wird sie gewaehlt, nennt die Seite die Foundry unter dem Fenster, wie die Lizenz es verlangt. */
 @font-face {
-  font-family: "Newsreader";
-  src: url("{{root}}assets/fonts/Newsreader.woff2") format("woff2");
+  font-family: "Gambarino";
+  src: url("{{root}}assets/fonts/Gambarino-Regular.woff2") format("woff2");
   font-weight: 400; font-display: swap;
 }
 /* Neue Heimat ist Davids eigene Schrift und steht hier auch als Schaufenster fuer sie (David, 03.11.2026). Variabel, wght 300 bis 700. */
@@ -266,8 +267,8 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
   background: var(--fg); color: var(--bg); text-decoration: none; font-weight: 600;
 }
 .button svg { width: 16px; height: 16px; margin-left: -.2rem; }
-.cta-note { margin: .6rem 0 0; font-size: .75rem; color: var(--fg-3); }
-.cta-meta { margin: .35rem 0 0; font-size: .75rem; color: var(--fg-3); }
+.cta-note { margin: 1rem 0 0; font-size: .75rem; line-height: 1.4; color: var(--fg-3); }
+.cta-meta { margin: .1rem 0 0; font-size: .75rem; line-height: 1.4; color: var(--fg-3); }
 .cta-meta .gh { color: var(--fg-2); vertical-align: -2px; }
 .cta-meta .gh svg { width: 13px; height: 13px; }
 .button.secondary { background: transparent; color: var(--fg); border: 1px solid var(--border); font-weight: 400; }
@@ -427,6 +428,7 @@ body { overflow-x: clip; }
         <iframe id="plugin" data-src="{{root}}plugin/ui.html?lang={{lang}}&amp;v={{v_ui}}" title="{{hero_shot_alt}}"></iframe>
       </div>
       <p class="try">{{try_hint}}</p>
+      <p class="try font-credit" id="fontCredit" hidden>{{gambarino_credit}}</p>
     </div>
     <div class="panels" aria-live="polite">
       <div data-panel="fonts"><h3>{{g1_h}}</h3><p>{{g1_p}}</p><h3>{{g2_h}}</h3><p>{{g2_p}}</p></div>

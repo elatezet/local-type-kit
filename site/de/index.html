@@ -33,10 +33,11 @@ try {
   src: url("../assets/fonts/InstrumentSerif-Regular.ttf") format("truetype");
   font-weight: 400; font-display: swap;
 }
-/* Newsreader von Production Type, SIL Open Font License, steht im Plugin auf der Seite zur Wahl. */
+/* Gambarino von Indian Type Foundry (Fontshare, ITF Free Font License) steht im Plugin auf der Seite zur Wahl.
+   Wird sie gewaehlt, nennt die Seite die Foundry unter dem Fenster, wie die Lizenz es verlangt. */
 @font-face {
-  font-family: "Newsreader";
-  src: url("../assets/fonts/Newsreader.woff2") format("woff2");
+  font-family: "Gambarino";
+  src: url("../assets/fonts/Gambarino-Regular.woff2") format("woff2");
   font-weight: 400; font-display: swap;
 }
 /* Neue Heimat ist Davids eigene Schrift und steht hier auch als Schaufenster fuer sie (David, 03.11.2026). Variabel, wght 300 bis 700. */
@@ -266,8 +267,8 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
   background: var(--fg); color: var(--bg); text-decoration: none; font-weight: 600;
 }
 .button svg { width: 16px; height: 16px; margin-left: -.2rem; }
-.cta-note { margin: .6rem 0 0; font-size: .75rem; color: var(--fg-3); }
-.cta-meta { margin: .35rem 0 0; font-size: .75rem; color: var(--fg-3); }
+.cta-note { margin: 1rem 0 0; font-size: .75rem; line-height: 1.4; color: var(--fg-3); }
+.cta-meta { margin: .1rem 0 0; font-size: .75rem; line-height: 1.4; color: var(--fg-3); }
 .cta-meta .gh { color: var(--fg-2); vertical-align: -2px; }
 .cta-meta .gh svg { width: 13px; height: 13px; }
 .button.secondary { background: transparent; color: var(--fg); border: 1px solid var(--border); font-weight: 400; }
@@ -427,6 +428,7 @@ body { overflow-x: clip; }
         <iframe id="plugin" data-src="../plugin/ui.html?lang=de&amp;v=92c5cfcf" title="Das Plugin-Fenster von Local Type Kit mit einer Beispieldatei. Du kannst es hier direkt bedienen."></iframe>
       </div>
       <p class="try">Probier das Plugin direkt hier aus.</p>
+      <p class="try font-credit" id="fontCredit" hidden>Gambarino von Indian Type Foundry.</p>
     </div>
     <div class="panels" aria-live="polite">
       <div data-panel="fonts"><h3>Alle verwendeten Schriften auf einen Blick</h3><p>Local Type Kit erfasst alle verwendeten Schriften in Text und Stilen. Fehlende Schriften werden automatisch erkannt und markiert.</p><h3>Schriften einfach überall tauschen</h3><p>Local Type Kit tauscht eine Schrift in der ganzen Datei, auch in Komponenten, Instanzen und Stilen. Die Vorschau zeigt vorher, was sich ändert.</p></div>
@@ -475,7 +477,7 @@ Zeig mir, welche Schriften die Datei nutzt und welche fehlen. Bevor du etwas än
   </div>
   </div>
 </footer>
-<script src="../plugin/demo.js?v=8b2bf9a1"></script>
+<script src="../plugin/demo.js?v=57699c31"></script>
 
 <script>
 /* Nur die Abweichung wird gespeichert. Ohne Wahl folgt die Seite weiter dem

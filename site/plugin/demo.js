@@ -13,7 +13,7 @@
     "Inter": ["Regular", "Medium", "Semi Bold"],
     "Neue Heimat": ["Regular", "Medium", "SemiBold"],
     "Instrument Serif": ["Regular"],
-    "Newsreader": ["Regular"]
+    "Gambarino": ["Regular"]
   };
   var used = [
     { family: "Brand Sans", style: "Regular", nodes: 488, styles: 9, available: false },
@@ -33,6 +33,9 @@
       document.documentElement.style.setProperty(role, '"' + r.to.family + '", ' + FALLBACK[role]);
       delete ROLE[r.from.family]; ROLE[r.to.family] = role;
     });
+    // Gambarino verlangt eine Nennung der Foundry, aber nur, solange die Seite sie zeigt.
+    var credit = document.getElementById("fontCredit");
+    if (credit) credit.hidden = !ROLE["Gambarino"];
     // Die Koernchen tasten die Schrift neu ab.
     setTimeout(function () { window.dispatchEvent(new Event("resize")); }, 60);
   }

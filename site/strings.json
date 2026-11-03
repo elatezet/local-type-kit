@@ -231,5 +231,9 @@
   "cta_note": {
     "en": "Opens the plugin in Figma Community.",
     "de": "Führt zum Plugin in der Figma Community."
+  },
+  "gambarino_credit": {
+    "en": "Gambarino by Indian Type Foundry.",
+    "de": "Gambarino von Indian Type Foundry."
   }
 }
