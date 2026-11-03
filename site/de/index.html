@@ -193,7 +193,8 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 /* Beim Loslassen federt das Fenster an seinen Platz zurueck, mit kleinem Ueberschwingen. */
 .win.settle { transition: transform .55s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s ease; }
 @media (prefers-reduced-motion: reduce) { .win.settle { transition: transform .15s ease, box-shadow .15s ease; } }
-.plug { font-family: var(--font-mono); font-size: 10px; line-height: 18px; padding: 0 3px; border-radius: 4px; background: var(--fg); color: var(--win); }
+/* Nach der Freigabe zeigt Figma im Fensterkopf das Icon des Plugins statt des Entwicklerzeichens. */
+.plug { width: 20px; height: 20px; border-radius: 5px; }
 .win-title { font-weight: 600; color: var(--fg); }
 .close { margin-left: auto; color: var(--fg-3); font-size: 18px; line-height: 1; }
 #plugin { display: block; width: 100%; height: 600px; border: 0; background: var(--win); }
@@ -341,7 +342,7 @@ body { overflow-x: clip; }
     </div>
     <div class="keyvisual" id="how">
       <div class="win">
-        <div class="win-bar"><span class="plug" aria-hidden="true">&lt;/&gt;</span><span class="win-title">Local Type Kit</span><span class="close" aria-hidden="true">×</span></div>
+        <div class="win-bar"><img class="plug" src="../assets/icon-128.png" alt="" width="20" height="20"><span class="win-title">Local Type Kit</span><span class="close" aria-hidden="true">×</span></div>
         <iframe id="plugin" data-src="../plugin/ui.html?lang=de&amp;v=92c5cfcf" title="Das Plugin-Fenster von Local Type Kit mit einer Beispieldatei. Du kannst es hier direkt bedienen."></iframe>
       </div>
       <p class="try">Das ist das echte Plugin mit einer Beispieldatei. Probier es einfach aus.</p>
