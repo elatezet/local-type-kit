@@ -106,8 +106,8 @@ section { padding: 4rem 0; border-top: 1px solid var(--border); scroll-margin-to
 nav { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
 nav a { color: var(--fg-2); text-decoration: none; font-size: .95rem; }
 nav a:hover { color: var(--fg); text-decoration: underline; }
-.sep { width: 1px; height: 1.1rem; background: var(--border); }
-@media (max-width: 34rem) { .sep { display: none; } nav { gap: .9rem 1rem; } }
+.tools { display: flex; gap: .4rem; }
+@media (max-width: 34rem) { nav { gap: .9rem 1rem; } }
 
 .chip {
   display: inline-flex; align-items: center; gap: .35rem;
@@ -127,6 +127,8 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 }
 
 .hero { padding: 3rem 0 4rem; text-align: center; }
+.eyebrow svg { width: 14px; height: 14px; }
+.eyebrow { display: inline-flex; align-items: center; gap: .45rem; margin: 0 0 1.4rem; padding: .35rem .8rem; border: 1px solid var(--border); border-radius: 999px; font-size: .9rem; color: var(--fg-2); }
 .hero h1 {
   font-family: var(--font-display); font-weight: 400;
   font-size: clamp(3rem, 8.6vw, 5.8rem); line-height: .98;
@@ -263,31 +265,33 @@ body { overflow-x: clip; }
     <a href="#how">Try it</a>
     <a href="#install">Install</a>
     <a href="#questions">Questions</a>
-    <span class="sep"></span>
+    <span class="tools">
     <a class="chip" href="de/" title="Auf Deutsch">
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM9.71002 19.6674C8.74743 17.6259 8.15732 15.3742 8.02731 13H4.06189C4.458 16.1765 6.71639 18.7747 9.71002 19.6674ZM10.0307 13C10.1811 15.4388 10.8778 17.7297 12 19.752C13.1222 17.7297 13.8189 15.4388 13.9693 13H10.0307ZM19.9381 13H15.9727C15.8427 15.3742 15.2526 17.6259 14.29 19.6674C17.2836 18.7747 19.542 16.1765 19.9381 13ZM4.06189 11H8.02731C8.15732 8.62577 8.74743 6.37407 9.71002 4.33256C6.71639 5.22533 4.458 7.8235 4.06189 11ZM10.0307 11H13.9693C13.8189 8.56122 13.1222 6.27025 12 4.24799C10.8778 6.27025 10.1811 8.56122 10.0307 11ZM14.29 4.33256C15.2526 6.37407 15.8427 8.62577 15.9727 11H19.9381C19.542 7.8235 17.2836 5.22533 14.29 4.33256Z"/></svg><span>DE</span>
     </a>
     <button class="chip" type="button" id="theme" title="Switch appearance" aria-label="Switch appearance">
       <span class="when-dark"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor"><path stroke-width="2" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="when-light"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="5" stroke-width="2"/><path stroke-width="2" d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
     </button>
+    </span>
   </nav>
 </div>
 
 <main>
 
   <div class="hero">
+    <p class="eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M5 6C5 3.79086 6.79086 2 9 2H15C17.2091 2 19 3.79086 19 6C19 7.19469 18.4762 8.26706 17.6458 9C18.4762 9.73295 19 10.8053 19 12C19 14.2091 17.2091 16 15 16C14.2714 16 13.5883 15.8052 13 15.4649V18C13 20.2091 11.2091 22 9 22C6.79086 22 5 20.2091 5 18C5 16.8053 5.52376 15.7329 6.35418 15C5.52376 14.2671 5 13.1947 5 12C5 10.8053 5.52376 9.73295 6.35418 9C5.52376 8.26706 5 7.19469 5 6ZM11 10H9C7.89543 10 7 10.8954 7 12C7 13.1046 7.89543 14 9 14H11V10ZM13 12C13 13.1046 13.8954 14 15 14C16.1046 14 17 13.1046 17 12C17 10.8954 16.1046 10 15 10C13.8954 10 13 10.8954 13 12ZM15 8C16.1046 8 17 7.10457 17 6C17 4.89543 16.1046 4 15 4H13V8H15ZM9 4C7.89543 4 7 4.89543 7 6C7 7.10457 7.89543 8 9 8H11V4H9ZM11 16H9C7.89543 16 7 16.8954 7 18C7 19.1046 7.89543 20 9 20C10.1046 20 11 19.1046 11 18V16Z"/></svg><span>Figma plugin · free and open source</span></p>
     <h1>Your typeface<br>stays on your machine</h1>
-    <p class="lede">Many brand fonts may not be uploaded to a shared font service. Local Type Kit works with them across the whole file, including text styles and instance overrides, and sends nothing over the network.</p>
+    <p class="lede">Check, replace and style the fonts in a Figma file with the fonts on your computer. Nothing is uploaded.</p>
 
     <div class="keyvisual" id="how">
       <div class="win">
         <div class="win-bar"><span class="plug" aria-hidden="true">&lt;/&gt;</span><span class="win-title">Local Type Kit</span><span class="close" aria-hidden="true">×</span></div>
         <iframe id="plugin" data-src="plugin/ui.html?lang=en" title="The Local Type Kit plugin window, working on a sample file. You can use it right here."></iframe>
       </div>
-      <p class="try">This is the real plugin window, running on a sample file. Try it.</p>
+      <p class="try">The real plugin with a sample file. Try it.</p>
       <div class="panels" aria-live="polite">
-        <div data-panel="fonts"><h3>See what the file uses</h3><p>Lists every font in text layers and in local text styles, and marks the ones that are not installed on this machine.</p><h3>Swap a font everywhere</h3><p>Loose text, components, instance overrides, local styles and mixed text runs. Components change first, so instances keep only the overrides they really have. A preview shows the counts first.</p></div>
-        <div data-panel="styles" hidden><h3>Build text styles from variables</h3><p>Creates or updates text styles from a variable collection and binds family, size and line height to the variables.</p><h3>Attach loose text to styles</h3><p>Gives loose text the one local style that matches it exactly. If more than one fits, the text stays as it is and goes on a list.</p></div>
+        <div data-panel="fonts"><h3>See which fonts a file uses</h3><p>Every font in text and styles. Missing ones are marked.</p><h3>Replace a font everywhere</h3><p>In text, components, instances and styles. The preview shows what changes.</p></div>
+        <div data-panel="styles" hidden><h3>Build styles from variables</h3><p>One text style per variable group, bound to size, line height and family.</p><h3>Attach loose text to styles</h3><p>Text without a style gets the one style that matches exactly.</p></div>
       </div>
     </div>
     <div class="actions">
@@ -299,7 +303,7 @@ body { overflow-x: clip; }
 
   <section id="script">
     <h2>Also runs without the window</h2>
-    <p>The same functions work from a script through Figma's Plugin API. Set one flag, load <code>code.js</code> and call <code>scan</code>, <code>replaceFonts</code>, <code>stylesFromVariables</code> or <code>assignStyles</code>. That helps when a script or an assistant prepares a file instead of a person. The <a href="https://github.com/elatezet/local-type-kit#scripting">README</a> shows how.</p>
+    <p>Every function also runs from a script through Figma's Plugin API. Handy when a script or an assistant prepares the file. See the <a href="https://github.com/elatezet/local-type-kit#scripting">README</a>.</p>
   </section>
   <section id="install">
     <h2>Two files, no build step</h2>
@@ -312,13 +316,13 @@ body { overflow-x: clip; }
 
   <section id="questions">
     <h2>Questions</h2>
-    <details><summary>Does the plugin send anything over the network?</summary><p>No. The manifest allows no network domain at all, and nothing is uploaded. Fonts load from your machine through the desktop app.</p></details>
-    <details><summary>Can I undo a run?</summary><p>Yes. Every change shows a preview first, and every run is one undo step.</p></details>
-    <details><summary>What happens to text whose font is bound to a variable?</summary><p>It is skipped and listed. The plugin never removes a variable binding.</p></details>
-    <details><summary>Where is the setup stored?</summary><p>In the Figma file itself. The next person who opens the plugin there runs the same configuration.</p></details>
-    <details><summary>Why does a colleague still see the font as missing?</summary><p>That limit belongs to Figma: the font has to be installed on every machine that edits the file, and no plugin changes that. Local Type Kit shows you where it is missing. In the browser, Figma's font installer is needed as well.</p></details>
-    <details><summary>Does it help with exports that Figma renders on its servers?</summary><p>No. Figma's servers only know fonts that an admin uploaded to the organization, which needs the Organization or Enterprise plan. Video exports and other renders on Figma's side fall back to another font. Export from the desktop app instead, or upload the font as a shared font if its license allows that.</p></details>
-    <details><summary>What does it cost?</summary><p>Nothing. It is open source under the MIT license: two files, no build step, no dependencies.</p></details>
+    <details><summary>Does the plugin send anything over the network?</summary><p>No. The plugin has no network access and uploads nothing.</p></details>
+    <details><summary>Can I undo a run?</summary><p>Yes. Each run is one undo step.</p></details>
+    <details><summary>What happens to text whose font is bound to a variable?</summary><p>It is skipped and listed. The binding stays.</p></details>
+    <details><summary>Where is the setup stored?</summary><p>In the Figma file. Whoever opens the plugin there next gets the same setup.</p></details>
+    <details><summary>Why does a colleague still see the font as missing?</summary><p>Every computer that edits the file needs the font installed. No plugin can change that. Local Type Kit shows where it is missing.</p></details>
+    <details><summary>Does it help with exports rendered on Figma's servers?</summary><p>No. Figma's servers only have fonts an admin uploaded to the organization, on the Organization or Enterprise plan. Export from the desktop app instead.</p></details>
+    <details><summary>What does it cost?</summary><p>Nothing. Open source under the MIT license.</p></details>
   </section>
 
 </main>

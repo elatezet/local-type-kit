@@ -49,8 +49,8 @@
     "de": "Deine Hausschrift<br>bleibt auf dem Rechner"
   },
   "hero_lede": {
-    "en": "Many brand fonts may not be uploaded to a shared font service. Local Type Kit works with them across the whole file, including text styles and instance overrides, and sends nothing over the network.",
-    "de": "Viele Hausschriften dürfen in keinen geteilten Schriftendienst. Local Type Kit arbeitet mit ihnen in der ganzen Datei, Textstile und Instanzen eingeschlossen, und schickt nichts übers Netz."
+    "en": "Check, replace and style the fonts in a Figma file with the fonts on your computer. Nothing is uploaded.",
+    "de": "Schriften in einer Figma-Datei prüfen, tauschen und als Stile anlegen, mit den Schriften auf deinem Rechner. Nichts wird hochgeladen."
   },
   "hero_shot_alt": {
     "en": "The Local Type Kit plugin window, working on a sample file. You can use it right here.",
@@ -69,36 +69,36 @@
     "de": "Kostenlos und quelloffen unter MIT-Lizenz."
   },
   "g1_h": {
-    "en": "See what the file uses",
-    "de": "Sehen, was die Datei benutzt"
+    "en": "See which fonts a file uses",
+    "de": "Sehen, welche Schriften die Datei nutzt"
   },
   "g1_p": {
-    "en": "Lists every font in text layers and in local text styles, and marks the ones that are not installed on this machine.",
-    "de": "Listet jede Schrift in Textebenen und in lokalen Textstilen und markiert die, die auf diesem Rechner fehlen."
+    "en": "Every font in text and styles. Missing ones are marked.",
+    "de": "Jede Schrift in Text und Stilen. Fehlende sind markiert."
   },
   "g2_h": {
-    "en": "Swap a font everywhere",
+    "en": "Replace a font everywhere",
     "de": "Eine Schrift überall tauschen"
   },
   "g2_p": {
-    "en": "Loose text, components, instance overrides, local styles and mixed text runs. Components change first, so instances keep only the overrides they really have. A preview shows the counts first.",
-    "de": "Loser Text, Komponenten, Abweichungen in Instanzen, lokale Stile und gemischte Textläufe. Komponenten kommen zuerst dran, damit Instanzen nur ihre eigenen Abweichungen behalten. Eine Vorschau zeigt vorher die Zahlen."
+    "en": "In text, components, instances and styles. The preview shows what changes.",
+    "de": "In Text, Komponenten, Instanzen und Stilen. Die Vorschau zeigt vorher, was sich ändert."
   },
   "g3_h": {
-    "en": "Build text styles from variables",
-    "de": "Textstile aus Variablen bauen"
+    "en": "Build styles from variables",
+    "de": "Stile aus Variablen bauen"
   },
   "g3_p": {
-    "en": "Creates or updates text styles from a variable collection and binds family, size and line height to the variables.",
-    "de": "Legt Textstile aus einer Variablensammlung an oder aktualisiert sie und bindet Familie, Größe und Zeilenhöhe an die Variablen."
+    "en": "One text style per variable group, bound to size, line height and family.",
+    "de": "Ein Textstil pro Variablengruppe, gebunden an Größe, Zeilenhöhe und Familie."
   },
   "g4_h": {
     "en": "Attach loose text to styles",
     "de": "Losen Text an Stile hängen"
   },
   "g4_p": {
-    "en": "Gives loose text the one local style that matches it exactly. If more than one fits, the text stays as it is and goes on a list.",
-    "de": "Gibt losem Text den einen lokalen Stil, der genau passt. Passen mehrere, bleibt der Text, wie er ist, und landet auf einer Liste."
+    "en": "Text without a style gets the one style that matches exactly.",
+    "de": "Text ohne Stil bekommt den einen Stil, der genau passt."
   },
   "install_h": {
     "en": "Two files, no build step",
@@ -125,48 +125,48 @@
     "de": "Schickt das Plugin etwas übers Netz?"
   },
   "faq1_a": {
-    "en": "No. The manifest allows no network domain at all, and nothing is uploaded. Fonts load from your machine through the desktop app.",
-    "de": "Nein. Das Manifest erlaubt keine einzige Domain, und nichts wird hochgeladen. Die Schriften kommen über die Desktop-App von deinem Rechner."
+    "en": "No. The plugin has no network access and uploads nothing.",
+    "de": "Nein. Das Plugin hat keinen Netzzugang und lädt nichts hoch."
   },
   "faq2_q": {
     "en": "Can I undo a run?",
     "de": "Kann ich einen Lauf rückgängig machen?"
   },
   "faq2_a": {
-    "en": "Yes. Every change shows a preview first, and every run is one undo step.",
-    "de": "Ja. Jede Änderung zeigt vorher eine Vorschau, und jeder Lauf ist ein einziger Rückgängig-Schritt."
+    "en": "Yes. Each run is one undo step.",
+    "de": "Ja. Jeder Lauf ist ein Rückgängig-Schritt."
   },
   "faq3_q": {
     "en": "What happens to text whose font is bound to a variable?",
     "de": "Was passiert mit Text, dessen Schrift an eine Variable gebunden ist?"
   },
   "faq3_a": {
-    "en": "It is skipped and listed. The plugin never removes a variable binding.",
-    "de": "Er wird übersprungen und aufgelistet. Das Plugin löst nie eine Bindung an eine Variable."
+    "en": "It is skipped and listed. The binding stays.",
+    "de": "Er wird übersprungen und aufgelistet. Die Bindung bleibt."
   },
   "faq4_q": {
     "en": "Where is the setup stored?",
     "de": "Wo liegt die Einrichtung?"
   },
   "faq4_a": {
-    "en": "In the Figma file itself. The next person who opens the plugin there runs the same configuration.",
-    "de": "In der Figma-Datei selbst. Wer das Plugin dort als Nächstes öffnet, arbeitet mit derselben Konfiguration."
+    "en": "In the Figma file. Whoever opens the plugin there next gets the same setup.",
+    "de": "In der Figma-Datei. Wer das Plugin dort als Nächstes öffnet, bekommt dieselbe Einrichtung."
   },
   "faq5_q": {
     "en": "Why does a colleague still see the font as missing?",
     "de": "Warum sieht eine Kollegin die Schrift trotzdem als fehlend?"
   },
   "faq5_a": {
-    "en": "That limit belongs to Figma: the font has to be installed on every machine that edits the file, and no plugin changes that. Local Type Kit shows you where it is missing. In the browser, Figma's font installer is needed as well.",
-    "de": "Die Grenze liegt bei Figma: Die Schrift muss auf jedem Rechner installiert sein, der die Datei bearbeitet, und kein Plugin ändert das. Local Type Kit zeigt dir, wo sie fehlt. Im Browser braucht es zusätzlich Figmas Font-Installer."
+    "en": "Every computer that edits the file needs the font installed. No plugin can change that. Local Type Kit shows where it is missing.",
+    "de": "Jeder Rechner, der die Datei bearbeitet, braucht die Schrift. Das kann kein Plugin ändern. Local Type Kit zeigt, wo sie fehlt."
   },
   "faq6_q": {
     "en": "What does it cost?",
     "de": "Was kostet es?"
   },
   "faq6_a": {
-    "en": "Nothing. It is open source under the MIT license: two files, no build step, no dependencies.",
-    "de": "Nichts. Es ist quelloffen unter MIT-Lizenz, zwei Dateien ohne Build und ohne Abhängigkeiten."
+    "en": "Nothing. Open source under the MIT license.",
+    "de": "Nichts. Quelloffen unter MIT-Lizenz."
   },
   "footer_licence": {
     "en": "MIT license",
@@ -177,23 +177,27 @@
     "de": "Kein Produkt von Figma."
   },
   "try_hint": {
-    "en": "This is the real plugin window, running on a sample file. Try it.",
-    "de": "Das ist das echte Plugin-Fenster, hier mit einer Beispieldatei. Probier es aus."
+    "en": "The real plugin with a sample file. Try it.",
+    "de": "Das echte Plugin mit einer Beispieldatei. Probier es aus."
   },
   "script_h": {
     "en": "Also runs without the window",
     "de": "Läuft auch ohne Fenster"
   },
   "script_p": {
-    "en": "The same functions work from a script through Figma's Plugin API. Set one flag, load <code>code.js</code> and call <code>scan</code>, <code>replaceFonts</code>, <code>stylesFromVariables</code> or <code>assignStyles</code>. That helps when a script or an assistant prepares a file instead of a person. The <a href=\"https://github.com/elatezet/local-type-kit#scripting\">README</a> shows how.",
-    "de": "Dieselben Funktionen laufen auch aus einem Skript über Figmas Plugin-API. Einen Schalter setzen, <code>code.js</code> laden und <code>scan</code>, <code>replaceFonts</code>, <code>stylesFromVariables</code> oder <code>assignStyles</code> aufrufen. Das hilft, wenn ein Skript oder ein Assistent eine Datei vorbereitet statt ein Mensch. Wie das geht, steht im <a href=\"https://github.com/elatezet/local-type-kit#scripting\">README</a>."
+    "en": "Every function also runs from a script through Figma's Plugin API. Handy when a script or an assistant prepares the file. See the <a href=\"https://github.com/elatezet/local-type-kit#scripting\">README</a>.",
+    "de": "Alle Funktionen laufen auch aus einem Skript über Figmas Plugin-API. Praktisch, wenn ein Skript oder ein Assistent die Datei vorbereitet. Mehr im <a href=\"https://github.com/elatezet/local-type-kit#scripting\">README</a>."
   },
   "faq7_q": {
-    "en": "Does it help with exports that Figma renders on its servers?",
+    "en": "Does it help with exports rendered on Figma's servers?",
     "de": "Hilft es bei Exporten, die Figma auf seinen Servern rendert?"
   },
   "faq7_a": {
-    "en": "No. Figma's servers only know fonts that an admin uploaded to the organization, which needs the Organization or Enterprise plan. Video exports and other renders on Figma's side fall back to another font. Export from the desktop app instead, or upload the font as a shared font if its license allows that.",
-    "de": "Nein. Figmas Server kennen nur Schriften, die ein Admin für die Organisation hochgeladen hat, und das setzt den Organization- oder Enterprise-Tarif voraus. Video-Exporte und andere Renderings auf Figmas Seite weichen auf eine andere Schrift aus. Exportiere dann aus der Desktop-App oder lade die Schrift als geteilte Schrift hoch, wenn ihre Lizenz das erlaubt."
+    "en": "No. Figma's servers only have fonts an admin uploaded to the organization, on the Organization or Enterprise plan. Export from the desktop app instead.",
+    "de": "Nein. Figmas Server kennen nur Schriften, die ein Admin für die Organisation hochgeladen hat, im Organization- oder Enterprise-Tarif. Exportiere dann aus der Desktop-App."
+  },
+  "eyebrow": {
+    "en": "Figma plugin · free and open source",
+    "de": "Figma-Plugin · kostenlos und quelloffen"
   }
 }
