@@ -33,6 +33,12 @@ try {
   src: url("{{root}}assets/fonts/InstrumentSerif-Regular.ttf") format("truetype");
   font-weight: 400; font-display: swap;
 }
+/* Gambarino von Indian Type Foundry, ueber Fontshare unter der ITF Free Font License (fontshare.com/terms), im Test fuer die Display-Zeilen (David, 03.11.2026). */
+@font-face {
+  font-family: "Gambarino";
+  src: url("{{root}}assets/fonts/Gambarino-Regular.woff2") format("woff2");
+  font-weight: 400; font-display: swap;
+}
 /* Neue Heimat ist Davids eigene Schrift und steht hier auch als Schaufenster fuer sie (David, 03.11.2026). Variabel, wght 300 bis 700. */
 @font-face {
   font-family: "Neue Heimat";
@@ -56,7 +62,7 @@ try {
 }
 
 :root {
-  --font-display: "Instrument Serif", Georgia, serif;
+  --font-display: "Gambarino", "Instrument Serif", Georgia, serif;
   --font-sans: "Neue Heimat", "Inter", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
@@ -156,20 +162,20 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 .intro { grid-area: intro; } .keyvisual { grid-area: plugin; } .panels { grid-area: panels; } .cta { grid-area: cta; }
 @media (min-width: 60rem) {
   .hero { grid-template-columns: 27.5rem minmax(0, 22rem); justify-content: center; grid-template-areas: "intro intro" "plugin panels" "plugin cta"; grid-template-rows: auto auto 1fr; column-gap: clamp(2.5rem, 5vw, 4.5rem); align-items: start; }
-  .hero .intro { margin-bottom: 1rem; }
+  /* Der Claim darf breiter sein als die zwei Spalten darunter. */
+  .hero .intro { margin-bottom: 1rem; width: min(calc(100vw - 2 * var(--gl-pad)), var(--gl-cap)); justify-self: center; }
   .hero .panels, .hero .cta { text-align: left; }
   .hero .panels { margin: 1.5rem 0 2rem; max-width: var(--measure); }
   .hero .keyvisual { margin: 0; }
   .hero .actions { justify-content: flex-start; }
   .hero .fineprint { margin: 0; }
-  .hero .maker { margin: 1.5rem 0 0; }
 }
 
 .eyebrow svg { width: 14px; height: 14px; }
 .eyebrow { display: inline-flex; align-items: center; gap: .45rem; margin: 0 0 1.4rem; padding: .35rem .8rem; border: 1px solid var(--border); border-radius: 999px; font-size: .9rem; color: var(--fg-2); }
 .hero h1 {
   font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(3rem, 8.6vw, 5.8rem); line-height: .98;
+  font-size: clamp(2.6rem, 7.6vw, 6.6rem); line-height: 1.02;
   margin: 0 auto 1.4rem; letter-spacing: -.01em;
 }
 /* Fliesstext im zentrierten Hero linksbuendig (David, 01.11.2026). */
@@ -305,6 +311,12 @@ body { overflow-x: clip; }
 .gh:hover { text-decoration: underline; }
 .gh svg { width: 16px; height: 16px; }
 .feet-links { align-items: center; gap: .9rem; }
+/* Drei Spalten: Name links, Absender mittig, Repository und Lizenz rechts. */
+.feet-row > * { flex: 1 1 0; }
+.feet-maker { text-align: center; color: var(--fg-2); font-size: .95rem; }
+.feet-maker a { color: var(--fg); }
+.feet-links { justify-content: flex-end; }
+@media (max-width: 48rem) { .feet-row > * { flex: 1 1 100%; } .feet-maker { text-align: left; } .feet-links { justify-content: flex-start; } }
 .feet-house { font-family: var(--font-sans); font-size: .95rem; font-weight: 500; color: var(--fg); text-decoration: none; }
 .feet-house:hover { text-decoration: underline; }
 </style>
@@ -357,7 +369,6 @@ body { overflow-x: clip; }
         <a class="button secondary" href="#questions">{{cta_questions}}</a>
       </div>
       <p class="fineprint">{{fineprint}}</p>
-      <p class="maker">{{maker}}</p>
     </div>
   </div>
 
@@ -394,8 +405,8 @@ body { overflow-x: clip; }
   <div class="feet-over">
   <div class="feet-row">
     <span class="feet-mark">Local Type Kit</span>
+    <span class="feet-maker">{{maker}}</span>
     <span class="feet-links"><a class="gh" href="https://github.com/elatezet/local-type-kit">{{logo_github}}<span>GitHub</span></a><span>{{footer_licence}} · {{footer_note}}</span></span>
-    <a class="feet-house" href="https://davidlatz.de">David Latz</a>
   </div>
   </div>
 </footer>

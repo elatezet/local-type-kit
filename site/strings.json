@@ -21,8 +21,8 @@
     "de": "Darstellung wechseln"
   },
   "footer_size": {
-    "en": "21.9vw",
-    "de": "21.9vw"
+    "en": "17.2vw",
+    "de": "17.2vw"
   },
   "title": {
     "en": "Local Type Kit – Figma plugin for locally installed fonts",
@@ -157,12 +157,12 @@
     "de": "MIT-Lizenz"
   },
   "footer_note": {
-    "en": "Not affiliated with Figma.",
-    "de": "Kein Produkt von Figma."
+    "en": "Not affiliated with Figma. Gambarino by Indian Type Foundry.",
+    "de": "Kein Produkt von Figma. Gambarino von Indian Type Foundry."
   },
   "try_hint": {
-    "en": "This is the real plugin with a sample file. Just try it.",
-    "de": "Das ist das echte Plugin mit einer Beispieldatei. Probier es einfach aus."
+    "en": "Try the plugin right here, with a sample file.",
+    "de": "Probier das Plugin direkt hier aus, mit einer Beispieldatei."
   },
   "faq7_q": {
     "en": "Does the plugin help with exports that Figma renders on its servers?",
