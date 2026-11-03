@@ -314,18 +314,19 @@ body { overflow-x: clip; }
 /* Feines Rauschen ueber der Unschaerfe bricht die Farbstufen im Verlauf auf (David, 01.11.2026). */
 .footer-display::after {
   content: ""; position: absolute; inset: 0 0 -4rem; z-index: 3; pointer-events: none;
-  opacity: .045;
+  opacity: .08;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   -webkit-mask-image: linear-gradient(to bottom, transparent 10%, #000 35%, #000 75%, transparent 100%);
           mask-image: linear-gradient(to bottom, transparent 10%, #000 35%, #000 75%, transparent 100%);
 }
-.foot-dust { position: absolute; left: 0; top: 0; width: 100%; height: calc(100% + 4rem); z-index: 2; filter: blur(2.5px); opacity: .9; pointer-events: none; }
+.foot-dust { position: absolute; left: 0; top: -6rem; width: 100%; height: calc(100% + 10rem); z-index: 2; filter: blur(2.5px); opacity: .9; pointer-events: none; }
 .footer-display { --frost-x: 50%; --frost-y: 50%; transition: --frost-r .45s ease; }
 .footer-display.frosting { --frost-r: 22vw; }
 .footer-hot {
-  position: absolute; inset: 0 0 -4rem; filter: blur(22px);
-  -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), #000 0%, transparent 70%);
-          mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), #000 0%, transparent 70%);
+  /* Reicht nach oben ueber die Zeile hinaus, damit die Unschaerfe dort nicht an einer Kante endet. */
+  position: absolute; inset: -6rem 0 -4rem; padding-top: 6rem; filter: blur(22px);
+  -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) calc(var(--frost-y) + 6rem), #000 0%, transparent 70%);
+          mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) calc(var(--frost-y) + 6rem), #000 0%, transparent 70%);
 }
 .footer-glass {
   /* Die Lage reicht unter die Zeile hinaus und laeuft dort bis transparent aus,
@@ -640,15 +641,17 @@ window.LTKDust = (function () {
   intro.addEventListener("click", function (e) {
     if (wasEditing) { input.blur(); return; }
     if (e.target.closest("a, button, input, .lede, h1, .eyebrow, .keyvisual, .panels")) return;
+    // Das stehende Wort ist der Startwert: ganz markiert, der erste Tastendruck ersetzt es.
+    if (!input.value) input.value = base.textContent;
     input.focus({ preventScroll: true });
-    var n = input.value.length; input.setSelectionRange(n, n); caret();
+    input.setSelectionRange(0, input.value.length); caret();
   });
   // Der Strich sitzt an der Stelle, an der getippt wird, auch nach den Pfeiltasten.
   var caretEl = haze.querySelector(".haze-caret");
   function caret() {
     if (document.activeElement !== input) return;
     var node = base.firstChild; if (!node) return;
-    var text = node.textContent, pos = Math.min(input.selectionStart == null ? text.length : input.selectionStart, input.value.length ? text.length : 0);
+    var text = node.textContent, pos = Math.min(input.selectionEnd == null ? text.length : input.selectionEnd, text.length);
     var r = document.createRange(), hr = haze.getBoundingClientRect(), box;
     if (pos > 0) { r.setStart(node, pos - 1); r.setEnd(node, pos); var b = r.getBoundingClientRect(); box = { x: b.right, top: b.top, h: b.height }; }
     else { r.setStart(node, 0); r.setEnd(node, Math.min(1, text.length)); var b2 = r.getBoundingClientRect(); box = { x: b2.left, top: b2.top, h: b2.height }; }
