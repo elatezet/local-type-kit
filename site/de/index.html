@@ -158,7 +158,7 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 
 /* Unter 60rem steht alles untereinander und mittig, darueber steht der Claim mittig oben, darunter das Plugin links und der Text zum Reiter rechts,
    damit Aussage und Fenster in einen Bildschirm passen (David, 03.11.2026). */
-.hero { padding: 3rem 0 4rem; text-align: center; display: grid; grid-template-areas: "intro" "plugin" "panels" "cta"; }
+.hero { padding: 1rem 0 4rem; text-align: center; display: grid; grid-template-areas: "intro" "plugin" "panels" "cta"; }
 .intro { grid-area: intro; } .keyvisual { grid-area: plugin; } .panels { grid-area: panels; } .cta { grid-area: cta; }
 @media (min-width: 60rem) {
   .hero { grid-template-columns: 27.5rem minmax(0, 22rem); justify-content: center; grid-template-areas: "intro intro" "plugin panels" "plugin cta"; grid-template-rows: auto auto 1fr; column-gap: clamp(2.5rem, 5vw, 4.5rem); align-items: start; }
@@ -204,21 +204,35 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 .win-title { font-weight: 600; color: var(--fg); }
 .close { margin-left: auto; color: var(--fg-3); font-size: 18px; line-height: 1; }
 #plugin { display: block; width: 100%; height: 600px; border: 0; background: var(--win); }
-/* Hinter dem Fenster liegt ein unscharfes „Aa“ in der Farbe der Wortmarke im Fuss,
+/* Hinter dem Claim liegt ein unscharfes „Aa“ in der Farbe der Wortmarke im Fuss,
    mit demselben Rauschen. So greift der Kopf den Fuss auf (David, 03.11.2026). */
-.keyvisual { position: relative; }
-.haze { position: absolute; inset: -14% -30% -10%; z-index: 0; pointer-events: none; display: grid; place-items: center; overflow: visible; }
+.intro { position: relative; padding: clamp(2rem, 6vw, 5rem) 0 clamp(2.5rem, 6vw, 5.5rem); }
+.haze { position: absolute; inset: -10% 0; z-index: -1; pointer-events: none; display: grid; place-items: center; }
+.haze { --hx: 50%; --hy: 50%; --hr: 0px; transition: --hr .5s ease; }
+.haze.frosting { --hr: 20vw; }
+@property --hr { syntax: "<length>"; inherits: true; initial-value: 0px; }
 .haze span {
-  font-family: var(--font-display); font-size: clamp(26rem, 66vw, 54rem); line-height: .8; letter-spacing: -.02em;
-  color: color-mix(in srgb, var(--fg) 15%, var(--bg)); filter: blur(10px); transform: translate(8%, 2%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 20%, #0008 55%, transparent 90%); mask-image: linear-gradient(to bottom, #000 20%, #0008 55%, transparent 90%);
+  grid-area: 1 / 1; font-family: var(--font-display); font-size: clamp(26rem, 64vw, 58rem); line-height: .8; letter-spacing: -.02em;
+  color: color-mix(in srgb, var(--fg) 14%, var(--bg));
+}
+/* Unter der Maus vernebelt das „Aa“ staerker als die Wortmarke im Fuss. */
+.haze-base {
+  filter: blur(9px);
+  -webkit-mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 0%, #000 75%), linear-gradient(to bottom, #000 25%, #0008 60%, transparent 92%);
+          mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 0%, #000 75%), linear-gradient(to bottom, #000 25%, #0008 60%, transparent 92%);
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+}
+.haze-hot {
+  filter: blur(34px); transform: scale(1.04);
+  -webkit-mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), #000 0%, transparent 75%);
+          mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), #000 0%, transparent 75%);
 }
 .haze::after {
   content: ""; position: absolute; inset: 0; opacity: .05;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   -webkit-mask-image: radial-gradient(closest-side, #000 40%, transparent 100%); mask-image: radial-gradient(closest-side, #000 40%, transparent 100%);
 }
-.keyvisual > .win, .keyvisual > .try, .hero .panels, .hero .cta, .hero .intro { position: relative; z-index: 1; }
+.intro { isolation: isolate; }
 .try { margin: .9rem 0 0; color: var(--fg-3); font-size: .9rem; text-align: center; }
 .panels { margin: 1.75rem auto 2.5rem; max-width: 27.5rem; text-align: left; }
 .panels h3 { font-size: 1.05rem; margin: 0 0 .35rem; }
@@ -364,12 +378,12 @@ body { overflow-x: clip; }
 
   <div class="hero">
     <div class="intro">
+      <div class="haze" aria-hidden="true"><span class="haze-base">Aa</span><span class="haze-hot">Aa</span></div>
       <p class="eyebrow"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M5 6C5 3.79086 6.79086 2 9 2H15C17.2091 2 19 3.79086 19 6C19 7.19469 18.4762 8.26706 17.6458 9C18.4762 9.73295 19 10.8053 19 12C19 14.2091 17.2091 16 15 16C14.2714 16 13.5883 15.8052 13 15.4649V18C13 20.2091 11.2091 22 9 22C6.79086 22 5 20.2091 5 18C5 16.8053 5.52376 15.7329 6.35418 15C5.52376 14.2671 5 13.1947 5 12C5 10.8053 5.52376 9.73295 6.35418 9C5.52376 8.26706 5 7.19469 5 6ZM11 10H9C7.89543 10 7 10.8954 7 12C7 13.1046 7.89543 14 9 14H11V10ZM13 12C13 13.1046 13.8954 14 15 14C16.1046 14 17 13.1046 17 12C17 10.8954 16.1046 10 15 10C13.8954 10 13 10.8954 13 12ZM15 8C16.1046 8 17 7.10457 17 6C17 4.89543 16.1046 4 15 4H13V8H15ZM9 4C7.89543 4 7 4.89543 7 6C7 7.10457 7.89543 8 9 8H11V4H9ZM11 16H9C7.89543 16 7 16.8954 7 18C7 19.1046 7.89543 20 9 20C10.1046 20 11 19.1046 11 18V16Z"/></svg><span>Figma-Plugin · kostenlos und quelloffen</span></p>
       <h1>Deine Hausschrift<br>bleibt auf dem Rechner</h1>
       <p class="lede">Mit Local Type Kit kannst du einfach fehlende oder falsche Schriften in einer Figma File prüfen, tauschen und als Stile anlegen – mit den Schriften auf deinem Rechner.</p>
     </div>
     <div class="keyvisual" id="how">
-      <div class="haze" aria-hidden="true"><span>Aa</span></div>
       <div class="win">
         <div class="win-bar"><img class="plug" src="../assets/icon-128.png" alt="" width="20" height="20"><span class="win-title">Local Type Kit</span><span class="close" aria-hidden="true">×</span></div>
         <iframe id="plugin" data-src="../plugin/ui.html?lang=de&amp;v=92c5cfcf" title="Das Plugin-Fenster von Local Type Kit mit einer Beispieldatei. Du kannst es hier direkt bedienen."></iframe>
@@ -471,6 +485,23 @@ Zeig mir, welche Schriften die Datei nutzt und welche fehlen. Bevor du etwas än
   });
   var btn = document.getElementById("copyPrompt"), label = btn.querySelector("span"), idle = label.textContent;
   btn.addEventListener("click", function () { copy(); label.textContent = btn.dataset.done; setTimeout(function () { label.textContent = idle; }, 1600); });
+})();
+</script>
+
+<script>
+/* Das „Aa“ hinter dem Claim folgt der Maus wie die Wortmarke im Fuss. */
+(function () {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!matchMedia("(hover: hover)").matches) return;
+  var intro = document.querySelector(".intro"), haze = document.querySelector(".haze");
+  if (!intro || !haze) return;
+  intro.addEventListener("mousemove", function (e) {
+    var r = haze.getBoundingClientRect();
+    haze.style.setProperty("--hx", (e.clientX - r.left) + "px");
+    haze.style.setProperty("--hy", (e.clientY - r.top) + "px");
+    haze.classList.add("frosting");
+  });
+  intro.addEventListener("mouseleave", function () { haze.classList.remove("frosting"); });
 })();
 </script>
 
