@@ -695,6 +695,12 @@ window.LTKDust = (function () {
   input.addEventListener("input", function () { show(input.value.replace(/\s+/g, " "), true); requestAnimationFrame(caret); });
   ["keyup", "select"].forEach(function (ev) { input.addEventListener(ev, function () { requestAnimationFrame(caret); }); });
   document.addEventListener("selectionchange", function () { if (document.activeElement === input) requestAnimationFrame(caret); });
+  // Wandert die Maus aus dem Kopf und wird eine Weile nicht getippt, endet die Eingabe von selbst.
+  var leaveT = 0;
+  function armLeave() { clearTimeout(leaveT); leaveT = setTimeout(function () { if (document.activeElement === input) input.blur(); }, 1500); }
+  intro.addEventListener("mouseleave", function () { if (document.activeElement === input) armLeave(); });
+  intro.addEventListener("mouseenter", function () { clearTimeout(leaveT); });
+  input.addEventListener("keydown", function () { if (!intro.matches(":hover")) armLeave(); });
   input.addEventListener("keydown", function (e) { if (e.key === "Escape" || e.key === "Enter") { if (e.key === "Escape") { input.value = ""; show(""); } input.blur(); } });
 })();
 </script>
