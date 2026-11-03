@@ -14,10 +14,7 @@
     "Neue Heimat": ["Regular", "Medium", "SemiBold"],
     "Instrument Serif": ["Regular"],
     "Georgia": ["Regular", "Bold"],
-    "Times New Roman": ["Regular", "Bold"],
-    "Helvetica Neue": ["Regular", "Medium", "Bold"],
-    "Arial": ["Regular", "Bold"],
-    "Courier New": ["Regular", "Bold"]
+    "Helvetica Neue": ["Regular", "Medium", "Bold"]
   };
   var used = [
     { family: "Brand Sans", style: "Regular", nodes: 488, styles: 9, available: false },

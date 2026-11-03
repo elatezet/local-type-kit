@@ -209,7 +209,7 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 /* Volle Fensterbreite wie die Wortmarke im Fuss, damit laengere Woerter erst am Fensterrand enden. */
 .haze { position: absolute; inset: -48% auto 30%; left: 50%; width: 100vw; transform: translateX(-50%); overflow-x: clip; z-index: -1; pointer-events: none; display: grid; place-items: center; grid-template-columns: max-content; justify-content: center; }
 .haze span {
-  grid-area: 1 / 1; padding: 8rem 6rem; white-space: nowrap; font-family: var(--font-display); font-size: clamp(21rem, 51vw, 46rem); line-height: .8; letter-spacing: -.02em;
+  grid-area: 1 / 1; padding: 8rem 6rem; white-space: nowrap; font-family: var(--font-display); font-size: clamp(17rem, 41.6vw, 37.7rem); line-height: .8; letter-spacing: -.02em;
   color: color-mix(in srgb, var(--fg) 14%, var(--bg));
 }
 /* Wie die Wortmarke im Fuss: unter der Maus vereist das „Aa“ in einem Kreis, und
@@ -218,15 +218,15 @@ nav a:hover { color: var(--fg); text-decoration: underline; }
 .haze.frosting { --hr: 16vw; }
 @property --hr { syntax: "<length>"; inherits: true; initial-value: 0px; }
 .haze-base {
-  filter: blur(3.5px);
+  filter: blur(5px);
   -webkit-mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 0%, #000 70%), linear-gradient(to bottom, #000 30%, #0008 47%, transparent 64%);
           mask-image: radial-gradient(circle var(--hr) at var(--hx) var(--hy), transparent 0%, #000 70%), linear-gradient(to bottom, #000 30%, #0008 47%, transparent 64%);
   -webkit-mask-composite: source-in; mask-composite: intersect;
 }
 /* Nach unten wird das Schriftbild deutlich weicher, wie die Wortmarke im Fuss. */
 .haze-glass {
-  filter: blur(16px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 22%, #000b 40%, #0008 52%, transparent 66%); mask-image: linear-gradient(to bottom, transparent 22%, #000b 40%, #0008 52%, transparent 66%);
+  filter: blur(24px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 18%, #000 36%, #000a 52%, transparent 68%); mask-image: linear-gradient(to bottom, transparent 18%, #000 36%, #000a 52%, transparent 68%);
 }
 .haze-hot {
   filter: blur(24px);
@@ -311,11 +311,11 @@ body { overflow-x: clip; }
 .footer-display > span, .footer-glass, .footer-hot {
   display: block; white-space: nowrap; text-align: center;
   font-family: var(--font-display); font-weight: 400;
-  font-size: 17.5vw; letter-spacing: -.01em; line-height: .9;
+  font-size: 21.9vw; letter-spacing: -.01em; line-height: .9;
   color: color-mix(in srgb, var(--fg) 13%, var(--bg));
 }
 .footer-display > span {
-  filter: blur(2px);
+  filter: blur(3px);
   -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 0%, #000 70%),
                       linear-gradient(to bottom, #000 16%, #0008 48%, transparent 82%);
           mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 0%, #000 70%),
@@ -343,7 +343,7 @@ body { overflow-x: clip; }
 .footer-glass {
   /* Die Lage reicht unter die Zeile hinaus und laeuft dort bis transparent aus,
      statt an der Kante der Zeile abzureissen (David, 01.11.2026). */
-  position: absolute; inset: 0 0 -4rem; filter: blur(17px);
+  position: absolute; inset: 0 0 -4rem; filter: blur(24px);
   -webkit-mask-image: linear-gradient(to bottom, transparent 15%, #000b 45%, #0008 65%, transparent 100%);
           mask-image: linear-gradient(to bottom, transparent 15%, #000b 45%, #0008 65%, transparent 100%);
 }
@@ -462,7 +462,7 @@ Zeig mir, welche Schriften die Datei nutzt und welche fehlen. Bevor du etwas än
   </div>
   </div>
 </footer>
-<script src="../plugin/demo.js?v=bd4ddb6d"></script>
+<script src="../plugin/demo.js?v=d5dd252f"></script>
 
 <script>
 /* Nur die Abweichung wird gespeichert. Ohne Wahl folgt die Seite weiter dem
@@ -516,7 +516,7 @@ window.LTKDust = (function () {
   var ok = !matchMedia("(prefers-reduced-motion: reduce)").matches && matchMedia("(hover: hover) and (pointer: fine)").matches;
   var dpr = Math.min(window.devicePixelRatio || 1, 2), all = [];
   // Punkte decken weniger Flaeche als eine volle Schrift, darum einen Ton kraeftiger.
-  function dustColor(box) { var s = getComputedStyle(document.documentElement); var p = document.createElement("i"); p.style.color = "color-mix(in srgb, " + s.getPropertyValue("--fg") + " 40%, " + s.getPropertyValue("--bg") + ")"; box.append(p); var c = getComputedStyle(p).color; p.remove(); return c; }
+  function dustColor(box) { var s = getComputedStyle(document.documentElement); var p = document.createElement("i"); p.style.color = "color-mix(in srgb, " + s.getPropertyValue("--fg") + " 48%, " + s.getPropertyValue("--bg") + ")"; box.append(p); var c = getComputedStyle(p).color; p.remove(); return c; }
 
   function field(o) {
     // o: box, canvas, glyph, trigger, full, end (Anteile der Schrifthoehe fuer das Ausblenden), radius
@@ -546,7 +546,7 @@ window.LTKDust = (function () {
         if (data[(y * W + x) * 4 + 3] > 120) pts.push(x + (Math.random() - .5) * step, y + (Math.random() - .5) * step);
       // Nur einzelne Koernchen loesen sich, sonst bildet der Schwarm eine zweite, versetzte Schrift.
       var loose = [];
-      for (var j = 0; j < pts.length; j += 2) if (Math.random() < .16) loose.push(pts[j], pts[j + 1]);
+      for (var j = 0; j < pts.length; j += 2) if (Math.random() < .25) loose.push(pts[j], pts[j + 1]);
       pts = loose; N = pts.length / 2;
       // je Punkt: x, y, Heimat x, Heimat y, vx, vy, Groesse
       P = new Float32Array(N * 7);
@@ -588,7 +588,7 @@ window.LTKDust = (function () {
         // Zuhause zeigt die unscharfe Schrift das Bild; sichtbar sind nur Koernchen, die sich geloest haben.
         var al = fade(hy) * Math.min(1, away / 10) * Math.max(0, 1 - away / 90);
         if (al <= .02) continue;
-        ctx.globalAlpha = al * .85;
+        ctx.globalAlpha = Math.min(1, al * 1.1);
         var s = P[k + 6];
         ctx.fillRect(x - s / 2, y - s / 2, s, s);
       }
