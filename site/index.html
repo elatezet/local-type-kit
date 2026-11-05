@@ -331,9 +331,9 @@ body { overflow-x: clip; }
 .footer-display > span {
   /* Oben nur ein Hauch Unschaerfe, sie waechst mit der Schrift. */
   filter: blur(.15vw);
-  -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 15%, #000 80%),
+  -webkit-mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 0%, #000 70%),
                       linear-gradient(to bottom, #000 16%, #0008 48%, transparent 82%);
-          mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 15%, #000 80%),
+          mask-image: radial-gradient(circle var(--frost-r) at var(--frost-x) var(--frost-y), transparent 0%, #000 70%),
                       linear-gradient(to bottom, #000 16%, #0008 48%, transparent 82%);
   -webkit-mask-composite: source-in; mask-composite: intersect;
 }
