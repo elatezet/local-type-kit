@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
-<title>Local Type Kit – Cover</title>
-<!-- Titelbild fuer die Figma-Community-Seite: python3 build.py, dann mit Headless Chrome in 1920x960 und 1920x1080 aufnehmen. -->
+<title>Local Type Kit – Community images</title>
+<!-- Bilder fuer die Figma-Community-Seite. ?s=1 bis ?s=9 waehlt das Bild, aufgenommen mit Headless Chrome in 1920x960.
+     Das Plugin-Fenster ist die echte Oberflaeche mit der Beispieldatei aus plugin/demo.js; die Schritte unten stellen den Zustand ein. -->
 <style>
 @font-face { font-family: "Instrument Serif"; src: url("../assets/fonts/InstrumentSerif-Regular.ttf") format("truetype"); }
 @font-face { font-family: "Neue Heimat"; src: url("../assets/fonts/NeueHeimat.woff2") format("woff2"); font-weight: 300 700; }
@@ -14,41 +15,89 @@
 :root { --bg: #171614; --fg: #EDEAE4; --fg-2: #B6B1A8; --fg-3: #858077; --border: #33312D; --win: #1F1E1B; }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); overflow: hidden; }
-body { display: grid; grid-template-columns: 1fr 440px; align-items: center; gap: 120px; padding: 0 150px; font-family: "Neue Heimat", Inter, sans-serif; }
+body { display: grid; grid-template-columns: 1fr 440px; align-items: center; gap: 140px; padding: 0 150px; font-family: "Neue Heimat", Inter, sans-serif; }
 .text { position: relative; }
 .aa { position: absolute; left: -20px; top: -270px; font: 400 430px/.8 "Instrument Serif", serif; color: color-mix(in srgb, var(--fg) 13%, var(--bg)); filter: blur(5px);
-  -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 85%); mask-image: linear-gradient(to bottom, #000 30%, transparent 85%); z-index: 0; }
+  -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent 85%); mask-image: linear-gradient(to bottom, #000 30%, transparent 85%); }
 .eyebrow { position: relative; display: inline-flex; align-items: center; gap: 10px; padding: 8px 18px; border: 1px solid var(--border); border-radius: 999px; font-size: 22px; color: var(--fg-2); margin-bottom: 34px; background: color-mix(in srgb, var(--bg) 60%, transparent); }
+.step { position: relative; display: block; font-size: 22px; color: var(--fg-3); margin-bottom: 28px; letter-spacing: .02em; }
 h1 { position: relative; margin: 0; font: 400 136px/.9 "Instrument Serif", serif; letter-spacing: -.01em; }
+h1.small { font-size: 112px; }
 p { position: relative; margin: 36px 0 0; font-size: 28px; line-height: 1.45; color: var(--fg-2); max-width: 760px; }
 .win { position: relative; width: 440px; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--win); box-shadow: 0 30px 80px rgba(0,0,0,.45); transform: scale(1.3); transform-origin: center; }
 .bar { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-bottom: 1px solid var(--border); font: 600 13px Inter, sans-serif; }
 .bar img { width: 20px; height: 20px; border-radius: 5px; }
 .bar .x { margin-left: auto; color: var(--fg-3); font-size: 18px; }
 #plugin { display: block; width: 100%; height: 560px; border: 0; }
+.alt { display: none; }
+body.no-plugin .win { display: none; }
+body.no-plugin .alt { display: grid; gap: 18px; justify-items: start; width: 560px; }
+.apps { display: grid; gap: 14px; }
+.apps a { display: inline-flex; align-items: center; gap: 14px; padding: 16px 24px; border: 1px solid var(--border); border-radius: 14px; color: var(--fg); text-decoration: none; font-size: 26px; font-weight: 500; background: var(--win); }
+.apps svg { width: 30px; height: 30px; }
+.apps button, .apps .copy { display: none !important; }
+.code { font: 400 22px/1.6 ui-monospace, Menlo, monospace; color: var(--fg-2); background: var(--win); border: 1px solid var(--border); border-radius: 14px; padding: 30px 34px; white-space: pre; }
+.code b { color: var(--fg); font-weight: 400; }
 </style>
 </head>
 <body>
 <div class="text">
   <div class="aa" aria-hidden="true">Aa</div>
-  <div class="eyebrow">Figma plugin · free and open source</div>
-  <h1>Your typeface<br>stays on your machine</h1>
-  <p>Check, swap and turn the fonts in a Figma file into styles, with the fonts on your computer. Nothing is uploaded.</p>
+  <span id="kicker"></span>
+  <h1 id="title"></h1>
+  <p id="lede"></p>
 </div>
 <div class="win">
   <div class="bar"><img src="../assets/icon-128.png" alt=""><span>Local Type Kit</span><span class="x">×</span></div>
   <iframe id="plugin" data-src="../plugin/ui.html?lang=en"></iframe>
 </div>
-<script src="../plugin/demo.js"></script>
+<div class="alt" id="alt"></div>
 <script>
-// Fuer das Bild: Brand Sans aufklappen und Inter als Ersatz eintragen, damit die Tabelle zeigt, was das Plugin tut.
-document.getElementById("plugin").addEventListener("load", function () {
-  var f = this;
-  setTimeout(function () {
-    var d = f.contentDocument, fam = d.querySelector(".fam"), i = fam && fam.querySelector("input");
-    if (i) { i.value = "Inter"; i.dispatchEvent(new Event("change")); }
-  }, 900);
+var S = {
+  1: { eyebrow: "Figma plugin · free and open source", title: "Your typeface<br>stays on your machine", lede: "Check, swap and turn the fonts in a Figma file into styles, with the fonts on your computer. Nothing is uploaded.", steps: ["target"] },
+  2: { step: "01", title: "Every font,<br>at a glance", lede: "Local Type Kit lists every font in text and styles. Fonts that are not installed on this machine are marked.", steps: ["open"] },
+  3: { step: "02", title: "Swap a family<br>everywhere", lede: "Pick a new family. Weights are matched by name, and the preview shows what will change.", steps: ["target", "preview"] },
+  4: { step: "03", title: "Choose<br>the scope", lede: "Selection, this page or the whole file. Local text styles change only with the whole file.", steps: ["target", "page"] },
+  5: { step: "04", title: "One run,<br>one undo", lede: "Components, instances, styles and mixed text runs change in one go. A single undo takes it all back.", steps: ["target", "apply"] },
+  6: { step: "05", title: "Text styles<br>from variables", lede: "Your typography variables become text styles. Size, line height and family stay bound to the variables.", steps: ["styles"] },
+  7: { step: "06", title: "Loose text,<br>styled", lede: "Text without a style gets the one local style that matches it exactly. If several fit, it stays as it is.", steps: ["styles", "assign"] },
+  8: { step: "07", title: "MCP ready", lede: "Claude, ChatGPT, Cursor, Gemini or Grok run Local Type Kit in your file through Figma's MCP server.", alt: "apps" },
+  9: { step: "08", title: "Nothing leaves<br>your machine", lede: "No network access, no upload, no account. Free and open source under the MIT license.", alt: "code" }
+};
+var n = +(new URLSearchParams(location.search).get("s") || 1), s = S[n] || S[1];
+document.getElementById("title").innerHTML = s.title;
+if (n > 1) document.getElementById("title").className = "small";
+document.getElementById("lede").textContent = s.lede;
+var k = document.getElementById("kicker");
+if (s.eyebrow) { k.className = "eyebrow"; k.textContent = s.eyebrow; } else { k.className = "step"; k.textContent = s.step; }
+
+var alt = document.getElementById("alt");
+if (s.alt) {
+  document.body.classList.add("no-plugin");
+  if (s.alt === "code") alt.innerHTML = '<div class="code">// manifest.json\n"networkAccess": {\n  "allowedDomains": [<b>"none"</b>]\n}</div>';
+  if (s.alt === "apps") fetch("../index.html").then(function (r) { return r.text(); }).then(function (h) {
+    var d = new DOMParser().parseFromString(h, "text/html"), apps = d.querySelector(".ai-apps");
+    alt.innerHTML = '<div class="apps">' + apps.innerHTML + "</div>";
+  });
+}
+
+// Zustand im echten Plugin einstellen, Schritt fuer Schritt.
+var frame = document.getElementById("plugin");
+frame.addEventListener("load", function () {
+  var d = frame.contentDocument, q = s.steps || [], t = 900;
+  function fam(name) { return Array.prototype.find.call(d.querySelectorAll("div.fam"), function (f) { return f.querySelector(".fam-name").textContent === name; }); }
+  var act = {
+    open: function () { var f = fam("Brand Sans"); f.querySelector(".name").click(); },
+    target: function () { var i = fam("Brand Sans").querySelector("input"); i.value = "Inter"; i.dispatchEvent(new Event("change")); },
+    preview: function () { d.getElementById("replacePreview").click(); },
+    apply: function () { d.getElementById("replaceApply").click(); },
+    page: function () { d.querySelector('[data-scope="page"]').click(); },
+    styles: function () { d.querySelector('[data-tab="styles"]').click(); },
+    assign: function () { d.getElementById("assignPreview").click(); setTimeout(function () { var m = d.getElementById("styles"); m.scrollTop = m.scrollHeight; }, 400); }
+  };
+  q.forEach(function (step) { setTimeout(act[step], t); t += 700; });
 });
 </script>
+<script src="../plugin/demo.js"></script>
 </body>
 </html>
