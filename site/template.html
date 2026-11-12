@@ -299,6 +299,7 @@ section > h2 { margin: 0 0 1.5rem; font-size: 1.6rem; }
   font-size: clamp(2.8rem, 9.4vw, 8.6rem); line-height: .9; letter-spacing: -.01em; margin-bottom: 2rem;
 }
 #ai > p { margin: 0 auto; }
+#ai > p + p { margin-top: 1em; }
 /* Ueber „MCP Ready“ liegt das MCP-Zeichen in derselben Bildsprache wie das „Aa“ oben:
    leicht weich, nach unten im Nebel, unter der Maus vereist. */
 #ai { position: relative; isolation: isolate; padding-top: clamp(12rem, 28vw, 22rem); }
@@ -481,6 +482,7 @@ body { overflow-x: clip; }
     <div class="mcp-haze" aria-hidden="true"><span class="mh-base">{{logo_mcp}}</span><span class="mh-glass">{{logo_mcp}}</span><span class="mh-hot">{{logo_mcp}}</span></div>
     <h2>{{ai_h}}</h2>
     <p>{{ai_p}}</p>
+    <p>{{ai_p2}}</p>
     <div class="ai-apps">
       <a class="ai" data-ai="claude" href="https://claude.ai/new" target="_blank" rel="noopener">{{logo_claude}}<span>Claude</span></a>
       <a class="ai" data-ai="chatgpt" href="https://chatgpt.com/" target="_blank" rel="noopener">{{logo_openai}}<span>ChatGPT</span></a>
