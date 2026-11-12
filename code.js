@@ -217,6 +217,52 @@ async function assignStyles(apply) {
   return res;
 }
 
+// ---- Styles on marked text, also inside instances ----
+// A script marks text layers with setSharedPluginData("localtype", "style", "<style name>"), also inside instances.
+// Local fonts only load on this machine, so the assignment runs here: font variables bound to the layer are released, then the style is set.
+const MARK_NS = "localtype";
+const STYLE_PROPS = ["textCase", "letterSpacing", "textDecoration", "paragraphSpacing"];
+const FONT_FIELDS = ["fontFamily", "fontStyle", "fontWeight", "fontSize", "lineHeight", "letterSpacing", "paragraphSpacing", "paragraphIndent"];
+async function applyMarkedStyles(apply, scope = "document") {
+  const byName = new Map((await figma.getLocalTextStylesAsync()).map((s) => [s.name, s]));
+  const res = { marked: 0, assigned: 0, unbound: 0, styleProps: 0, missing: [], failed: [] };
+  // Styles can carry properties to set here, as JSON in setSharedPluginData("localtype", "props", ...): textCase, letterSpacing, textDecoration, paragraphSpacing.
+  for (const st of byName.values()) {
+    const raw = st.getSharedPluginData(MARK_NS, "props");
+    if (!raw) continue;
+    let props;
+    try { props = JSON.parse(raw); } catch (e) { res.failed.push(`Style "${st.name}": props are not JSON`); continue; }
+    res.styleProps++;
+    if (!apply) continue;
+    try {
+      await figma.loadFontAsync(st.fontName);
+      for (const k of STYLE_PROPS) if (k in props) st[k] = props[k];
+    } catch (e) {
+      res.failed.push(`Style "${st.name}": ${e.message}`);
+    }
+  }
+  for (const n of await textNodesIn(scope)) {
+    const want = n.getSharedPluginData(MARK_NS, "style");
+    if (!want) continue;
+    res.marked++;
+    const st = byName.get(want);
+    if (!st) { res.missing.push(`"${n.name}": ${want}`); continue; }
+    if (!apply) continue;
+    try {
+      await loadFontsOf(n);
+      await figma.loadFontAsync(st.fontName);
+      const bv = n.boundVariables || {};
+      for (const f of FONT_FIELDS) if (bv[f]) { n.setBoundVariable(f, null); res.unbound++; }
+      await n.setTextStyleIdAsync(st.id);
+      res.assigned++;
+    } catch (e) {
+      res.failed.push(`"${n.name}": ${e.message}`);
+    }
+  }
+  if (apply) commit();
+  return res;
+}
+
 // ---- Plugin shell ----
 const handlers = {
   scan: () => scan(),
@@ -227,6 +273,8 @@ const handlers = {
   context: () => context(),
   assignPreview: () => assignStyles(false),
   assignApply: () => assignStyles(true),
+  markedPreview: (msg) => applyMarkedStyles(false, msg.scope),
+  markedApply: (msg) => applyMarkedStyles(true, msg.scope),
   saveConfig: (msg) => { figma.root.setPluginData("config", JSON.stringify(msg.config)); return true; },
   loadConfig: () => { const c = figma.root.getPluginData("config"); return c ? JSON.parse(c) : null; },
 };
@@ -237,7 +285,13 @@ function context() {
 }
 
 // Set globalThis.LOCAL_TYPE_KIT_NO_UI = true before this file to use the functions above without the window.
-if (typeof figma !== "undefined" && !globalThis.LOCAL_TYPE_KIT_NO_UI) {
+if (typeof figma !== "undefined" && !globalThis.LOCAL_TYPE_KIT_NO_UI && figma.command === "apply-marked") {
+  // Menu command without the window: assigns the styles named on marked text layers across the file.
+  applyMarkedStyles(true, "document").then(
+    (r) => figma.closePlugin(`Local Type: ${r.styleProps} styles updated, ${r.assigned} of ${r.marked} marked layers styled` + (r.missing.length + r.failed.length ? `, ${r.missing.length} without style, ${r.failed.length} failed` : "") + "."),
+    (e) => figma.closePlugin(`Local Type: ${e.message}`)
+  );
+} else if (typeof figma !== "undefined" && !globalThis.LOCAL_TYPE_KIT_NO_UI) {
   figma.showUI(__html__, { width: 440, height: 680, themeColors: true });
   const post = (type, result) => figma.ui.postMessage({ type, ok: true, result });
   figma.ui.onmessage = async (msg) => {

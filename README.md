@@ -66,7 +66,10 @@ const preview = await replaceFonts(mapping, false, "document"); // "selection" |
 await replaceFonts(mapping, true, "document");
 await stylesFromVariables({ collection: "Typography", styles: [{ name: "body", familyVariable: "font/body", style: "Regular" }] });
 await assignStyles(true);
+await applyMarkedStyles(true); // text layers marked with setSharedPluginData("localtype", "style", "<style name>"), also inside instances
 ```
+
+The menu command "Apply marked styles" runs the last call without the window. It lets a script that cannot load local fonts mark text layers, for example labels inside library instances whose font family is bound to a variable, and leaves the font work to the machine that has the fonts. Bound font variables on a marked layer are released before the style is set. A text style can also carry properties as JSON in setSharedPluginData("localtype", "props", ...); the command sets textCase, letterSpacing, textDecoration and paragraphSpacing on that style first.
 
 Outside the plugin there is no undo step per run, and the saved configuration is not available.
 
