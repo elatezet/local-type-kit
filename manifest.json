@@ -8,7 +8,8 @@
   "documentAccess": "dynamic-page",
   "menu": [
     { "name": "Open Local Type Kit", "command": "open" },
-    { "name": "Apply marked styles", "command": "apply-marked" }
+    { "name": "Apply marked styles", "command": "apply-marked" },
+    { "name": "Replace marked fonts", "command": "replace-marked" }
   ],
   "networkAccess": { "allowedDomains": ["none"] }
 }

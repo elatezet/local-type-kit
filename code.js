@@ -285,7 +285,18 @@ function context() {
 }
 
 // Set globalThis.LOCAL_TYPE_KIT_NO_UI = true before this file to use the functions above without the window.
-if (typeof figma !== "undefined" && !globalThis.LOCAL_TYPE_KIT_NO_UI && figma.command === "apply-marked") {
+if (typeof figma !== "undefined" && !globalThis.LOCAL_TYPE_KIT_NO_UI && figma.command === "replace-marked") {
+  // Menu command without the window: swaps fonts across the file by the mapping a script stored on the document,
+  // figma.root.setSharedPluginData("localtype", "replace", JSON.stringify([{ from: {family, style}, to: {family, style} }])).
+  const raw = figma.root.getSharedPluginData("localtype", "replace");
+  let mapping = null;
+  try { mapping = raw ? JSON.parse(raw) : null; } catch (e) { mapping = null; }
+  if (!Array.isArray(mapping) || !mapping.length) figma.closePlugin("Local Type: no font mapping stored on the document.");
+  else replaceFonts(mapping, true, "document").then(
+    (r) => { figma.root.setSharedPluginData("localtype", "replaceResult", JSON.stringify(r)); figma.closePlugin(`Local Type: ${r.styles} styles and ${r.nodes} layers changed` + (r.skipped.length ? `, ${r.skipped.length} skipped` : "") + "."); },
+    (e) => figma.closePlugin(`Local Type: ${e.message}`)
+  );
+} else if (typeof figma !== "undefined" && !globalThis.LOCAL_TYPE_KIT_NO_UI && figma.command === "apply-marked") {
   // Menu command without the window: assigns the styles named on marked text layers across the file.
   applyMarkedStyles(true, "document").then(
     (r) => figma.closePlugin(`Local Type: ${r.styleProps} styles updated, ${r.assigned} of ${r.marked} marked layers styled` + (r.missing.length + r.failed.length ? `, ${r.missing.length} without style, ${r.failed.length} failed` : "") + "."),

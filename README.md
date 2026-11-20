@@ -69,7 +69,7 @@ await assignStyles(true);
 await applyMarkedStyles(true); // text layers marked with setSharedPluginData("localtype", "style", "<style name>"), also inside instances
 ```
 
-The menu command "Apply marked styles" runs the last call without the window. It lets a script that cannot load local fonts mark text layers, for example labels inside library instances whose font family is bound to a variable, and leaves the font work to the machine that has the fonts. Bound font variables on a marked layer are released before the style is set. A text style can also carry properties as JSON in setSharedPluginData("localtype", "props", ...); the command sets textCase, letterSpacing, textDecoration and paragraphSpacing on that style first.
+The menu command "Replace marked fonts" swaps fonts across the file without the window, by a mapping a script stores on the document with `figma.root.setSharedPluginData("localtype", "replace", JSON.stringify([{ from: { family, style }, to: { family, style } }]))`; the result is written back as `replaceResult`. The menu command "Apply marked styles" runs the last call without the window. It lets a script that cannot load local fonts mark text layers, for example labels inside library instances whose font family is bound to a variable, and leaves the font work to the machine that has the fonts. Bound font variables on a marked layer are released before the style is set. A text style can also carry properties as JSON in setSharedPluginData("localtype", "props", ...); the command sets textCase, letterSpacing, textDecoration and paragraphSpacing on that style first.
 
 Outside the plugin there is no undo step per run, and the saved configuration is not available.
 
